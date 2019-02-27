@@ -15,7 +15,7 @@ void setup_l()
   digitalWrite(l_pin[i],HIGH);
   pinMode(l_pin[i],OUTPUT);
   value_l[i]=0;
-  send_message("w", l_address[i], value_l[i]);
+  //send_message("w", l_address[i], value_l[i]);
   }
 }
 

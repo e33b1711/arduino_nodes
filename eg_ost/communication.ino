@@ -18,14 +18,15 @@ void init_comm()
   Ethernet.begin(mac, ip);
  // give the Ethernet shield a second to initialize:
   delay(1000);
-  Serial.println("connecting...");
+  Serial.println("init_comm: connecting...");
   // if you get a connection, report back via serial:
   if (client.connect(server, port)) {
-    Serial.println("connected");
+    Serial.println("init_comm: connected");
+    client.println("Arduino Node "+ unit_name + " started.$");
   } 
   else {
     // if you didn't get a connection to the server:
-    Serial.println("connection failed");
+    Serial.println("inint_comm: connection failed");
   }
   // reserve 50 bytes for the inputString
   inputString.reserve(50);
@@ -44,8 +45,10 @@ void handle_comm(){
 
 
 void hear(){
+  
+  
   if (!client.connected()) {
-    Serial.println("No connection to server, trying to connect...");
+    Serial.println("handel_comm: no connection to server, trying to connect...");
     //reset parser state
     inputString = "";
     messageComplete = false;
@@ -57,11 +60,11 @@ void hear(){
     }  
   }
   
+  
   // message parser
   while (client.available() && !(messageComplete)) {
-
     // get the new byte:
-    char inChar = (char)Serial1.read(); 
+    char inChar = client.read(); 
     // add it to the inputString:
     inputString += inChar;
     // if the incoming character is a newline, set a flag
@@ -85,10 +88,10 @@ void hear(){
 
     //debbuging
     if (in_messageType!="t"){
-      Serial.println("parsing message:");
-      Serial.println(in_messageType);
-      Serial.println(addressString);
-      Serial.println(in_value);
+      Serial.println("handle_comm: parsing message done:");
+      Serial.println("  " + in_messageType);
+      Serial.println("  " + addressString);
+      Serial.println("  " + in_value);
     }
     //debbuging
 

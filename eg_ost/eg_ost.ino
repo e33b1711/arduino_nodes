@@ -1,17 +1,17 @@
-#include <Ethernet.h>
-
-
+//this nodes name
 const String unit_name = "eg_ost";
 
-//for com to tcp relay  
+//for tcp communication
+//watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
+#include <Ethernet.h>
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-IPAddress ip(192,168,1,177);
-IPAddress server(1,1,1,1);
+IPAddress ip(192,168,178,200);
+IPAddress server(192,168,178,222);
 int port = 8888;
 
 //dht22
-//#include <dht.h>
-//dht DHT;
+#include <dht.h>
+dht DHT;
 
 //for debug interface
 String db_inputString = "";                // a string to hold incoming data
@@ -19,7 +19,7 @@ boolean db_messageComplete = false;        // whether the string is complete
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a=0;
-const int num_b_states=16;
+const int num_b_states=8;
 const int b_pin[]={           
   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
@@ -45,7 +45,7 @@ int prev_value_b[]={
 //14 gardarobe
 //15 
 
-const int num_c_states=16;
+const int num_c_states=8;
 const int which_b[]={           
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
 int value_c[]={                 
@@ -76,7 +76,7 @@ int value_d[]={
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 //                              hobby süd, hobby nord, heizkeller, lager, waschküche, gang
-const int num_t_states=0;
+const int num_t_states=1;
 const int period_t=309;                                                                                  //update periode in s
 const String t_address[]={      
   "TI_EG_WC", "TI_48", "TI_49", "TI_50", "TI_51", "TI_52"};       
@@ -165,6 +165,7 @@ int value_u[]={
 
 void user_logic()
 {
+  /**
   int i;
 
   // c states über debug schnittstelle
@@ -322,7 +323,7 @@ void user_logic()
      write_state("LI_EG_VH",0);
     Serial.print("timer extern abgebrochen. LI_EG_VH ausgeschaltet!");
   }
-
+**/
 
 }
 

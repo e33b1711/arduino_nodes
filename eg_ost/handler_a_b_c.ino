@@ -13,6 +13,7 @@
 
 void setup_a_b_c()
 {
+  Serial.println("setup_a_b_c");
   int i;
   for (i=0; i<num_b_states; i++){
      pinMode(b_pin[i], INPUT);

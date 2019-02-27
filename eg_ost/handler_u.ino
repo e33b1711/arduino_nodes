@@ -17,7 +17,9 @@ void setup_u()
   Serial.println("init_u");
   
   for (i=0; i<num_u_states; i++){
-  send_message("w", u_address[i], value_u[i]);
+     Serial.println("init_u1");
+  //send_message("w", u_address[i], value_u[i]);
+   Serial.println(i);
   digitalWrite(u_pin[i],HIGH);
   pinMode(u_pin[i],OUTPUT);
   }

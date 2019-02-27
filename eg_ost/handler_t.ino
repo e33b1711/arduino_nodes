@@ -13,7 +13,6 @@
 
 void setup_t()
 {
-  /**
   int i;
   for (i=0; i<num_t_states; i++){
     
@@ -25,6 +24,7 @@ void setup_t()
         break;
       default:
         send_message("dht22_error", t_address[i], 0);
+        Serial.println("setup_t: error reading from dth22.");
         break;
       }
       value_t[i]=DHT.temperature*10;
@@ -32,7 +32,6 @@ void setup_t()
       send_message("w", t_address[i], value_t[i]);
       send_message("w", h_address[i], value_h[i]);
   }
-  **/
 }
 
 
@@ -49,9 +48,9 @@ void update_t()
     i_t++;
     if (i_t==num_t_states){i_t=0;}
     int chk;
-    //chk = DHT.read22(t_pin[i_t]);
-    //value_t[i_t]=DHT.temperature*10;
-    //value_h[i_t]=DHT.humidity;
+    chk = DHT.read22(t_pin[i_t]);
+    value_t[i_t]=DHT.temperature*10;
+    value_h[i_t]=DHT.humidity;
     send_message("w", t_address[i_t], value_t[i_t]);
     send_message("w", h_address[i_t], value_h[i_t]);
     
