@@ -1,12 +1,3 @@
-////constants and variables for d states (pwm-dimmer ausgang)
-////                              0                1
-////                              Wohnzimmer       Esszimmer
-//const int num_d_states=2;
-//const String d_address[]={      'DI_EG_WZ',      'DI_EG_EZ'};       //addresse, zum gleichschalten selbe addresse vergeben
-//const int d_pin[]={             10,              11}                //pwm-pin  
-//int value_d[]={                 0,               0};       
-
-
 void setup_d()
 {
   int i;
@@ -25,6 +16,7 @@ void update_d()
     analogWrite(d_pin[i], value_d[i]);
   }
 }
+
 
 void write_d(String address, int value){
   int i;
