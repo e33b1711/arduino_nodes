@@ -41,25 +41,15 @@ int prev_value_b[]={
 //15 
 const int num_c_states=15;
 const int which_b[]={           
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
 int value_c[]={                 
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
 int aux_value_c[]={             
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
 long time_c_neg[]={             
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
 long time_c_pos[]={             
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
-
-
-//constants and variables for d states (pwm-dimmer ausgang)
-const int num_d_states=0;
-const String d_address[]={      
-  "PWM_1",      "PWM_2"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int d_pin[]={             
-  2,               3};               //pwm-pin  
-int value_d[]={                 
-  0,               0};       
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -67,14 +57,14 @@ int value_d[]={
 const int num_t_states=1;
 const int period_t=309;                                                                                  //update periode in s
 const String t_address[]={      
-  "TI_EG_WC", "TI_48", "TI_49", "TI_50", "TI_51", "TI_52"};       
+"TI_EG_WC", "TI_48", "TI_49", "TI_50", "TI_51", "TI_52"};       
 //addresse
 const int t_pin[]={             
-  49,  48,  49,  50,  51, 52};
+49,  48,  49,  50,  51, 52};
 int value_t[]={                 
-  0,   0,   0,   0,   0,   0};                                            //temperatur
+0,   0,   0,   0,   0,   0};                                            //temperatur
 int aux_value_t[]={             
-  0,   0,   0,   0,   0,   0};                                            //feuchtigkeit
+0,   0,   0,   0,   0,   0};                                            //feuchtigkeit
 long time_t=0;                                                                                          //update 
 int i_t=0;                                                                                              //cycle_counter
 
@@ -82,59 +72,59 @@ int i_t=0;                                                                      
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states=1;
 const String h_address[]={      
-  "HI_EG_WC", "HI_48", "HI_49", "HI_50", "HI_51", "HI_52"};       //addresse
+"HI_EG_WC", "HI_48", "HI_49", "HI_50", "HI_51", "HI_52"};       //addresse
 int value_h[]={                 
-  0, 0, 0, 0, 0, 0};
+0, 0, 0, 0, 0, 0};
 
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=16;
 const String l_address[]={      
-  "LI_EG_GR", "LI_EG_GA", "LI_GA_L1", "LI_EG_WZ_L1", "LI_EG_WZ_L2", "LI_EG_WZ", "LI_EG_WC", "LI_EG_VH", "ZE_EG_VH", "L31", "L40", "L41", "L42", "L43", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
+"LI_EG_GR", "LI_EG_GA", "LI_GA_L1", "LI_EG_WZ_L1", "LI_EG_WZ_L2", "LI_EG_WZ", "LI_EG_WC", "LI_EG_VH", "ZE_EG_VH", "L31", "L40", "L41", "L42", "L43", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]={             
-  22,23,24,25,26,27,28,29,30,31,40,41,42,43,44,45};                //digitaler pin
+22,23,24,25,26,27,28,29,30,31,40,41,42,43,44,45};                //digitaler pin
 int value_l[]={                 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
 ////constants and variables for r states (rollo)
 // über an/aus und richtungsrelais gesteuert
 const int num_r_states=0;
 const String r_address[]={      
-  "RO_EG_SU", "RO_EG_WE"};       //addresse
+"RO_EG_SU", "RO_EG_WE"};       //addresse
 const String r_on_off[]={       
-  "RO_EG_SU_ON", "RO_EG_WE_ON"};         //l state
+"RO_EG_SU_ON", "RO_EG_WE_ON"};         //l state
 const String r_up_down[]={      
-  "RO_EG_SU_DO", "RO_EG_WE_DO"};         //l state
+"RO_EG_SU_DO", "RO_EG_WE_DO"};         //l state
 const int up_time_r[]={            
-  25, 25};       // zeit zum öffnen in s
+25, 25};       // zeit zum öffnen in s
 const int down_time_r[]={          
-  22, 22};       // zeit zum schließen in s
+22, 22};       // zeit zum schließen in s
 int value_r[]={                  
-  0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_r[]={              
-  0, 0};          // zeit zu stoppen
+0, 0};          // zeit zu stoppen
 
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
 const int num_s_states=0;
 const String s_address[]={      
-  "DF_OG_KN"};       //addresse
+"DF_OG_KN"};       //addresse
 const String s_up[]={           
-  "DF_OG_KN_UP"};         //l state
+"DF_OG_KN_UP"};         //l state
 const String s_down[]={         
-  "DF_OG_KN_UP_DO"};         //l state
+"DF_OG_KN_UP_DO"};         //l state
 const int up_time_s[]={         
-  10};       // zeit zum öffnen in ms
+10};       // zeit zum öffnen in ms
 const int down_time_s[]={       
-  200};       // zeit zum schließen in ms
+200};       // zeit zum schließen in ms
 int value_s[]={                  
-  -1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+-1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]={              
-  0};          // zeit zu stoppen
+0};          // zeit zu stoppen
 
 
 //constants and variables for u states (temperatur steller)
@@ -142,14 +132,14 @@ long stop_time_s[]={
 //                              KU               EZ1                EZ2(2 kr, ost)    Gang           WZ              Gardarobe     WC         
 const int num_u_states=7;
 const String u_address[]={      
-  "U_EG_KU",       "U_EG_E1",         "U_EG_E2",        "U_EG_GA",     "U_EG_WZ",       "U_EG_GR",    "U_EG_WC"};        //addresse
+"U_EG_KU",       "U_EG_E1",         "U_EG_E2",        "U_EG_GA",     "U_EG_WZ",       "U_EG_GR",    "U_EG_WC"};        //addresse
 const int u_pin[]={             
-  32,               33,               34,               35,             36,              37,            38};               //pwm-pin  
+32,               33,               34,               35,             36,              37,            38};               //pwm-pin  
 const unsigned long u_interval= 230000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis=0;
 int u_phase=8;
 int value_u[]={                   
-  6,              6,                  6,                6,             6,              6,            6};               //stell wert 0-15 (0=aus bis 15=voll)
+6,              6,                  6,                6,             6,              6,            6};               //stell wert 0-15 (0=aus bis 15=voll)
 
 
 void user_logic()

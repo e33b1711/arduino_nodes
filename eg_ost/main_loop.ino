@@ -15,7 +15,6 @@ void setup(){
   setup_s();
 
   //states mit ausgängen zum Schluss
-  setup_d();
   setup_l();
 
 }
@@ -38,7 +37,6 @@ void loop()
   update_r();
   update_s();
   update_l();
-  update_d();
   update_a_b_c();
 
   //debug Interface

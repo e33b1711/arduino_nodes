@@ -10,7 +10,6 @@ void write_state_silent(String address, int value){
 //    Serial.println("in function write silent");
 //    Serial.println(address);
 //    //debbuging
-  write_d(address, value);
   write_t(address, value);
   write_h(address, value);
   write_u(address, value);
@@ -34,11 +33,6 @@ void toggle_state(String address){
 int address_to_value(String address){
   int i;
   int value;
-  for (i=0; i<num_d_states; i++){
-    if (d_address[i]==address){
-      return value_d[i];
-    }
-  }
   for (i=0; i<num_t_states; i++){
     if (t_address[i]==address){
       return value_t[i];
@@ -75,11 +69,6 @@ int address_to_value(String address){
 //checket ob es diesen state auf dieser unit gibt
 boolean is_my_state(String address){
    int i;
-  for (i=0; i<num_d_states; i++){
-    if (d_address[i]==address){
-      return true;
-    }
-  }
   for (i=0; i<num_t_states; i++){
     if (t_address[i]==address){
       return true;

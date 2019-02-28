@@ -112,9 +112,6 @@ void handle_comm(){
 void post_all(){
   client.println("!info!" + unit_name + "!posting all: start!0$");
   int i;
-  for (i=0; i<num_d_states; i++){
-    client.println("!w!" + d_address[i] + "!" + value_d[i] + "!0$");
-  }
   for (i=0; i<num_l_states; i++){
     client.println("!w!" + l_address[i] + "!" + value_l[i] + "!0$");
   }
