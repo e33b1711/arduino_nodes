@@ -5,17 +5,20 @@ const String unit_name = "eg_ost";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-IPAddress ip(192,168,178,200);
-IPAddress server(192,168,178,222);
-int port = 8888;
+const int ethernet_sc_pin = 53;
+const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x02 };
+const IPAddress ip(192,168,178,201);
+const IPAddress server(192,168,178,222);
+const int port = 8888;
+
+
 
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a=0;
 const int num_b_states=16;
 const int b_pin[]={           
-  2, 3, 4, 5, 6, 7, 8, 9, 7, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
   0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -33,28 +36,26 @@ int prev_value_b[]={
 //7 
 //8 treppe mitte
 //9 wz ez
-//10 pin belegt ethernet => auch 7
+//10
 //11 wz gang
 //12 
 //13 gang wz
 //14 gardarobe
 //15 
-const int num_c_states=15;
+const int num_c_states=16;
 const int which_b[]={           
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
 int value_c[]={                 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
 int aux_value_c[]={             
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
-long time_c_neg[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
-long time_c_pos[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
+long time_c_neg[]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
+long time_c_pos[]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 //                              hobby süd, hobby nord, heizkeller, lager, waschküche, gang
-const int num_t_states=1;
+const int num_t_states=0;
 const int period_t=309;                                                                                  //update periode in s
 const String t_address[]={      
 "TI_EG_WC", "TI_48", "TI_49", "TI_50", "TI_51", "TI_52"};       
@@ -306,11 +307,3 @@ void user_logic()
   }
 
 }
-
-
-
-
-
-
-
-

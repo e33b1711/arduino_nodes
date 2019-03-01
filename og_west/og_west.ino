@@ -5,10 +5,11 @@ const String unit_name = "og_west";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-IPAddress ip(192,168,178,200);
-IPAddress server(192,168,178,222);
-int port = 8888;
+const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x03 };
+const int ethernet_sc_pin = 53;
+const IPAddress ip(192,168,178,202);
+const IPAddress server(192,168,178,222);
+const int port = 8888;
 
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
@@ -16,7 +17,7 @@ int port = 8888;
 int counter_a=0;
 const int num_b_states=16;
 const int b_pin[]={           
-  2, 3, 4, 5, 6, 7, 8, 9, 7, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
   0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -34,13 +35,13 @@ int prev_value_b[]={
 //7 roll kurbi hoch
 //8 rollo leo hoch
 //9 hoch df leo 
-//10 leo unten   !!!!!!!!!!
+//10 leo unten  
 //11  rot df gang
 //12 runter df leo
 //13  rosa df gang 
 //14  gang nord unten
 //15 leo oben 
-const int num_c_states=15;
+const int num_c_states=16;
 const int which_b[]={           
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
 int value_c[]={                 
@@ -60,7 +61,7 @@ const int period_t=10000;                                                       
 const String t_address[]={      
 "TI_OG_KS", "TI_OG_KN", "TI_OG_GA"};          //addresse
 const int t_pin[]={             
-47,  48,  49};
+46, 47,  48};
 int value_t[]={                 
 0,   0,   0};                                            //temperatur
 int aux_value_t[]={             
@@ -355,7 +356,3 @@ void user_logic()
   
   
 }
-
-
-
-

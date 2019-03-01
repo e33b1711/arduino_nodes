@@ -5,10 +5,11 @@ const String unit_name = "eg_west";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-IPAddress ip(192,168,178,200);
-IPAddress server(192,168,178,222);
-int port = 8888;
+const int ethernet_sc_pin = 53;
+const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
+const IPAddress ip(192,168,178,200);
+const IPAddress server(192,168,178,222);
+const int port = 8888;
 
   
 
@@ -16,7 +17,7 @@ int port = 8888;
 int counter_a=0;
 const int num_b_states=16;
 const int b_pin[]={           
-2, 3, 4, 5, 6, 7, 8, 9, 7, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -34,13 +35,13 @@ int prev_value_b[]={
 //7 ez süd unten
 //8 ez süd rollo runter
 //9 gang keller unten
-//10 ändern!!!!! frei lassen (war küche)
+//10 küche
 //11 ez süd roolo hoch
 //12 ez we rollo runter
 //13 ez we unten
-//14 küche ändern!!!!
+//14 
 //15 
-const int num_c_states=15;
+const int num_c_states=16;
 const int which_b[]={           
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
 int value_c[]={                 
@@ -49,8 +50,7 @@ int aux_value_c[]={
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
 long time_c_neg[]={             
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
-long time_c_pos[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
+long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
   
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -58,9 +58,9 @@ long time_c_pos[]={
 const int num_t_states=4;
 const int period_t=10000;                                                                                  //update periode in ms
 const String t_address[]={       
-"TI_EG_WZ", "TI_EG_EZ", "TI_EG_GA", "TI_EG_KU"};                                                                                                           //addresse
+"TI_xx_WZ", "TI_xx_EZ", "TI_xx_GA", "TI_xx_KU"};                                                                                                           //addresse
 const int t_pin[]={             
-46, 47,  48,  48};
+46, 47,  48,  49};
 int value_t[]={                 
 0,   0,   0,   0};                                            //temperatur
 int aux_value_t[]={             
@@ -70,9 +70,9 @@ int i_t=0;                                                                      
   
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states=5;
+const int num_h_states=4;
 const String h_address[]={      
-"HI_EG_WZ", "HI_EG_EZ", "HI_EG_GA", "HI_EG_SP", "HI_EG_KU"};       //addresse
+"HI_EG_WZ", "HI_EG_EZ", "HI_EG_GA", "HI_EG_KU"};       //addresse
 int value_h[]={                 
 0, 0, 0, 0, 0};
 
@@ -194,9 +194,13 @@ void user_logic(){
     write_state("RO_EG_SU",-1);
     write_state("RO_EG_WE",-1);
   }
-  //7  ez, süd, unten
-  //11  ez, süd, rollo
-  //8  "
+
+
+
+  
+  //8  ez, süd, unten
+  //7  ez, süd, rollo
+  //6  "
   i=7;
   if (value_c[i]==-1){
     if (time_c_pos[i]+700>time_c_neg[i]){
@@ -207,7 +211,6 @@ void user_logic(){
     }
   }
   i=11;
-    
   if (value_c[i]==1){
     //entriegeln
     write_state("RO_EG_SU",0);
@@ -311,4 +314,3 @@ void user_logic(){
   
   
   
-

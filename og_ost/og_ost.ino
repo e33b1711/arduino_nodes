@@ -5,17 +5,18 @@ const String unit_name = "og_ost";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-IPAddress ip(192,168,178,200);
-IPAddress server(192,168,178,222);
-int port = 8888;
+const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x04 };
+const int ethernet_sc_pin = 53;
+const IPAddress ip(192,168,178,203);
+const IPAddress server(192,168,178,222);
+const int port = 8888;
 
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a=0;
 const int num_b_states=16;
 const int b_pin[]={           
-2, 3, 4, 5, 6, 7, 8, 9, 7, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -30,7 +31,7 @@ int prev_value_b[]={
 //4 bewegung
 //5 bad df runter
 //6 sz oben
-//7sz unten
+//7 sz unten
 //8 sz anselm
 //9 gang sz
 //10 sz rollo hoch
@@ -39,17 +40,15 @@ int prev_value_b[]={
 //13  sz df
 //14 bad rollo ho
 //15 bad rollo ru
-const int num_c_states=15;
+const int num_c_states=16;
 const int which_b[]={           
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
 int value_c[]={                 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
 int aux_value_c[]={             
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
-long time_c_neg[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
-long time_c_pos[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
+long time_c_neg[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
+long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -398,6 +397,3 @@ i=4;
      write_state("ZE_EG_VH",1);
   }
 }
-
-
-

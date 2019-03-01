@@ -17,6 +17,7 @@ EthernetClient client;
 void init_comm()
 {
   // initialize
+  Ethernet.init(ethernet_sc_pin);
   Ethernet.begin(mac, ip);
   // give the Ethernet shield a second to initialize:
   delay(1000);
@@ -84,14 +85,14 @@ void handle_comm(){
     inputString="";
     messageComplete= false;
 
-    /**
+    
     if (in_messageType!="t"){
-      Serial.println("handle_comm: parsing message done:");
-      Serial.println("  " + in_messageType);
-      Serial.println("  " + addressString);
+      Serial.print("handle_comm: parsing message done:");
+      Serial.print("  " + in_messageType);
+      Serial.print("  " + addressString);
       Serial.println("  " + in_value);
     }
-    **/
+    
 
     //message handler
     if (in_messageType=="post_all" && addressString==unit_name){
@@ -127,7 +128,3 @@ void post_all(){
   }
   send_message("info", unit_name + " posting all: end", 0);
 }
-
-
-
-

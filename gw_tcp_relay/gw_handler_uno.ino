@@ -28,14 +28,19 @@ long timer;
 
 void setup()  
 {
-
+  
   com_in_buffer.reserve(40);
   rs485_in_buffer.reserve(40);
   rs485_out_buffer.reserve(40);
   Serial.begin(9600);
+  Serial.println("hello");
   Ethernet.begin(mac, ip);
+  Serial.println(Ethernet.hardwareStatus());
   Connected = client.connect(server, port);
-  
+  if (Connected){
+    Serial.println("connected");
+  }else{
+    Serial.println("failure");}
   timer=millis();
 }
 
