@@ -38,6 +38,7 @@ void init_comm()
 void send_message(String out_messageType, String out_address, int out_value){
   String message='!' + out_messageType + '!' + out_address + '!' + String(out_value, DEC) + "$";
   client.println(message);
+  client.flush();
 }
 
 
@@ -51,6 +52,8 @@ void handle_comm(){
     inputString = "";
     messageComplete = false;
     //try to reconnect
+    Ethernet.init(ethernet_sc_pin);
+    Ethernet.begin(mac, ip);
     if (client.connect(server, port)) {
       Serial.println("...success.");
     }else{

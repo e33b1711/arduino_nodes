@@ -163,7 +163,7 @@ void user_logic(){
   //3  gang, ez
   i=3;
   if (value_c[3]==1){
-     write_state("LI_EG_GA",3);
+     toggle_state("LI_EG_GA");
      //write_state("LI_GA_L1",3);
   }
   //4, ez, gang, unten
@@ -172,16 +172,16 @@ void user_logic(){
   //2  "
   i=4;
   if (value_c[i]==1){
-     write_state("LI_EG_EZ_KU",3);
+     toggle_state("LI_EG_EZ_KU");
   }
   i=0;
   if (value_c[i]==-1){
     //verriegeln auf auf
     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_EG_EZ",3);
+      toggle_state("LI_EG_EZ");
     }
     else{
-      write_state("LI_EG_EZ_L1",3);
+      toggle_state("LI_EG_EZ_L1");
     }
   }
   i=1;
@@ -204,7 +204,7 @@ void user_logic(){
   i=7;
   if (value_c[i]==-1){
     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_EG_AS",3);
+      toggle_state("LI_EG_AS");
     }
     else{
       write_state("PUMP",3);
@@ -252,7 +252,7 @@ void user_logic(){
   //12  "
   i=13;
   if (value_c[i]==1){
-    write_state("LI_EG_AW",3);
+    toggle_state("LI_EG_AW");
   }
   i=6;
   if (value_c[i]==1){
@@ -294,20 +294,20 @@ void user_logic(){
   //10  küche
   i=10;
   if (value_c[i]==1){
-    write_state("LI_EG_KU_L1",3);
-    write_state("LI_EG_SP",3);
+    toggle_state("LI_EG_KU_L1");
+    toggle_state("LI_EG_SP");
   }
       
   //9 kellertreppe unten
   //5 kellertreppe oben
   i=9;
   if (value_c[i]==1){
-    write_state("LI_UG_GA",3);
+    toggle_state("LI_UG_GA");
     //write_state("LI_GA_L1",3);
   }
   i=5;
   if (value_c[i]==1){
-    write_state("LI_EG_GA",3);
+    toggle_state("LI_EG_GA");
     //write_state("LI_GA_L1",3);
   }
 }

@@ -166,7 +166,7 @@ void user_logic()
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_SZ",3);
+      toggle_state("LI_OG_SZ");
      }
      else{
        write_state("LI_OG_SZ",0);
@@ -178,7 +178,7 @@ void user_logic()
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_SZ",3);
+      toggle_state("LI_OG_SZ");
      }
      else{
        write_state("LI_OG_SZ",0);
@@ -261,7 +261,7 @@ void user_logic()
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_SZ_L1",3);
+      toggle_state("LI_OG_SZ_L1");
      }
      else{
        write_state("LI_OG_SZ",0);
@@ -273,23 +273,22 @@ void user_logic()
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_SZ_L2",3);
+      toggle_state("LI_OG_SZ_L2");
      }
      else{
        write_state("LI_OG_SZ",0);
-     write_state("LI_OG_SZ_L1",0);
-     write_state("LI_OG_SZ_L2",0);
+       write_state("LI_OG_SZ_L1",0);
+       write_state("LI_OG_SZ_L2",0);
      }
   }
   //9  flur, sz
   i=9;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_GA",3);
+       write_state("LI_OG_GA", 3);
      }
      else{
-     
-      write_state("LI_OG_GA_L1",3);
+       write_state("LI_OG_GA_L1", 3);
      }
   }
   
@@ -297,11 +296,10 @@ void user_logic()
   i=3;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_GA",3);
+       write_state("LI_OG_GA", 3);
      }
      else{
-     
-      write_state("LI_OG_GA_L1",3);
+       write_state("LI_OG_GA_L1", 3);
      }
   }
   // 2  bad, einzel
@@ -309,7 +307,7 @@ void user_logic()
   //5  rollo bad tür
   i=2;
   if (value_c[i]==1){
-     write_state("LI_OG_BA",3);
+     toggle_state("LI_OG_BA");
   }
    i=1;
  

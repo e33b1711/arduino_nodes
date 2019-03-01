@@ -6,8 +6,8 @@ const String unit_name = "eg_ost";
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
 const int ethernet_sc_pin = 53;
-const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x02 };
-const IPAddress ip(192,168,178,201);
+const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x04 };
+const IPAddress ip(192,168,178,203);
 const IPAddress server(192,168,178,222);
 const int port = 8888;
 
@@ -164,7 +164,7 @@ void user_logic()
   if (value_c[i]==-1){
     //verriegeln auf auf
     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_EG_GR",3);
+      toggle_state("LI_EG_GR");
     }
     else{
       write_state("LI_EG_AO",3);
@@ -175,7 +175,7 @@ void user_logic()
   //5  " oben
   i=6;
   if (value_c[i]==1){
-    write_state("LI_EG_GA",3);
+    toggle_state("LI_EG_GA");
     //write_state("LI_GA_L1",3);
   }
   i=5;
@@ -186,7 +186,7 @@ void user_logic()
   // 13  gang bei wz
   i=13;
   if (value_c[i]==1){
-    write_state("LI_EG_GA",3);
+    toggle_state("LI_EG_GA");
     //write_state("LI_GA_L1",3);
   }
 
@@ -248,7 +248,7 @@ void user_logic()
   //4  wc
   i=4;
   if (value_c[i]==1){
-    write_state("LI_EG_WC",3);
+    toggle_state("LI_EG_WC");
   }
 
   //8  treppe oben

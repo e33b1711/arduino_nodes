@@ -159,32 +159,32 @@ void user_logic()
     if (value_c[i]==-1){
       //verriegeln auf auf
        if (time_c_pos[i]+700>time_c_neg[i]){
-        write_state("LI_UG_HK",3);
+        toggle_state("LI_UG_HK");
        }
        else{
-         write_state("PUMP",3);
+         toggle_state("PUMP");
        }
     }
   //9 Gang
   i=9;
   if (value_c[i]==1){
-     write_state("LI_UG_GA",3);
+     toggle_state("LI_UG_GA");
     
   }
   //6 Hobby
   i=6;
   if (value_c[i]==1){
-     write_state("LI_UG_HO",3);
+     toggle_state("LI_UG_HO");
   }
   //3 Lager
   i=3;
   if (value_c[i]==1){
-     write_state("LI_UG_LA",3);
+     toggle_state("LI_UG_LA");
   }
   //5 Waschküche
   i=5;
   if (value_c[i]==1){
-     write_state("LI_UG_WK",3);
+     toggle_state("LI_UG_WK");
   }
 }
 

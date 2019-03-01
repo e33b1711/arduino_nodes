@@ -1,3 +1,4 @@
+
 //this nodes name
 const String unit_name = "og_west";
 
@@ -168,11 +169,11 @@ void user_logic()
   i=14;
    if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_GA",3);
+      toggle_state("LI_OG_GA");
      }
      else{
      
-      write_state("LI_OG_GA_L1",3);
+      toggle_state("LI_OG_GA_L1");
      }
   }
   i=13;
@@ -187,11 +188,11 @@ void user_logic()
   i=2;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_GA",3);
+      toggle_state("LI_OG_GA");
      }
      else{
      
-      write_state("LI_OG_GA_L1",3);
+      toggle_state("LI_OG_GA_L1");
      }
   }
   // 10  KZ nord unten
@@ -200,11 +201,11 @@ void user_logic()
   //12
   i=10;
   if (value_c[i]==1){
-     write_state("LI_OG_KN",3);
+     toggle_state("LI_OG_KN");
   }
   i=15;
   if (value_c[i]==1){
-     write_state("LI_OG_KN_L1",3);
+     toggle_state("LI_OG_KN_L1");
   }
   i=9;
    if (value_c[i]==-1){
@@ -280,11 +281,11 @@ void user_logic()
   //4  "
   i=3;
   if (value_c[i]==1){
-     write_state("LI_OG_KS",3);
+     toggle_state("LI_OG_KS");
   }
   i=1;
   if (value_c[i]==1){
-     write_state("LI_OG_KS_L1",3);
+     toggle_state("LI_OG_KS_L1");
   }
   i=0;
    if (value_c[i]==-1){
