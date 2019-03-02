@@ -5,8 +5,9 @@ const String unit_name = "ug";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-IPAddress ip(192,168,178,200);
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x05 };
+const int ethernet_sc_pin = 53;
+IPAddress ip(192,168,178,204);
 IPAddress server(192,168,178,222);
 int port = 8888;
 
@@ -46,14 +47,12 @@ int value_c[]={
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
 int aux_value_c[]={             
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
-long time_c_neg[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
-long time_c_pos[]={             
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
+long time_c_neg[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
+long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
        
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
-const int num_t_states=6;
+const int num_t_states=0;
 const int period_t=10000;                                                                                  //update periode in ms
 const String t_address[]={    
 "TI_UG_WK", "TI_UG_HN", "TI_UG_LA", "TI_UG_HS", "TI_UG_HK", "TI_UG_GA"};                                       //addresse
@@ -68,19 +67,18 @@ int i_t=0;                                                                      
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states=6;
+const int num_h_states=0;
 const String h_address[]={      
 "HI_UG_WK", "HI_UG_HN", "HI_UG_LA", "HI_UG_HS", "HI_UG_HK", "HI_UG_GA"};       //addresse
-int value_h[]={                 
-0, 0, 0, 0, 0, 0};
+int value_h[]={0, 0, 0, 0, 0, 0};
 
 
 //constants and variables for l states (einfaches licht / verbraucher)
-const int num_l_states=18;
-const String l_address[]={      "BELL", "LI_UG_WK", "LI_UG_HO", "LI_UG_GA", "PUMP", "LI_UG_LA", "LI_GA_L1", "LI_UG_HK", "L36", "L37", "L38", "L39","L40", "L41", "L42", "L43", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]={             22,23,24,25,26,27,28,29,36,37,38,39,40,41,42,43,44,45};                //digitaler pin
-int value_l[]={                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-long set_time_l[]={               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const int num_l_states=8;
+const String l_address[]={      "BELL", "LI_UG_HO", "LI_UG_02", "LI_UG_LA", "LI_UG_GA", "LI_UG_WK", "PUMP", "LI_UG_HK"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]={             22,24,26,28,30,32,34,36};                //digitaler pin
+int value_l[]={                 0, 0, 0, 0, 0, 0, 0, 0};
+long set_time_l[]={               0, 0, 0, 0, 0, 0, 0, 0};
 
 
 ////constants and variables for r states (rollo)
@@ -124,16 +122,13 @@ long stop_time_s[]={
 //constants and variables for u states (temperatur steller)
 //                              0                1                  2                 3              4                5
 //                              hobby1           hobby2             hobby3            gang          lager             waschküche
-const int num_u_states=6;
-const String u_address[]={      
-"U_UG_H1",       "U_UG_H2",         "U_UG_H3",        "U_UG_GA",     "U_UG_LA",       "U_UG_WK"};        //addresse
-const int u_pin[]={             
-30,              31,                32,               33,             34,             35};               //pwm-pin  
+const int num_u_states=8;
+const String u_address[]={"U_UG_WK", "U_UG_LA",       "U_UG_02",         "U_UG_GA",        "U_UG_H1",     "U_UG_H2",       "U_UG_H3",    "U_UG_07"};        //addresse
+const int u_pin[]={23,              25,                27,               29,             31,             33, 35, 37};               //pwm-pin  
 const unsigned long u_interval= 240000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis=0;
 int u_phase=0;
-int value_u[]={                   
-5,               5,                 5,                 1,            1,                14};               //stell wert 0-15 (0=aus bis 15=voll)
+int value_u[]={3, 3, 3, 3, 3, 3, 3, 3};               //stell wert 0-15 (0=aus bis 15=voll)
 
 
 void user_logic()
@@ -187,7 +182,3 @@ void user_logic()
      toggle_state("LI_UG_WK");
   }
 }
-
-
-
-
