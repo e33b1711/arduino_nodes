@@ -14,7 +14,7 @@ int port = 8888;
   
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a=0;
-const int num_b_states=16;
+const int num_b_states=8;
 const int b_pin[]={           
 2, 3, 4, 5, 6, 7, 8, 9, 7, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
@@ -24,17 +24,17 @@ int prev_value_b[]={
 
 
 //constants and variables for c states (flanke eines b states)
-//0
-//1
-//2
-//3 la
-//4
-//5 wk
-//6 ho
-//7 
-//8 hk
-//9 gang
-//10 frei lassen ethernet!!
+//0 
+//1 
+//2 GA_HK
+//3 HK
+//4 GA_notHK
+//5 LA
+//6 WK
+//7 HO
+//8 
+//9 
+//10 
 //11
 //12 
 //13
@@ -75,7 +75,7 @@ int value_h[]={0, 0, 0, 0, 0, 0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=8;
-const String l_address[]={      "BELL", "LI_UG_HO", "LI_UG_02", "LI_UG_LA", "LI_UG_GA", "LI_UG_WK", "PUMP", "LI_UG_HK"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]={      "BELL", "LI_UG_HO", "PUMP", "LI_UG_LA", "LI_UG_GA", "LI_UG_WK", "LI_UG_GA", "LI_UG_HK"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]={             22,24,26,28,30,32,34,36};                //digitaler pin
 int value_l[]={                 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={               0, 0, 0, 0, 0, 0, 0, 0};
@@ -146,38 +146,44 @@ void user_logic()
       Serial.println(i);
   }
   }
+
+  //2 GA_HK
+//3 HK
+//4 GA_notHK
+//5 LA
+//6 WK
+//7 HO
   
 
   //taster verküpfungen
-  //8 HK
-  i=8;
-    if (value_c[i]==-1){
-      //verriegeln auf auf
-       if (time_c_pos[i]+700>time_c_neg[i]){
-        toggle_state("LI_UG_HK");
-       }
-       else{
-         toggle_state("PUMP");
-       }
+  //3 HK
+  i=3;
+    if (value_c[i]==1){
+     toggle_state("LI_UG_HK");
     }
-  //9 Gang
-  i=9;
+  //4, 2 Gang
+  i=4;
   if (value_c[i]==1){
      toggle_state("LI_UG_GA");
     
   }
-  //6 Hobby
-  i=6;
+  i=2;
+  if (value_c[i]==1){
+     toggle_state("LI_UG_GA");
+    
+  }
+  //7 Hobby
+  i=7;
   if (value_c[i]==1){
      toggle_state("LI_UG_HO");
   }
-  //3 Lager
-  i=3;
+  //5 Lager
+  i=5;
   if (value_c[i]==1){
      toggle_state("LI_UG_LA");
   }
-  //5 Waschküche
-  i=5;
+  //6 Waschküche
+  i=6;
   if (value_c[i]==1){
      toggle_state("LI_UG_WK");
   }

@@ -2,8 +2,6 @@
 #include <Ethernet.h>
 
 
-String inputString = "";                // a string to hold incoming data
-boolean messageComplete = false;        // whether the string is complete
 EthernetClient client;
 
 
@@ -31,7 +29,7 @@ void init_comm()
     Serial.println("init_comm: connection failed");
   }
   // reserve 50 bytes for the inputString
-  inputString.reserve(50);
+  //inputString.reserve(50);
 }
 
 
@@ -43,6 +41,11 @@ void send_message(String out_messageType, String out_address, int out_value){
 
 
 void handle_comm(){
+
+  static String inputString = "";                // a string to hold incoming data
+  static boolean messageComplete = false;        // whether the string is complete
+  String in_messageType, addressString, valueString;
+  int in_value;
   
   //check if still connected, eventually reconnect 
   if (!client.connected()) {
@@ -74,27 +77,36 @@ void handle_comm(){
 
   //message parser & handler
   while (messageComplete) {
-    //parser
+    //message parser
+    Serial.print("handle_debug: parsing message...:");
+    
     int index1=inputString.indexOf('!');
     int index2=inputString.indexOf('!', index1+1);
     int index3=inputString.indexOf('!', index2+1);
     int index4=inputString.indexOf('$');
-    String in_messageType=inputString.substring(index1+1, index2);
-    String addressString=inputString.substring(index2+1,index3);
-    String valueString=inputString.substring(index3+1,index4);
-    int in_value=valueString.toInt();
-   
+
+    Serial.print("  " + inputString + " index1-4: ");
+    Serial.print(index1);
+    Serial.print("  ");
+    Serial.print(index2);
+    Serial.print("  ");
+    Serial.print(index3);
+    Serial.print("  ");
+    Serial.println(index4);
+    
+    in_messageType=inputString.substring(index1+1, index2);
+    Serial.println("  " + inputString);
+    addressString=inputString.substring(index2+1,index3);
+    Serial.println("  " + addressString);
+    valueString=inputString.substring(index3+1,index4);
+    Serial.println("  " + valueString);
+    in_value=valueString.toInt();
+    Serial.print("  ");
+    Serial.println(in_value);
+
     //reset parser state
     inputString="";
     messageComplete= false;
-
-    
-    if (in_messageType!="t"){
-      Serial.print("handle_comm: parsing message done:");
-      Serial.print("  " + in_messageType);
-      Serial.print("  " + addressString);
-      Serial.println("  " + in_value);
-    }
     
 
     //message handler

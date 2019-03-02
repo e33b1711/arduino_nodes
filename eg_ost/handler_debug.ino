@@ -1,37 +1,58 @@
-String db_inputString = "";                // a string to hold incoming data
-boolean db_messageComplete = false;        // whether the string is complete
+
 
 
 void handle_debug(){
 
+  static String inputString = "";                // a string to hold incoming data
+  static boolean messageComplete = false;        // whether the string is complete
+  String in_messageType, addressString, valueString;
+  int in_value;
+
   //get one whole message from com
-  while (Serial.available() && !(db_messageComplete)) {
+  while (Serial.available() && !(messageComplete)) {
     // get the new byte:
     char inChar = (char)Serial.read(); 
     // add it to the inputString:
-    db_inputString += inChar;
+    inputString += inChar;
     // if the incoming character is a newline, set a flag
     // so the main loop can do something about it:
     if (inChar == '$') {
-      db_messageComplete = true;
+messageComplete = true;
     } 
   }
   
   //message parser & handler
-  while (db_messageComplete) {
+  while (messageComplete) {
     //message parser
-    int index1=db_inputString.indexOf('!');
-    int index2=db_inputString.indexOf('!', index1+1);
-    int index3=db_inputString.indexOf('!', index2+1);
-    int index4=db_inputString.indexOf('$');
-    String in_messageType=db_inputString.substring(index1+1, index2);
-    String addressString=db_inputString.substring(index2+1,index3);
-    String valueString=db_inputString.substring(index3+1,index4);
-    int in_value=valueString.toInt();
+    Serial.print("handle_debug: parsing message...:");
+    
+    int index1=inputString.indexOf('!');
+    int index2=inputString.indexOf('!', index1+1);
+    int index3=inputString.indexOf('!', index2+1);
+    int index4=inputString.indexOf('$');
+
+  Serial.print("  " + inputString + " index1-4: ");
+    Serial.print(index1);
+    Serial.print("  ");
+    Serial.print(index2);
+    Serial.print("  ");
+    Serial.print(index3);
+    Serial.print("  ");
+    Serial.println(index4);
+    
+    in_messageType=inputString.substring(index1+1, index2);
+    Serial.println("  " + inputString);
+    addressString=inputString.substring(index2+1,index3);
+    Serial.println("  " + addressString);
+    valueString=inputString.substring(index3+1,index4);
+    Serial.println("  " + valueString);
+    in_value=valueString.toInt();
+    Serial.print("  ");
+    Serial.println(in_value);
 
     //reset parser state
-    db_inputString="";
-    db_messageComplete= false;
+    inputString="";
+    messageComplete= false;
 
     //handler
     if (in_messageType=="w") {   

@@ -31,13 +31,13 @@ void loop()
   update_t();
   update_h();
   update_u();
-  update_a_b_c();
+  //update_a_b_c();
 
   //states mit ausgängen zum Schluss
   update_r();
   update_s();
   update_l();
-  update_a_b_c();
+  //update_a_b_c();
 
   //debug Interface
   handle_debug();
