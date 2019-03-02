@@ -43,16 +43,11 @@ int prev_value_b[]={
 //14  gang nord unten
 //15 leo oben 
 const int num_c_states=16;
-const int which_b[]={           
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
-int value_c[]={                 
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
-int aux_value_c[]={             
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
-long time_c_neg[]={             
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
-long time_c_pos[]={             
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
+const int which_b[]={0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
+int value_c[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //positive flanke
+int aux_value_c[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //negative flanke
+long time_c_neg[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen fallenden flanke
+long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit der letzen steigenden flanke
       
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -125,7 +120,7 @@ const int down_time_s[]={
 int value_s[]={                  
 -1, -1, -1, 0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]={              
-0, 0, 0};          // zeit zu stoppen
+0, 0, 0, 0, 0};          // zeit zu stoppen
 
 
 //constants and variables for u states (temperatur steller)
