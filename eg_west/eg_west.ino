@@ -58,7 +58,7 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
 const int num_t_states=4;
 const int period_t=10000;                                                                                  //update periode in ms
 const String t_address[]={       
-"TI_xx_WZ", "TI_xx_EZ", "TI_xx_GA", "TI_xx_KU"};                                                                                                           //addresse
+"TI_EG_WZ", "TI_EG_KU", "TI_EG_EZ", "TI_EG_GA"};                                                                                                           //addresse
 const int t_pin[]={             
 46, 47,  48,  49};
 int value_t[]={                 
@@ -85,8 +85,7 @@ const int l_pin[]={
 22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45};                //digitaler pin
 int value_l[]={                 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-long set_time_l[]={
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+long set_time_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   
 
 ////constants and variables for r states (rollo)
@@ -144,20 +143,6 @@ int value_u[]={
 
 void user_logic(){
   int i;
-    
-  // c states über debug schnittstelle
-  for (i=0; i<num_c_states; i++){
-    if (value_c[i]==1){
-      Serial.print("pos Flanke: ");
-      Serial.println(i);
-    }
-    if (value_c[i]==-1){
-      Serial.print("neg Flanke: ");
-      Serial.println(i);
-    }
-  }
-  //Serial.print("8b: " );
-  //Serial.println(value_b[8]);
     
   //taster verküpfungen
   //3  gang, ez
