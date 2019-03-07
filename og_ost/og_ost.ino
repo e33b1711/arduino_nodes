@@ -7,7 +7,7 @@ const String unit_name = "og_ost";
 #include <Ethernet.h>
 const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x04 };
 const int ethernet_sc_pin = 53;
-const IPAddress ip(192,168,178,203);
+const IPAddress ip(192,168,178,201);
 const IPAddress server(192,168,178,222);
 const int port = 8888;
 
@@ -69,10 +69,8 @@ int i_t=0;                                                                      
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states=2;
-const String h_address[]={      
-"HI_OG_SZ", "HI_OG_BA", "HI_3", "HI_4", "HI_5", "HI_6"};       //addresse
-int value_h[]={                 
-0, 0, 0, 0, 0, 0};
+const String h_address[]={"HI_OG_SZ", "HI_OG_BA", "HI_3", "HI_4", "HI_5", "HI_6"};       //addresse
+int value_h[]={0, 0, 0, 0, 0, 0};
 
 
 //constants and variables for l states (einfaches licht / verbraucher)
