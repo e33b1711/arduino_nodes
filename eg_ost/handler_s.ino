@@ -1,5 +1,6 @@
 void setup_s()
 {
+  Serial.println("setup_s");
   int i;
   for (i=0; i<num_s_states; i++){
     send_message("w", s_address[i], value_r[i]);
@@ -55,9 +56,3 @@ void write_s(String address, int value){
     }
   }
 }
-
-
-
-
-
-

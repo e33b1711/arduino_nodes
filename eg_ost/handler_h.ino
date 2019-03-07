@@ -1,7 +1,11 @@
-void setup_h(){}
+void setup_h()
+{
+  Serial.println("setup_h");
+}
 
 
 void update_h(){}
+
 
 
 void write_h(String address, int value){
@@ -12,4 +16,3 @@ void write_h(String address, int value){
     }
   }
 }
-

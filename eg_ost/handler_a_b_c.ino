@@ -30,11 +30,15 @@ void update_a_b_c()
   if (value_b[i]==1 && prev_value_b[i]==0){
     value_c[i]=1;
     time_c_pos[i]=millis();
+    Serial.print("update_abc: pos Flanke: ");
+    Serial.println(i);
   }
   else if(value_b[i]==0 && prev_value_b[i]==1)
   {
     value_c[i]=-1;
     time_c_neg[i]=millis();
+    Serial.print("update_abc: neg Flanke: ");
+    Serial.println(i);
   }
   else
   {
@@ -49,5 +53,3 @@ void update_a_b_c()
   }
 }
   
-
-

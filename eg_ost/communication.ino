@@ -4,6 +4,8 @@
 
 EthernetClient client;
 
+int conn_error_count = 0;
+String message_buffer = "";
 
 //these are defined unit spefic file
 //byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
@@ -28,20 +30,21 @@ void init_comm()
     // if you didn't get a connection to the server:
     Serial.println("init_comm: connection failed");
   }
-  // reserve 50 bytes for the inputString
-  //inputString.reserve(50);
+  // reserve 100 bytes for the message buffer
+  message_buffer.reserve(100);
 }
 
 
 void send_message(String out_messageType, String out_address, int out_value){
-  String message='!' + out_messageType + '!' + out_address + '!' + String(out_value, DEC) + "$";
-  client.println(message);
-  client.flush();
+  String message='!' + out_messageType + '!' + out_address + '!' + String(out_value, DEC) + "$\n";
+  //client.println(message);
+  //client.flush();
+  message_buffer += message;
 }
 
 
 void handle_comm(){
-
+  
   static String inputString = "";                // a string to hold incoming data
   static boolean messageComplete = false;        // whether the string is complete
   String in_messageType, addressString, valueString;
@@ -49,19 +52,25 @@ void handle_comm(){
   
   //check if still connected, eventually reconnect 
   if (!client.connected()) {
-    //how is the performance, without connection?
-    Serial.println("handel_comm: no connection to server, trying to connect...");
-    //reset parser state
-    inputString = "";
-    messageComplete = false;
-    //try to reconnect
-    Ethernet.init(ethernet_sc_pin);
-    Ethernet.begin(mac, ip);
-    if (client.connect(server, port)) {
-      Serial.println("...success.");
-    }else{
-      Serial.println("...fail.");
-    }  
+      Serial.println("handel_comm: client not connected");
+    if (conn_error_count%20==0){
+      //how is the performance, without connection?
+      Serial.println("handel_comm: trying to connect...");
+      //reset parser state
+      inputString = "";
+      messageComplete = false;
+      //try to reconnect
+      Ethernet.init(ethernet_sc_pin);
+      Ethernet.begin(mac, ip);
+      delay(1000);
+      if (client.connect(server, port)) {
+        Serial.println("     ...success.");
+        conn_error_count = 0;
+      }else{
+        Serial.println("     ...fail.");
+        conn_error_count++;
+      }  
+    }
   }
   
   // get a complete message
@@ -78,31 +87,32 @@ void handle_comm(){
   //message parser & handler
   while (messageComplete) {
     //message parser
-    Serial.print("handle_debug: parsing message...:");
+    Serial.print("handle_debug: parsing message: ");
+    Serial.println(inputString);
     
     int index1=inputString.indexOf('!');
     int index2=inputString.indexOf('!', index1+1);
     int index3=inputString.indexOf('!', index2+1);
     int index4=inputString.indexOf('$');
 
-    Serial.print("  " + inputString + " index1-4: ");
-    Serial.print(index1);
-    Serial.print("  ");
-    Serial.print(index2);
-    Serial.print("  ");
-    Serial.print(index3);
-    Serial.print("  ");
-    Serial.println(index4);
+    //Serial.print("  " + inputString + " index1-4: ");
+    //Serial.print(index1);
+    //Serial.print("  ");
+    //Serial.print(index2);
+    //Serial.print("  ");
+    //Serial.print(index3);
+    //Serial.print("  ");
+    //Serial.println(index4);
     
     in_messageType=inputString.substring(index1+1, index2);
-    Serial.println("  " + inputString);
+    //Serial.println("  " + inputString);
     addressString=inputString.substring(index2+1,index3);
-    Serial.println("  " + addressString);
+    //Serial.println("  " + addressString);
     valueString=inputString.substring(index3+1,index4);
-    Serial.println("  " + valueString);
+    //Serial.println("  " + valueString);
     in_value=valueString.toInt();
-    Serial.print("  ");
-    Serial.println(in_value);
+    //Serial.print("  ");
+    //Serial.println(in_value);
 
     //reset parser state
     inputString="";
@@ -122,6 +132,15 @@ void handle_comm(){
       write_state_silent(addressString, in_value);
     }
   }
+
+  //send messages
+  if(client.connected()  && message_buffer != ""){
+    client.println(message_buffer);
+    Serial.println("handle_comm: Sending message_buffer...");
+    Serial.println(message_buffer);
+    message_buffer="";
+  }
+  
 }
 
 

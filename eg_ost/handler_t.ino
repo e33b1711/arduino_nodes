@@ -4,6 +4,7 @@ dht DHT;
 
 void setup_t()
 {
+  Serial.println("setup_t");
   int i;
   for (i=0; i<num_t_states; i++){
     int chk = DHT.read22(t_pin[i]);

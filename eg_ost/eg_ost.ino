@@ -71,7 +71,7 @@ int i_t=0;                                                                      
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states=1;
+const int num_h_states=0;
 const String h_address[]={      
 "HI_EG_WC", "HI_48", "HI_49", "HI_50", "HI_51", "HI_52"};       //addresse
 int value_h[]={                 
@@ -146,18 +146,6 @@ int value_u[]={
 void user_logic()
 {
   int i;
-
-  // c states über debug schnittstelle
-  for (i=0; i<num_c_states; i++){
-    if (value_c[i]==1){
-      Serial.print("pos Flanke: ");
-      Serial.println(i);
-    }
-    if (value_c[i]==-1){
-      Serial.print("neg Flanke: ");
-      Serial.println(i);
-    }
-  }
 
   // 14  gararobe
   i=14;

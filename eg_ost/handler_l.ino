@@ -1,5 +1,6 @@
 void setup_l()
 {
+  Serial.println("setup_l");
   int i;
   for (i=0; i<num_l_states; i++){
   digitalWrite(l_pin[i],HIGH);
@@ -51,8 +52,3 @@ void write_l(String address, int value){
     }
   }
 }
-
-
-
-
-
