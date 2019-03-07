@@ -52,7 +52,7 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
        
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
-const int num_t_states=0;
+const int num_t_states=5;
 const int period_t=10000;                                                                                  //update periode in ms
 const String t_address[]={    
 "TI_UG_WK", "TI_UG_HN", "TI_UG_LA", "TI_UG_HS", "TI_UG_HK", "TI_UG_GA"};                                       //addresse
@@ -67,7 +67,7 @@ int i_t=0;                                                                      
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states=0;
+const int num_h_states=5;
 const String h_address[]={      
 "HI_UG_WK", "HI_UG_HN", "HI_UG_LA", "HI_UG_HS", "HI_UG_HK", "HI_UG_GA"};       //addresse
 int value_h[]={0, 0, 0, 0, 0, 0};
@@ -134,18 +134,6 @@ int value_u[]={3, 3, 3, 3, 3, 3, 3, 3};               //stell wert 0-15 (0=aus b
 void user_logic()
 {
     int i;
-  
-  // c states über debug schnittstelle
-  for (i=0; i<num_c_states; i++){
-    if (value_c[i]==1){
-      Serial.print("pos Flanke: ");
-      Serial.println(i);
-  }
-  if (value_c[i]==-1){
-      Serial.print("neg Flanke: ");
-      Serial.println(i);
-  }
-  }
 
   //2 GA_HK
 //3 HK

@@ -70,20 +70,17 @@ int i_t=0;                                                                      
 const int num_h_states=3;
 const String h_address[]={      
 "HI_OG_KS", "HI_OG_KN", "HI_OG_GA", "HI_50", "HI_51", "HI_52"};       //addresse
-int value_h[]={                 
-0, 0, 0, 0, 0, 0};
+int value_h[]={0, 0, 0, 0, 0, 0};
 
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=24;
 const String l_address[]={      
 "LI_OG_GA_L1", "VD_OG_KS_DO", "VD_OG_KS_UP", "L25", "VD_OG_KN_UP", "LI_GA_L1", "VD_OG_KN_DO", "LI_OG_KN", "RO_OG_KN_ON", "RO_OG_KN_DO", "LI_OG_GA", "RO_OG_KS_ON", "LI_OG_KS", "LI_OG_KN_L1", "RO_OG_KS_DO", "LI_OG_KS_L1", "DF_OG_KN_DO", "DF_OG_GA_DO","DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "DF_OG_KS_DO", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]={             
-22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45};                //digitaler pin
+const int l_pin[]={             22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45};                //digitaler pin
 int value_l[]={                 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-long set_time_l[]={
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+long set_time_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
 ////constants and variables for r states (rollo)
@@ -135,28 +132,13 @@ const unsigned long u_interval=
 240000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis=0;
 int u_phase=0;
-int value_u[]={                   
-5,               5,                 5,                 3,            14,                5};               //stell wert 0-15 (0=aus bis 15=voll)
+int value_u[]={5,               5,                 5,                 3,            14,                5};               //stell wert 0-15 (0=aus bis 15=voll)
 
 
 void user_logic()
 {
     int i;
-  
-  // c states über debug schnittstelle
-  for (i=0; i<num_c_states; i++){
-    if (value_c[i]==1){
-      Serial.print("pos Flanke: ");
-      Serial.println(i);
-  }
-  if (value_c[i]==-1){
-      Serial.print("neg Flanke: ");
-      Serial.println(i);
-  }
-  }
-  
-  
-  
+   
   //taster verküpfungen
   // 14  Gang, KZ nord, einzel
   // 13  DF

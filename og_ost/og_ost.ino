@@ -142,20 +142,7 @@ int value_u[]={
 
 void user_logic()
 {
-    int i;
-  
-  // c states über debug schnittstelle
-  for (i=0; i<num_c_states; i++){
-    if (value_c[i]==1){
-      Serial.print("pos Flanke: ");
-      Serial.println(i);
-  }
-  if (value_c[i]==-1){
-      Serial.print("neg Flanke: ");
-      Serial.println(i);
-  }
-  }
-  
+    int i;  
 
   //taster verküpfungen
   //6  sz, tür, mitte
