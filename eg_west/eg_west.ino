@@ -72,7 +72,7 @@ int i_t=0;                                                                      
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states=4;
 const String h_address[]={      
-"HI_EG_WZ", "HI_EG_EZ", "HI_EG_GA", "HI_EG_KU"};       //addresse
+"HI_EG_WZ", "HI_EG_KU", "HI_EG_EZ", "HI_EG_GA"};       //addresse
 int value_h[]={                 
 0, 0, 0, 0, 0};
 
@@ -287,7 +287,7 @@ void user_logic(){
   //5 kellertreppe oben
   i=9;
   if (value_c[i]==1){
-    toggle_state("LI_UG_GA");
+    write_state("LI_UG_GA",3);
     //write_state("LI_GA_L1",3);
   }
   i=5;

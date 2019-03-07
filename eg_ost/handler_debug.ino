@@ -24,31 +24,32 @@ messageComplete = true;
   //message parser & handler
   while (messageComplete) {
     //message parser
-    Serial.print("handle_debug: parsing message...:");
+    Serial.println("handle_debug: parsing message...:");
+    Serial.println(inputString);
     
     int index1=inputString.indexOf('!');
     int index2=inputString.indexOf('!', index1+1);
     int index3=inputString.indexOf('!', index2+1);
     int index4=inputString.indexOf('$');
 
-  Serial.print("  " + inputString + " index1-4: ");
-    Serial.print(index1);
-    Serial.print("  ");
-    Serial.print(index2);
-    Serial.print("  ");
-    Serial.print(index3);
-    Serial.print("  ");
-    Serial.println(index4);
+  //Serial.print("  " + inputString + " index1-4: ");
+    //Serial.print(index1);
+    //Serial.print("  ");
+    //Serial.print(index2);
+    //Serial.print("  ");
+    //Serial.print(index3);
+    //Serial.print("  ");
+    //Serial.println(index4);
     
     in_messageType=inputString.substring(index1+1, index2);
-    Serial.println("  " + inputString);
+    //Serial.println("  " + inputString);
     addressString=inputString.substring(index2+1,index3);
-    Serial.println("  " + addressString);
+    //Serial.println("  " + addressString);
     valueString=inputString.substring(index3+1,index4);
-    Serial.println("  " + valueString);
+    //Serial.println("  " + valueString);
     in_value=valueString.toInt();
-    Serial.print("  ");
-    Serial.println(in_value);
+    //Serial.print("  ");
+    //Serial.println(in_value);
 
     //reset parser state
     inputString="";

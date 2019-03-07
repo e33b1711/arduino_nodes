@@ -3,7 +3,7 @@ void setup_u()
   Serial.println("setup_u");
   int i;
   for (i=0; i<num_u_states; i++){
-    send_message("w", u_address[i], value_u[i]);
+    //send_message("w", u_address[i], value_u[i]);
     digitalWrite(u_pin[i],HIGH);
     pinMode(u_pin[i],OUTPUT);
   }
@@ -24,7 +24,7 @@ void update_u()
     u_phase=u_phase+1;
     if (u_phase>14){u_phase=0;}
     for (i=0; i<num_u_states; i++){
-      Serial.println(value_u[i]>=((u_phase + 2*i) % 16));
+      //Serial.println(value_u[i]>=((u_phase + 2*i) % 16));
       if (value_u[i]>((u_phase + 2*i) % 15)){
         digitalWrite(u_pin[i],LOW);
       }else{
@@ -45,8 +45,10 @@ void write_u(String address, int value){
            value_u[i]=7;}
            else{
       value_u[i]=value;}
+      Serial.print("write_u: i: ");
+      Serial.print(i);
+      Serial.println(" , value: ");
       Serial.println(value_u[i]);
-      Serial.println("update u");
     }
   }
 }

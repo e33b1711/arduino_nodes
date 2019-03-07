@@ -20,7 +20,7 @@ void init_comm()
   Ethernet.init(ethernet_sc_pin);
   Ethernet.begin(mac, ip);
   // give the Ethernet shield a second to initialize:
-  delay(1000);
+  delay(500);
   Serial.println("init_comm: connecting...");
   if (client.connect(server, port)) {
     Serial.println("init_comm: connected");
@@ -45,30 +45,55 @@ void send_message(String out_messageType, String out_address, int out_value){
 
 void handle_comm(){
   
-  static String inputString = "";                // a string to hold incoming data
+  static long last_try=0;               // a string to hold incoming data
   static boolean messageComplete = false;        // whether the string is complete
-  String in_messageType, addressString, valueString;
+  String in_messageType, addressString, valueString, inputString;
   int in_value;
-  
-  //check if still connected, eventually reconnect 
-  if (!client.connected()) {
-      Serial.println("handel_comm: client not connected");
-    if (conn_error_count%20==0){
-      //how is the performance, without connection?
-      Serial.println("handel_comm: trying to connect...");
+
+  //trigger not conneted conndition
+  static long last_keep_alive=millis();
+  if (last_keep_alive+1000<millis()){
+  client.print(" \b");
+  last_keep_alive = millis();
+  }
+
+  //check if still connected, eventually reconnect
+  static bool reconn_try = false;
+  if ((!client.connected()) & !reconn_try) {
+    reconn_try=true;
+     Serial.println("handel_comm: trying to reconnect...");
+      //reset parser state
+      inputString = "";
+      messageComplete = false;
+      //try to reconnect
+      if (client.connect(server, port)) {
+        Serial.println("     ...success.");
+        reconn_try=false;
+      }else{
+        Serial.println("     ...fail.");
+      }  
+  }
+
+  //if still unconnected, try to recover each 20 secs
+  if (!client.connected() & reconn_try) {
+    if (last_try+20000<millis()){
+      last_try = millis();
+      Serial.println("handel_comm: trying to recover...");
       //reset parser state
       inputString = "";
       messageComplete = false;
       //try to reconnect
       Ethernet.init(ethernet_sc_pin);
       Ethernet.begin(mac, ip);
-      delay(1000);
+      delay(500);
       if (client.connect(server, port)) {
         Serial.println("     ...success.");
-        conn_error_count = 0;
+        //clear in / out buffer
+        while (client.available()){ char inChar = client.read(); };
+        message_buffer="";
+        reconn_try=false;
       }else{
         Serial.println("     ...fail.");
-        conn_error_count++;
       }  
     }
   }
@@ -87,7 +112,7 @@ void handle_comm(){
   //message parser & handler
   while (messageComplete) {
     //message parser
-    Serial.print("handle_debug: parsing message: ");
+    Serial.print("handle_comm: parsing message: ");
     Serial.println(inputString);
     
     int index1=inputString.indexOf('!');
@@ -135,7 +160,7 @@ void handle_comm(){
 
   //send messages
   if(client.connected()  && message_buffer != ""){
-    client.println(message_buffer);
+    client.print(message_buffer);
     Serial.println("handle_comm: Sending message_buffer...");
     Serial.println(message_buffer);
     message_buffer="";
