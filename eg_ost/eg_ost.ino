@@ -5,9 +5,9 @@ const String unit_name = "eg_ost";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const int ethernet_sc_pin = 53;
-const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x04 };
-const IPAddress ip(192,168,178,203);
+const int ethernet_sc_pin = 10;
+const byte mac[] = {0xDE, 0xAA, 0x7E, 0xEF, 0xFE, 0x04 };
+const IPAddress ip(192,168,178,211);
 const IPAddress server(192,168,178,222);
 const int port = 8888;
 
@@ -18,7 +18,7 @@ const int port = 8888;
 int counter_a=0;
 const int num_b_states=16;
 const int b_pin[]={           
-  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+  2, 3, 4, 5, 6, 7, 8, 9, 9, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
   0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
