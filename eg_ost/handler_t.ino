@@ -14,7 +14,7 @@ void setup_t()
 
 void update_t()
 {
-  if (time_t+(period_t*1000)<millis()){
+  if (time_t+(period_t)<millis()){
     time_t=millis();
     i_t++;
     if (i_t==num_t_states){i_t=0;}
@@ -39,8 +39,8 @@ void handle_one_t(int i){
    if (notice == SDHT_OK){
       value_t[i]=dht.celsius*10;
       value_h[i]=dht.humidity;
-      send_message("w", t_address[i], value_t[i]);
-      send_message("w", h_address[i], value_h[i]);
+      //send_message("w", t_address[i], value_t[i]);
+      //send_message("w", h_address[i], value_h[i]);
       Serial.print("handle_one_t: value_t: "); Serial.print(value_t[i]); 
       Serial.print(" value_h: "); Serial.print(value_h[i]);
       Serial.print("  i: "); Serial.println(i);

@@ -8,7 +8,7 @@ void setup_u()
     pinMode(u_pin[i],OUTPUT);
   }
   for (i=0; i<num_u_states; i++){
-    delay(1000);
+    delay(400);
     digitalWrite(u_pin[i],LOW);
   }
   previousMillis=millis();

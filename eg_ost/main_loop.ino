@@ -2,9 +2,6 @@ void setup(){
 
    //init debug interface
   init_debug();
-  
-  //init comm
-  init_comm();
 
   // init states
   setup_a_b_c();
@@ -13,9 +10,11 @@ void setup(){
   setup_u();
   setup_r();
   setup_s();
-
   //states mit ausgängen zum Schluss
-  setup_l();
+  setup_l();  
+
+  //init comm
+  init_comm();
 
 }
 

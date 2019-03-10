@@ -73,23 +73,23 @@ void init_debug(){
 
 
 void post_all_debug(){
-Serial.println("unit adress: " + unit_name + ", posting all: start");
+  Serial.println("unit adress: " + unit_name + ", posting all: start");
   int i;  
   for (i=0; i<num_l_states; i++){
-  Serial.println(l_address[i] + " " +  value_l[i]);
+    Serial.println(l_address[i] + " " +  value_l[i]);
   }
   for (i=0; i<num_r_states; i++){
-  Serial.println(r_address[i] + " " +  value_r[i]);
+    Serial.println(r_address[i] + " " +  value_r[i]);
   }
   for (i=0; i<num_s_states; i++){
-  Serial.println(s_address[i] + " " +  value_s[i]);
+    Serial.println(s_address[i] + " " +  value_s[i]);
   }
   for (i=0; i<num_t_states; i++){
-      Serial.println(t_address[i] + " " +  value_t[i]);
-      Serial.println(h_address[i] + " " +  value_h[i]);
+    Serial.println(t_address[i] + " " +  value_t[i]);
+    Serial.println(h_address[i] + " " +  value_h[i]);
   }
   for (i=0; i<num_u_states; i++){
-  Serial.println(u_address[i] + " " +  value_u[i]);
+    Serial.println(u_address[i] + " " +  value_u[i]);
   }
   Serial.println("posting all: end");
 }

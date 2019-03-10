@@ -162,7 +162,7 @@ void handle_comm(){
   if(client.connected()  && message_buffer != ""){
     client.print(message_buffer);
     Serial.println("handle_comm: Sending message_buffer...");
-    Serial.println(message_buffer);
+    Serial.print(message_buffer);
     message_buffer="";
   }
   
@@ -170,17 +170,17 @@ void handle_comm(){
 
 
 void post_all(){
-  client.println("!info!" + unit_name + "!posting all: start!0$");
+   send_message("info", unit_name + " posting all: start", 0);
   int i;
   for (i=0; i<num_l_states; i++){
-    client.println("!w!" + l_address[i] + "!" + value_l[i] + "!0$");
+    send_message("w", l_address[i], value_l[i]);
   }
   for (i=0; i<num_r_states; i++){
-    client.println("!w!" + r_address[i] + "!" + value_r[i] + "!0$");
+    send_message("w", r_address[i], value_r[i]);
   }
   for (i=0; i<num_t_states; i++){
-    client.println("!w!" + t_address[i] + "!" + value_t[i] + "!0$");
-    client.println("!w!" + h_address[i] + "!" + value_h[i] + "!0$");
+    send_message("w", t_address[i], value_t[i]);
+    send_message("w", h_address[i], value_h[i]);
   }
   for (i=0; i<num_u_states; i++){
     send_message("w", u_address[i], value_u[i]);

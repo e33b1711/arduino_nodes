@@ -7,8 +7,8 @@ const String unit_name = "eg_ost";
 #include <Ethernet.h>
 const int ethernet_sc_pin = 10;
 const byte mac[] = {0xDE, 0xAA, 0x7E, 0xEF, 0xFE, 0x04 };
-const IPAddress ip(192,168,178,211);
-const IPAddress server(192,168,178,222);
+IPAddress ip(192,168,178,211);
+IPAddress server(192,168,178,222);
 const int port = 8888;
 
 
@@ -56,7 +56,7 @@ long time_c_pos[]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zei
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 //                              hobby süd, hobby nord, heizkeller, lager, waschküche, gang
 const int num_t_states=0;
-const int period_t=309;                                                                                  //update periode in s
+const long period_t=1800000;                                                                                 
 const String t_address[]={      
 "TI_EG_WC", "TI_48", "TI_49", "TI_50", "TI_51", "TI_52"};       
 //addresse

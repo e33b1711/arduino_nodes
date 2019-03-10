@@ -56,7 +56,7 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 //achtung 2mal 48, ändern!!!!!!!!
 const int num_t_states=4;
-const int period_t=10000;                                                                                  //update periode in ms
+const long period_t=1800000;                                                                                //update periode in ms
 const String t_address[]={       
 "TI_EG_WZ", "TI_EG_KU", "TI_EG_EZ", "TI_EG_GA"};                                                                                                           //addresse
 const int t_pin[]={             
