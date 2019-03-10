@@ -51,11 +51,11 @@ void handle_comm(){
   int in_value;
 
   //trigger not conneted conndition
-  static long last_keep_alive=millis();
+  /**static long last_keep_alive=millis();
   if (last_keep_alive+1000<millis()){
   client.print(" \b");
   last_keep_alive = millis();
-  }
+  }**/
 
   //check if still connected, eventually reconnect
   static bool reconn_try = false;
