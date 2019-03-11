@@ -266,9 +266,6 @@ void user_logic()
   if (value_c[i]==1){
     write_state("BELL",1);
   }
-  if (value_c[i]==-1){
-    write_state("BELL",0);
-  }
 
   //timer: Vordach Beleuchtung
   static boolean timer_on=false;

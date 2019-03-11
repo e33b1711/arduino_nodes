@@ -175,4 +175,13 @@ void user_logic()
   if (value_c[i]==1){
      toggle_state("LI_UG_WK");
   }
+
+  //turn off BELL trigger after one second
+  i=0;
+  if ((value_l[i]==1) && set_time_l[i]+1000<millis()){
+    write_l("BELL",0); 
+    send_message("w", l_address[i], value_l[i]);
+  }
+  
+  
 }
