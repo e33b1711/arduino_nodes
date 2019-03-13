@@ -54,7 +54,7 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 //                              hobby süd, hobby nord, heizkeller, lager, waschküche, gang
 const int num_t_states=2;
-const int period_t=1800000;                                                                                  //update periode in ms
+const long period_t=1800000;                                                                                  //update periode in ms
 const String t_address[]={      
 "TI_OG_SZ", "TI_OG_BA", "TI_3", "TI_4", "TI_5"};                                         //addresse
 const int t_pin[]={             

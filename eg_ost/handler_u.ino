@@ -3,7 +3,7 @@ void setup_u()
   Serial.println("setup_u");
   int i;
   for (i=0; i<num_u_states; i++){
-    //send_message("w", u_address[i], value_u[i]);
+    send_message("w", u_address[i], value_u[i]);
     digitalWrite(u_pin[i],HIGH);
     pinMode(u_pin[i],OUTPUT);
   }
