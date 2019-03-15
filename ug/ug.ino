@@ -6,7 +6,7 @@ const String unit_name = "ug";
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x05 };
-const int ethernet_sc_pin = 53;
+const int ethernet_sc_pin = 10;
 IPAddress ip(192,168,178,204);
 IPAddress server(192,168,178,222);
 int port = 8888;

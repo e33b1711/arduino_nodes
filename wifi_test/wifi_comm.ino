@@ -42,7 +42,7 @@ void handle_wifi_comm(){
   
   
   // get a complete message
-  while (client.available() & !messageComplete) {
+  while (client.available()) {
     //get the new byte:
     char inChar = client.read();
     Serial.print(inChar);
@@ -122,7 +122,7 @@ Serial.print("message_handler: client.connected(): ");
 
 void connect_network(){
   //a hw reset by io pin could be done here
-   Serial1.begin(9600);
+   Serial1.begin(115200);
   // initialize ESP module
   WiFi.init(&Serial1);
   // check for the presence of the shield

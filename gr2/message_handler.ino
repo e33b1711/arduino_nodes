@@ -14,58 +14,74 @@ void message_handler(){
 
   //generic handler for in and out going messages
 
-  static boolean messageComplete = false;        // whether the string is complete
-  String in_messageType, addressString, valueString, inputString;
+  static boolean messageComplete = false;        
+  static boolean messageStarted = false;        
+  static String inputString;
+  String in_messageType, addressString, valueString;
   int in_value;
   
   //reconnecting server / wifi here...
 
- Serial.print("message_handler: client.connected(): ");
- Serial.println(client.connected());
- Serial.print("message_handler: client.vailable(): ");
- Serial.println(client.available());
+  /**static int counter=0;
+  if (counter%100==0){
+    Serial.print("message_handler: client.connected(): ");
+    Serial.println(client.connected());
+    Serial.print("message_handler: client.ailable(): ");
+    Serial.println(client.available());
+    Serial.print("message_handler: client.messageComplete: ");
+    Serial.println(messageComplete);
+  }
+  counter++;**/
+ 
 
   // get a complete message
   while (client.available() && !(messageComplete)) {
+  //while (client.available()){
     //get the new byte:
     char inChar = client.read();
-    Serial.print(inChar);
+    //Serial.print(inChar);
+    if (inChar == '!') messageStarted = true;
     //add it to the inputString:
-    inputString += inChar;
-    if (inChar == '$') {
-      messageComplete = true;
-    } 
+    if (messageStarted){
+      inputString += inChar;
+      if (inChar == '$') {
+        messageComplete = true;
+        messageStarted = false;
+      } 
+    }
   }
 
   //message parser & handler
   while (messageComplete) {
     //message parser
-    Serial.print("handle_comm: parsing message: ");
-    Serial.println(inputString);
+    Serial.println("handle_comm: inputString: " + inputString);
     
     int index1=inputString.indexOf('!');
     int index2=inputString.indexOf('!', index1+1);
     int index3=inputString.indexOf('!', index2+1);
     int index4=inputString.indexOf('$');
 
-    //Serial.print("  " + inputString + " index1-4: ");
-    //Serial.print(index1);
-    //Serial.print("  ");
-    //Serial.print(index2);
-    //Serial.print("  ");
-    //Serial.print(index3);
-    //Serial.print("  ");
-    //Serial.println(index4);
+    /**Serial.print("  " + inputString + " index1-4: ");
+    Serial.print(index1);
+    Serial.print("  ");
+    Serial.print(index2);
+    Serial.print("  ");
+    Serial.print(index3);
+    Serial.print("  ");
+    Serial.println(index4);**/
     
     in_messageType=inputString.substring(index1+1, index2);
-    //Serial.println("  " + inputString);
     addressString=inputString.substring(index2+1,index3);
-    //Serial.println("  " + addressString);
+   
     valueString=inputString.substring(index3+1,index4);
-    //Serial.println("  " + valueString);
+   
     in_value=valueString.toInt();
-    //Serial.print("  ");
-    //Serial.println(in_value);
+    
+
+    Serial.println("  handle_comm: in_message_type:     " + in_messageType);
+    Serial.println("  handle_comm: addressString:       " + addressString);
+    Serial.print  ("  handle_comm: valueString / value: " + valueString + " / ");
+    Serial.println(in_value);
 
     //reset parser state
     inputString="";
@@ -87,7 +103,7 @@ void message_handler(){
     
     
   }
-
+  
   //send messages
   if(client.connected()  && message_buffer != ""){
     client.print(message_buffer);

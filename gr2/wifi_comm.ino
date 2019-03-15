@@ -50,7 +50,7 @@ void handle_comm(){
 
 void connect_network(){
   //a hw reset by io pin could be done here
-   Serial1.begin(9600);
+   Serial1.begin(115200);
   // initialize ESP module
   WiFi.init(&Serial1);
   // check for the presence of the shield

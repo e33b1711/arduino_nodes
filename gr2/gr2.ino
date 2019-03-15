@@ -27,8 +27,8 @@ WiFiEspClient client;
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a=0;
-const int num_b_states  = 8;
-const int b_pin[]       = {26, 28, 30, 32, 34, 36, 38, 40};       //a state auf der selben unit                         
+const int num_b_states  = 3;
+const int b_pin[]       = {42, 44, 46, 48, 50, 52, 54, 56};       //a state auf der selben unit                         
 int value_b[]           = {0, 0, 0, 0, 0, 0, 0, 0};       //an/aus
 int prev_value_b[]      = {0, 0, 0, 0, 0, 0, 0, 0};       //an/aus (alter Wert zur Flankenerkennung)
 
@@ -60,9 +60,9 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0};        //zeit der letzen steigenden 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 const int num_t_states=2;
-const int period_t=10000;                                                                                  //update periode in ms
+const long period_t=600000;                                                                                  //update periode in ms
 const String t_address[]={"TI_GR", "TI_GR_A"};                                                                                                           //addresse
-const int t_pin[]={ 22, 24};
+const int t_pin[]={ 38, 40};
 int value_t[]={ 0,   0};                                            //temperatur
 int aux_value_t[]={  0,   0};                                            //feuchtigkeit
 long time_t=0;                                                                                          //update timer
@@ -92,6 +92,7 @@ const String r_trigger[]    = {"GR_DO_TR"};         //l state
 const int r_down[]          = {1};         // c state up sensor
 const int r_up[]            = {2};       // c state down sensor
 int value_r[]               = {0};          // -1 z, 0 unsicher, 1 auf
+int last_value_r[]          = {0};          // -1 z, 0 unsicher, 1 auf
 long lock_time_r[]          = {0};          
 const long lock_delay_r     = 20000;      
   
@@ -127,6 +128,13 @@ void user_logic(){
   //0 taster innen
   i=0;
   if(value_c[i]==1) toggle_state("LI_GR");
+
+  /**TO DO:
+   * timer & timer state (lang / kurz)
+   * door debuggen
+   * wlan stabilisieren
+   * dht22
+   */
     
 }
   

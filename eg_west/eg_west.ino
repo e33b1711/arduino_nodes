@@ -5,7 +5,7 @@ const String unit_name = "eg_west";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const int ethernet_sc_pin = 53;
+const int ethernet_sc_pin = 10;
 const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
 const IPAddress ip(192,168,178,200);
 const IPAddress server(192,168,178,222);
@@ -17,7 +17,7 @@ const int port = 8888;
 int counter_a=0;
 const int num_b_states=16;
 const int b_pin[]={           
-2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+2, 3, 4, 5, 6, 7, 8, 9, 9, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
 int value_b[]={               
 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -31,16 +31,18 @@ int prev_value_b[]={
 //3 gang ez
 //4 ez gang unten
 //5 gang keller oben
-//6 ez we rollo hoch
-//7 ez süd unten
-//8 ez süd rollo runter
-//9 gang keller unten
-//10 küche
-//11 ez süd roolo hoch
-//12 ez we rollo runter
-//13 ez we unten
-//14 
+//6 ez su runter
+//7 gang keller unten
+//8 xxx
+//9 ez we hoch
+//10 ez su unten
+//11 ez we runter
+//12 ku
+//13 ez su hoch
+//14 ez we unten
 //15 
+
+
 const int num_c_states=16;
 const int which_b[]={           
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15};       //a state auf der selben unit                         
@@ -177,10 +179,10 @@ void user_logic(){
 
 
   
-  //8  ez, süd, unten
-  //7  ez, süd, rollo
+  //10  ez, süd, unten
+  //13  ez, süd, rollo
   //6  "
-  i=7;
+  i=10;
   if (value_c[i]==-1){
     if (time_c_pos[i]+700>time_c_neg[i]){
       toggle_state("LI_EG_AS");
@@ -189,7 +191,7 @@ void user_logic(){
       write_state("PUMP",3);
     }
   }
-  i=11;
+  i=13;
   if (value_c[i]==1){
     //entriegeln
     write_state("RO_EG_SU",0);
@@ -208,7 +210,7 @@ void user_logic(){
       write_state("RO_EG_SU_DO",0);
     }
   }
-  i=8;
+  i=6;
   if (value_c[i]==1){
     //entriegeln
     write_state("RO_EG_SU",0);
@@ -226,14 +228,14 @@ void user_logic(){
       write_state("RO_EG_SU_DO",0);
     }
   }
-  //13  ez, west, unten
-  //6 ", rollo
-  //12  "
-  i=13;
+  //14  ez, west, unten
+  //9 ", rollo
+  //11  "
+  i=14;
   if (value_c[i]==1){
     toggle_state("LI_EG_AW");
   }
-  i=6;
+  i=9;
   if (value_c[i]==1){
     //entriegeln
     write_state("RO_EG_WE",0);
@@ -251,7 +253,7 @@ void user_logic(){
       write_state("RO_EG_WE_DO",0);
     }
   }
-  i=12;
+  i=11;
   if (value_c[i]==1){
     //entriegeln
     write_state("RO_EG_WE",0);
@@ -271,15 +273,15 @@ void user_logic(){
   }
    
   //10  küche
-  i=10;
+  i=12;
   if (value_c[i]==1){
     toggle_state("LI_EG_KU_L1");
     toggle_state("LI_EG_SP");
   }
       
-  //9 kellertreppe unten
+  //7 kellertreppe unten
   //5 kellertreppe oben
-  i=9;
+  i=7;
   if (value_c[i]==1){
     write_state("LI_UG_GA",3);
     //write_state("LI_GA_L1",3);
