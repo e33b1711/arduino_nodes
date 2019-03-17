@@ -12,6 +12,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   if ((notice  = dht.broadcast(DHT22, 2)) == SDHT_OK) layout(); else Serial.println(notice);
   delay(2000);
+  Serial.println("Hello");
 
 }
 

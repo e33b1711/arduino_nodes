@@ -52,12 +52,12 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
        
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
-const int num_t_states=5;
+const int num_t_states=6;
 const long period_t=1800000;                                                                                  //update periode in ms
 const String t_address[]={    
 "TI_UG_WK", "TI_UG_HN", "TI_UG_LA", "TI_UG_HS", "TI_UG_HK", "TI_UG_GA"};                                       //addresse
 const int t_pin[]={             
-40,  41,  42,  43,  44, 45};
+44,  45,  46,  47,  48, 49};
 int value_t[]={                 
 0,   0,   0,   0,   0,   0};                                            //temperatur
 int aux_value_t[]={             
@@ -67,7 +67,7 @@ int i_t=0;                                                                      
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states=5;
+const int num_h_states=6;
 const String h_address[]={      
 "HI_UG_WK", "HI_UG_HN", "HI_UG_LA", "HI_UG_HS", "HI_UG_HK", "HI_UG_GA"};       //addresse
 int value_h[]={0, 0, 0, 0, 0, 0};
