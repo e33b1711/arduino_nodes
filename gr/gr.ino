@@ -70,7 +70,7 @@ int value_h[]={0, 0};
  * ...
  */
 const int num_l_states    = 8;
-const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR_L2", "LI_GR_L4", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "GR_DO_TR" };       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR_L2", "LI_GR_L4", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_TR" };       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]         = {23, 25, 27, 29, 31, 33, 35, 37};                //digitaler pin
 int value_l[]             = {0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -80,8 +80,8 @@ long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
 ////constants and variables for r states (garage door)
 // über an/aus und richtungsrelais gesteuert
 const int num_r_states      = 1;
-const String r_address[]    = {"GR_DO"};       //addresse
-const String r_trigger[]    = {"GR_DO_TR"};         //l state
+const String r_address[]    = {"DO_GR"};       //addresse
+const String r_trigger[]    = {"DO_GR_TR"};         //l state
 const int r_down[]          = {1};         // c state up sensor
 const int r_up[]            = {2};       // c state down sensor
 int value_r[]               = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
@@ -202,7 +202,7 @@ void user_logic(){
   //timer: external off
    if ((address_to_value("ZE_GR_2")==0) & (timer_2_on==true)){
      timer_2_on=false;
-     write_state("LI_GR_L2",0);
+     write_state("LI_GR_L1",0);
      Serial.println("user_logic: timer 2 extern abgebrochen.");
   }
   

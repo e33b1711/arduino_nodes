@@ -41,9 +41,18 @@ void write_r(String address, int value){
   int i;
   for (i=0; i<num_r_states; i++){
     if (r_address[i]==address){
+      Serial.println("write_r: match. ");
       if (lock_time_r[i]+lock_delay_r < millis()){
-        lock_time_r[i]=millis();
-        write_state_silent(r_trigger[i],1);
+        if (value != value_r[i]){
+          write_state_silent(r_trigger[i],1);
+          lock_time_r[i]=millis();
+        }
+        else{
+          Serial.println("write_r: already this value. ");
+        }
+      }
+      else{
+      Serial.println("write_r: still locked. ");
       }
     }  
   }
