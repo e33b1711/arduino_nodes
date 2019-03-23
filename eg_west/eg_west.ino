@@ -276,7 +276,7 @@ void user_logic(){
   i=12;
   if (value_c[i]==1){
     toggle_state("LI_EG_KU_L1");
-    toggle_state("LI_EG_SP");
+    write_state("LI_EG_SP", address_to_value("LI_EG_KU_L1"));
   }
       
   //7 kellertreppe unten
