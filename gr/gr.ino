@@ -1,27 +1,15 @@
 //this nodes name
-const String unit_name = "eg_west";
+const String unit_name = "gr";
 
-/**
+
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const int ethernet_sc_pin = 53;
-const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
-const IPAddress ip(192,168,178,200);
-const IPAddress server(192,168,178,222);
+const int ethernet_sc_pin = 10;
+const byte mac[] = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x14 };
+IPAddress ip(192,168,178,215);
+IPAddress server(192,168,178,222);
 const int port = 8888;
-**/
-
-
-
-// wifi settings, on mega wifi on hw serial 1, on uno on sw serial on pins 6 7
-#include "WiFiEsp.h"
-char ssid[] = "DRGREENTUMB";            // your network SSID (name)
-char pass[] = "JUMPAROUND99";        // your network password
-//char server[] = "ak-ThinkPad-Edge-E540";
-char server[] = "openhabianpi2.fritz.box";
-WiFiEspClient client;
-
 
 
 
@@ -60,7 +48,7 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0};        //zeit der letzen steigenden 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 const int num_t_states=2;
-const int period_t=10000;                                                                                  //update periode in ms
+const int period_t=1800000;                                                                                  //update periode in ms
 const String t_address[]={"TI_GR", "TI_GR_A"};                                                                                                           //addresse
 const int t_pin[]={ 22, 24};
 int value_t[]={ 0,   0};                                            //temperatur
@@ -76,8 +64,13 @@ int value_h[]={0, 0};
 
   
 //constants and variables for l states (einfaches licht / verbraucher)
+/**
+ * 0 innen
+ * 1 aussen
+ * ...
+ */
 const int num_l_states    = 8;
-const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR_L2", "GR_DO_TR", "LI_44", "LI_45", "LI_46", "LI_47" };       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR_L2", "LI_GR_L4", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "GR_DO_TR" };       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]         = {23, 25, 27, 29, 31, 33, 35, 37};                //digitaler pin
 int value_l[]             = {0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -91,7 +84,8 @@ const String r_address[]    = {"GR_DO"};       //addresse
 const String r_trigger[]    = {"GR_DO_TR"};         //l state
 const int r_down[]          = {1};         // c state up sensor
 const int r_up[]            = {2};       // c state down sensor
-int value_r[]               = {0};          // -1 z, 0 unsicher, 1 auf
+int value_r[]               = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
+int aux_value_r[]          = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
 long lock_time_r[]          = {0};          
 const long lock_delay_r     = 20000;      
   
@@ -124,9 +118,94 @@ int value_u[]={};               //stell wert 0-15 (0=aus bis 15=voll)
 
 void user_logic(){
   int i;
-  //0 taster innen
+  //0 taster innen =< timer 9
   i=0;
-  if(value_c[i]==1) toggle_state("LI_GR");
+  if(value_c[i]==1) toggle_state("ZE_GR_0");
+
+  //garagen tor -1 => 0 timer 1
+  static int prev_value = address_to_value("GR_DO");
+  if ( (prev_value==-1) & (prev_value != address_to_value("GR_DO")) ){
+    write_state("ZE_GR_1",1);
+  }
+  prev_value = address_to_value("GR_DO");
+
+  //timer innenbeleuchtung lang (taster)
+  i=4;
+  static boolean timer_0_on=false;
+  //start
+  if ((address_to_value("ZE_GR_0")==1) & (timer_0_on==false)){
+    timer_0_on=true;
+    write_state("LI_GR",1);
+    Serial.println("user_logic: timer 0  an");
+  }
+  //timer: running
+  if ((address_to_value("ZE_GR_0")==1) & (timer_0_on==true)){
+    if ((set_time_l[i]+600000)<millis()){
+     if (address_to_value("ZE_GR_1")==0) write_state("LI_GR",0);
+      write_state("ZE_EG_0",0);
+      timer_0_on=false;
+      Serial.println("user_logic: timer 0 abgelaufen");
+    }
+  }
+  //timer: external off
+   if ((address_to_value("ZE_GR_0")==0) & (timer_0_on==true)){
+     timer_0_on=false;
+     if (address_to_value("ZE_GR_1")==0) write_state("LI_GR",0);
+     Serial.println("user_logic: timer 0 extern abgebrochen.");
+  }
+
+
+  //timer innenbeleuchtung kurz (einfahrt)
+   i=5;
+  static boolean timer_1_on=false;
+  //start
+  if ((address_to_value("ZE_GR_1")==1) & (timer_1_on==false)){
+    timer_1_on=true;
+    write_state("LI_GR",1);
+    Serial.println("user_logic: timer 1  an");
+  }
+  //timer: running
+  if ((address_to_value("ZE_GR_1")==1) & (timer_1_on==true)){
+    if ((set_time_l[i]+120000)<millis()){
+      if (address_to_value("ZE_GR_0")==0) write_state("LI_GR",0);
+      write_state("ZE_EG_1",0);
+      timer_1_on=false;
+      Serial.println("user_logic: timer 1 abgelaufen.");
+    }
+  }
+  //timer: external off
+   if ((address_to_value("ZE_GR_1")==0) & (timer_1_on==true)){
+     timer_1_on=false;
+     if (address_to_value("ZE_GR_0")==0) write_state("LI_GR",0);
+     Serial.println("user_logic: timer 1 extern abgebrochen.");
+  }
+
+
+  //timer außen, mit vordach timer auslösen
+  i=6;
+  static boolean timer_2_on=false;
+  //start
+  if ((address_to_value("ZE_GR_2")==1) & (timer_2_on==false)){
+    timer_2_on=true;
+    write_state("LI_GR_L1",1);
+    Serial.println("user_logic: timer 2  an");
+  }
+  //timer: running
+  if ((address_to_value("ZE_GR_2")==1) & (timer_2_on==true)){
+    if ((set_time_l[i]+120000)<millis()){
+      write_state("LI_GR_L1",0);
+      write_state("ZE_GR_2",0);
+      timer_2_on=false;
+      Serial.println("user_logic: timer 2 abgelaufen.");
+    }
+  }
+  //timer: external off
+   if ((address_to_value("ZE_GR_2")==0) & (timer_2_on==true)){
+     timer_2_on=false;
+     write_state("LI_GR_L2",0);
+     Serial.println("user_logic: timer 2 extern abgebrochen.");
+  }
+  
     
 }
   
