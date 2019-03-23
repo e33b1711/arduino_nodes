@@ -378,5 +378,6 @@ i=4;
  if (value_c[i]==1){
     //entriegeln
      write_state("ZE_EG_VH",1);
+     write_state("ZE_GR_1",1);
   }
 }
