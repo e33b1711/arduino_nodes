@@ -169,6 +169,7 @@ void user_logic()
   i=5;
   if (value_c[i]==1){
     write_state("ZE_EG_VH",1);
+    write_state("ZE_GR_2",1);
   }
 
   // 13  gang bei wz
