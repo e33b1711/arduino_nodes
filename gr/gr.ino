@@ -70,7 +70,7 @@ int value_h[]={0, 0};
  * ...
  */
 const int num_l_states    = 8;
-const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR_L2", "LI_GR_L4", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_TR" };       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]  = {"LI_GR_L2", "LI_GR", "LI_GR_L1", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP" };       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]         = {23, 25, 27, 29, 31, 33, 35, 37};                //digitaler pin
 int value_l[]             = {0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -79,15 +79,16 @@ long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
 
 ////constants and variables for r states (garage door)
 // über an/aus und richtungsrelais gesteuert
-const int num_r_states      = 1;
-const String r_address[]    = {"DO_GR"};       //addresse
-const String r_trigger[]    = {"DO_GR_TR"};         //l state
-const int r_down[]          = {1};         // c state up sensor
-const int r_up[]            = {2};       // c state down sensor
-int value_r[]               = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
-int aux_value_r[]          = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
-long lock_time_r[]          = {0};          
-const long lock_delay_r     = 20000;      
+const int num_r_states            = 1;
+const String r_address[]          = {"DO_GR"};       //addresse
+const String r_trigger_up[]       = {"DO_GR_UP"};         //l state
+const String r_trigger_do[]       = {"DO_GR_DO"};         //l state
+const int r_down[]                = {1};         // c state up sensor
+const int r_up[]                  = {2};       // c state down sensor
+int value_r[]                     = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
+int aux_value_r[]                 = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
+long lock_time_r[]                = {0};          
+const long lock_delay_r           = 20000;      
   
 
 ////constants and variables for s states (dachfenster)
@@ -123,14 +124,17 @@ void user_logic(){
   if(value_c[i]==1) toggle_state("ZE_GR_0");
 
   //garagen tor -1 => 0 timer 1
-  static int prev_value = address_to_value("GR_DO");
-  if ( (prev_value==-1) & (prev_value != address_to_value("GR_DO")) ){
+  static int prev_value = address_to_value("DO_GR");
+  if ( (prev_value==-1) & (prev_value != address_to_value("DO_GR")) ){
     write_state("ZE_GR_1",1);
+    write_state("ZE_GR_2",1);
+    write_state("ZE_EG_VH",1);
+    Serial.println("User logic: trigger einfahrt licht.");
   }
-  prev_value = address_to_value("GR_DO");
+  prev_value = address_to_value("DO_GR");
 
   //timer innenbeleuchtung lang (taster)
-  i=4;
+  i=3;
   static boolean timer_0_on=false;
   //start
   if ((address_to_value("ZE_GR_0")==1) & (timer_0_on==false)){
@@ -156,7 +160,7 @@ void user_logic(){
 
 
   //timer innenbeleuchtung kurz (einfahrt)
-   i=5;
+   i=4;
   static boolean timer_1_on=false;
   //start
   if ((address_to_value("ZE_GR_1")==1) & (timer_1_on==false)){
@@ -182,7 +186,7 @@ void user_logic(){
 
 
   //timer außen, mit vordach timer auslösen
-  i=6;
+  i=5;
   static boolean timer_2_on=false;
   //start
   if ((address_to_value("ZE_GR_2")==1) & (timer_2_on==false)){

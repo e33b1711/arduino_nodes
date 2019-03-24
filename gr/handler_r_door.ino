@@ -16,7 +16,10 @@ void update_r()
   int i;
   for (i=0; i<num_r_states; i++){
     //reset trigger state to 0
-     if (lock_time_r[i]+1000 < millis()) write_state_silent(r_trigger[i],0);
+     if (lock_time_r[i]+1000 < millis()){
+        write_state_silent(r_trigger_up[i],0);
+        write_state_silent(r_trigger_do[i],0);
+     }
 
     //sensors => value 
     bool down = (value_b[r_down[i]]==1);
@@ -30,7 +33,6 @@ void update_r()
     if (aux_value_r[i] != value_r[i]){
       send_message("w", r_address[i], value_r[i]);
       aux_value_r[i] = value_r[i];
-      Serial.println("update_r: error both sensors are closed!");
     }
     
   }  
@@ -44,7 +46,8 @@ void write_r(String address, int value){
       Serial.println("write_r: match. ");
       if (lock_time_r[i]+lock_delay_r < millis()){
         if (value != value_r[i]){
-          write_state_silent(r_trigger[i],1);
+          if (value == 1)   write_state_silent(r_trigger_up[i],1);
+          if (value == -1)  write_state_silent(r_trigger_do[i],1);
           lock_time_r[i]=millis();
         }
         else{
