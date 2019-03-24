@@ -146,7 +146,7 @@ void user_logic(){
   if ((address_to_value("ZE_GR_0")==1) & (timer_0_on==true)){
     if ((set_time_l[i]+600000)<millis()){
      if (address_to_value("ZE_GR_1")==0) write_state("LI_GR",0);
-      write_state("ZE_EG_0",0);
+      write_state("ZE_GR_0",0);
       timer_0_on=false;
       Serial.println("user_logic: timer 0 abgelaufen");
     }
@@ -172,7 +172,7 @@ void user_logic(){
   if ((address_to_value("ZE_GR_1")==1) & (timer_1_on==true)){
     if ((set_time_l[i]+120000)<millis()){
       if (address_to_value("ZE_GR_0")==0) write_state("LI_GR",0);
-      write_state("ZE_EG_1",0);
+      write_state("ZE_GR_1",0);
       timer_1_on=false;
       Serial.println("user_logic: timer 1 abgelaufen.");
     }
