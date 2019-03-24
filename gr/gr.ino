@@ -170,7 +170,7 @@ void user_logic(){
   }
   //timer: running
   if ((address_to_value("ZE_GR_1")==1) & (timer_1_on==true)){
-    if ((set_time_l[i]+120000)<millis()){
+    if ((set_time_l[i]+180000)<millis()){
       if (address_to_value("ZE_GR_0")==0) write_state("LI_GR",0);
       write_state("ZE_GR_1",0);
       timer_1_on=false;
@@ -196,7 +196,7 @@ void user_logic(){
   }
   //timer: running
   if ((address_to_value("ZE_GR_2")==1) & (timer_2_on==true)){
-    if ((set_time_l[i]+120000)<millis()){
+    if ((set_time_l[i]+180000)<millis()){
       write_state("LI_GR_L1",0);
       write_state("ZE_GR_2",0);
       timer_2_on=false;
