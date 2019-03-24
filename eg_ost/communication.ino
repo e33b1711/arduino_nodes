@@ -178,6 +178,9 @@ void post_all(){
   for (i=0; i<num_r_states; i++){
     send_message("w", r_address[i], value_r[i]);
   }
+  for (i=0; i<num_s_states; i++){
+    send_message("w", s_address[i], value_s[i]);
+  }
   for (i=0; i<num_t_states; i++){
     send_message("w", t_address[i], value_t[i]);
     send_message("w", h_address[i], value_h[i]);
