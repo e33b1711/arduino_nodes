@@ -10,6 +10,9 @@ const byte mac[] = {0xDE, 0xAA, 0x7E, 0xEF, 0xFE, 0x04 };
 IPAddress ip(192,168,178,211);
 IPAddress server(192,168,178,222);
 const int port = 8888;
+bool comm_online = false;
+const long t_expire =180000; //3 min
+long last_comm_contact;
 
 
 

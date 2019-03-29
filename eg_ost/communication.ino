@@ -32,6 +32,8 @@ void init_comm()
   }
   // reserve 100 bytes for the message buffer
   message_buffer.reserve(100);
+  // timer for comm_online
+  last_comm_contact = millis() - 2* t_expire;
 }
 
 
@@ -49,6 +51,9 @@ void handle_comm(){
   static boolean messageComplete = false;        // whether the string is complete
   String in_messageType, addressString, valueString, inputString;
   int in_value;
+
+  //check is still connected to openhab
+  if (last_comm_contact + t_expire < millis()) comm_online = false;
 
   //trigger not conneted conndition
   /**static long last_keep_alive=millis();
@@ -146,6 +151,8 @@ void handle_comm(){
 
     //message handler
     if (in_messageType=="post_all" && addressString==unit_name){
+      comm_online = true;
+      last_comm_contact = millis();		
       post_all(); 
     }
     if (in_messageType=="r") {
