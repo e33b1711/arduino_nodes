@@ -76,7 +76,7 @@ int value_h[]={0, 0, 0, 0, 0, 0};
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=18;
 const String l_address[]={      
-"VD_OG_SZ_UP", "LI_OG_BA", "VD_OG_SZ_DO", "L25", "DF_OG_SZ_UP", "L27", "DF_OG_SZ_DO", "L29", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "RO_OG_SZ_ON", "ST_OG_BA", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L1", "RO_OG_BA_ON", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
+"VD_OG_SZ_UP", "LI_OG_BA", "VD_OG_SZ_DO", "L25", "DF_OG_SZ_UP", "L27", "DF_OG_SZ_DO", "L29", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "RO_OG_SZ_ON", "L33", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L1", "RO_OG_BA_ON", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]={             
 22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,44,45};                //digitaler pin
 int value_l[]={                 
@@ -142,7 +142,7 @@ void user_logic()
 {
     int i;  
 
-  //taster verküpfungen
+  //taFer verküpfungen
   //6  sz, tür, mitte
   //7  sz, tür, unten
   //12  df sz
