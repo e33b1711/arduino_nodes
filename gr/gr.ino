@@ -127,8 +127,8 @@ void user_logic(){
   static int prev_value = address_to_value("DO_GR");
   if ( (prev_value==-1) & (prev_value != address_to_value("DO_GR")) ){
     write_state("ZE_GR_1",1);
-    write_state("ZE_GR_2",1);
-    write_state("ZE_EG_VH",1);
+    //write_state("ZE_GR_2",1);
+    //write_state("ZE_EG_VH",1);
     Serial.println("User logic: trigger einfahrt licht.");
   }
   prev_value = address_to_value("DO_GR");
