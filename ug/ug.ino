@@ -55,7 +55,7 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
 const int num_t_states=6;
 const long period_t=1800000;                                                                                  //update periode in ms
 const String t_address[]={    
-"TI_UG_HK", "TI_UG_HN", "TI_UG_LA", "TI_UG_GA", "TI_UG_HS", "TI_UG_WK"};                                       //addresse
+"TI_UG_HS", "TI_UG_HN", "TI_UG_HK", "TI_UG_GA", "TI_UG_LA", "TI_UG_WK"};                                       //addresse
 const int t_pin[]={             
 44,  45,  46,  47,  48, 49};
 int value_t[]={                 
