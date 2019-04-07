@@ -70,7 +70,7 @@ int value_h[]={0, 0};
  * ...
  */
 const int num_l_states    = 8;
-const String l_address[]  = {"LI_GR_L2", "LI_GR", "LI_GR_L1", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP" };       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP" };       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]         = {23, 25, 27, 29, 31, 33, 35, 37};                //digitaler pin
 int value_l[]             = {0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
