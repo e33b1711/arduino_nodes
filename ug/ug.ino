@@ -69,7 +69,7 @@ int i_t=0;                                                                      
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states=6;
 const String h_address[]={      
-"HI_UG_HK", "HI_UG_HN", "HI_UG_LA", "HI_UG_GA", "HI_UG_HS", "HI_UG_WK"};       //addresse
+"HI_UG_HS", "HI_UG_HN", "HI_UG_HK", "HI_UG_GA", "HI_UG_LA", "HI_UG_WK"};       //addresse
 int value_h[]={0, 0, 0, 0, 0, 0};
 
 
