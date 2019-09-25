@@ -1,7 +1,7 @@
 clear all;
 close all;
 filename = './gp.txt';
-[time,power] = importfile(filename);
+[time,power] = importfile1(filename);
 
 plot(time, power);
 grid on;
