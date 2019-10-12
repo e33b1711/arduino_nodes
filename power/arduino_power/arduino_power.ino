@@ -61,7 +61,8 @@ void setup() {
 
   //needed to supress wrong messages at startup
   lastNegFlank  = millis();
-  offTime       = millis() - 60000;
+  lastNegFlank1  = millis();
+  lastNegFlank2  = millis();
   
 }
 
