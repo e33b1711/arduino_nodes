@@ -134,16 +134,16 @@ void loop() {
     if (powerUpdateGrid) nextUpdateGrid = now + 5000;   
   }
 
-  //force update after 6 minutes (single phase counter)
-  if (!sensorValue1 & (now - lastNegFlank1 > 360000)){
+  //force update after 90 sec (=20W) (single phase counter)
+  if (!sensorValue1 & (now - lastNegFlank1 > 90000)){
     powerHeating = 0;
     powerUpdateHeating     = nextUpdateHeating < now;
-    if (powerUpdateHeating) nextUpdateHeating = now + 5000;   
+    if (powerUpdateHeating) nextUpdateHeating = now + 90000;   
   }
-  if (!sensorValue2 & (now - lastNegFlank2 > 360000)){
+  if (!sensorValue2 & (now - lastNegFlank2 > 90000)){
     powerPV = 0;
     powerUpdatePV     = nextUpdatePV < now;
-    if (powerUpdatePV) nextUpdatePV = now + 5000;   
+    if (powerUpdatePV) nextUpdatePV = now + 90000;   
   }
 
 
