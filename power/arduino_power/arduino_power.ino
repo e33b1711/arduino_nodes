@@ -75,7 +75,10 @@ void loop() {
 
   oldValue1          = sensorValue1;
   sensorValue1       = digitalRead(sensorPin1);
-  digitalWrite(ledPin, sensorValue);
+
+  oldValue2          = sensorValue2;
+  sensorValue2       = digitalRead(sensorPin2);
+  digitalWrite(ledPin, sensorValue2);
 
   //detect flanks and store times
   bool negFlank     = oldValue & !sensorValue;
@@ -120,7 +123,7 @@ void loop() {
   if (negFlank2 & (now - lastPosFlank2 < 500)){
     powerPV             = 1800000.0/(now - lastNegFlank2);
     lastNegFlank2      = now;
-    powerUpdateHeating       = killUpdate2;
+    powerUpdatePV       = killUpdate2;
     killUpdate2 = true;
   }
 
