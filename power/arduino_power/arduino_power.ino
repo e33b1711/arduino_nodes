@@ -1,52 +1,58 @@
 
-const int sensorPin         = 4;          // digital input of the power meter pulses
-const int sensorPin1        = 5;
-const int sensorPin2        = 6;
-const int ledPin            = 13;         // LED output pin
+const int sensorPin         = 4;                        // digital input of the power meter pulses (Utility power, only consumption)
+const int sensorPin1        = 5;                        // power to electric heating
+const int sensorPin2        = 6;                        // power from PV
+const int ledPin            = 13;                       // LED output pin
 
-const int heatControlPin    = 11;         // analog output for the triac control
+const double meterConstant  = 3600000;                  // 1 Wh / 1ms
+const double meterConstant1 = 1800000;                  // 0.5 Wh / 1ms
+const double meterConstant2 = 1800000;                  // "
 
-const int maxControlPower   = 3000;                    // 100% Power of Heating
-const double powerIncrement = maxControlPower / 256;   // one PWM step of heating Power
-const int acceptablePower   = 6;                       // acceptale Heating Draw from Grid 
+const int heatControlPin    = 11;                       // pwm output for controlling the power of the electric heating
 
-long now;
+const int maxControlPower   = 3000;                     // 100% Power of Heating
+const double powerIncrement = maxControlPower / 256;    // one PWM step of heating Power
+const int acceptablePower   = 6;                        // acceptebale power drawn from Utility during electric heating
 
-bool sensorValue          = false; 
-bool oldValue             = false;
+long now;                                               //timestamp in milliseconds (now())
+
+bool sensorValue            = false;                    //flank detection and timestamps of flanks         
+bool oldValue               = false;
 long lastNegFlank;
 long lastPosFlank;
 
-bool sensorValue1          = false; 
-bool oldValue1             = false;
+bool sensorValue1           = false; 
+bool oldValue1              = false;
 long lastNegFlank1;
 long lastPosFlank1;
 
-bool sensorValue2          = false; 
-bool oldValue2             = false;
+bool sensorValue2           = false; 
+bool oldValue2              = false;
 long lastNegFlank2;
 long lastPosFlank2;
 
-double  powerGrid;
-bool powerUpdateGrid          = false;
-long nextUpdateGrid;
-bool killUpdate     = false;
+int powerUtility;                                           //measured power values & update flags / counters & suppression of first update
+int errorUtility               = false;                     //error condition are not reversible and require a reset
+bool powerUpdateUtility        = false;
+long nextUpdateUtility         = 0;
+bool killUpdate             = false;
 
+int powerHeating;
+bool errorHeating           = false;
+bool powerUpdateHeating     = false;
+long nextUpdateHeating      = 0;
+bool killUpdate1            = false;
 
-double  powerHeating;
-bool powerUpdateHeating          = false;
-long nextUpdateHeating;
-bool killUpdate1     = false;
-
-double  powerPV;
+int powerPV;
+bool errorPV                = false;
 bool powerUpdatePV          = false;
-long nextUpdatePV;
-bool killUpdate2     = false;
+long nextUpdatePV           = 0;
+bool killUpdate2            = false;
 
-int controlPower = 0;
-long offTime;
-bool systemError = false; 
-int incrUp       = 0;
+int controlPower            = 0;                         //variables for the control algorithm
+bool powerUpdateControl     = false;                     //control power is in watt / powerIncrement
+int errorControl            = false;
+int incrUp                  = 0;
 
 void setup() {
   
@@ -67,74 +73,75 @@ void setup() {
 }
 
 void loop() {
-  // read the value from the sensor, false = LED off / true = LED on !!!!!!
+
+  //get timestamp
   now               = millis();
   
+  //reset update flags
+  powerUpdateUtility       = false;
+  powerUpdatePV         = false;
+  powerUpdateHeating    = false;
+  powerUpdateControl    = false;
+  
+  // read the value from the sensor, LED for debbuging
   oldValue          = sensorValue;
   sensorValue       = !digitalRead(sensorPin);
-
   oldValue1          = sensorValue1;
   sensorValue1       = digitalRead(sensorPin1);
-
   oldValue2          = sensorValue2;
   sensorValue2       = digitalRead(sensorPin2);
-  digitalWrite(ledPin, sensorValue2);
+  digitalWrite(ledPin, sensorValue);
 
-  //detect flanks and store times
+  //detect flanks
   bool negFlank     = oldValue & !sensorValue;
   bool posFlank     = !oldValue & sensorValue;
-   bool negFlank1     = oldValue1 & !sensorValue1;
-  bool posFlank1     = !oldValue1 & sensorValue1;
-    bool negFlank2     = oldValue2 & !sensorValue2;
-  bool posFlank2     = !oldValue2 & sensorValue2;
+  bool negFlank1    = oldValue1 & !sensorValue1;
+  bool posFlank1    = !oldValue1 & sensorValue1;
+  bool negFlank2    = oldValue2 & !sensorValue2;
+  bool posFlank2    = !oldValue2 & sensorValue2;
 
-  //a positive Flank just gets stored
+  //a positive flank just gets stored
   if (posFlank){
-    lastPosFlank    = now;
-    nextUpdateGrid      = now;
+    lastPosFlank        = now;
+    nextUpdateUtility      = now;
   }
   if (posFlank1){
-    lastPosFlank1    = now;
-    nextUpdateHeating      = now;
+    lastPosFlank1       = now;
+    nextUpdateHeating   = now;
   }
   if (posFlank2){
-    lastPosFlank2    = now;
-    nextUpdatePV      = now;
+    lastPosFlank2       = now;
+    nextUpdatePV        = now;
   }
 
-  //reset powerUpdate flag
-   powerUpdateGrid  = false;
-   powerUpdatePV  = false;
-   powerUpdateHeating  = false;
-
-  //a short pulse (<500ms) signals a 1/1000th of a kWh / 1/2000th of a kWh (grid / single phase counter)
+   //a short pulse (<500ms) signals a 1/1000th / 1/2000th of a kWh (Utility / single phase counter)
   if (negFlank & (now - lastPosFlank < 500)){
-    powerGrid             = 3600000.0/(now - lastNegFlank);
-    lastNegFlank      = now;
-    powerUpdateGrid       = killUpdate;
-    killUpdate  = true;
+    powerUtility             = meterConstant/(now - lastNegFlank);
+    lastNegFlank          = now;
+    powerUpdateUtility       = killUpdate;     //supress first update
+    killUpdate            = true;
   }
   if (negFlank1 & (now - lastPosFlank1 < 500)){
-    powerHeating             = 1800000.0/(now - lastNegFlank1);
-    lastNegFlank1      = now;
-    powerUpdateHeating       = killUpdate1;
-    killUpdate1       =true;
+    powerHeating          = meterConstant1/(now - lastNegFlank1);
+    lastNegFlank1         = now;
+    powerUpdateHeating    = killUpdate1;    //supress first update
+    killUpdate1           = true;
   }
   if (negFlank2 & (now - lastPosFlank2 < 500)){
-    powerPV             = 1800000.0/(now - lastNegFlank2);
-    lastNegFlank2      = now;
-    powerUpdatePV       = killUpdate2;
-    killUpdate2 = true;
+    powerPV               = meterConstant2/(now - lastNegFlank2);
+    lastNegFlank2         = now;
+    powerUpdatePV         = killUpdate2;    //supress first update
+    killUpdate2           = true;
   }
 
-  //a permanent on (>500ms) signals 0 kWh (grid counter)
+  //a permanent on (>500ms) signals 0 kWh (Utility counter only)
   if (sensorValue & (now - lastPosFlank > 500)){
-    powerGrid = 0;
-    powerUpdateGrid     = nextUpdateGrid < now;
-    if (powerUpdateGrid) nextUpdateGrid = now + 5000;   
+    powerUtility = 0;
+    powerUpdateUtility     = nextUpdateUtility < now;
+    if (powerUpdateUtility) nextUpdateUtility = now + 5000;   
   }
 
-  //force update after 90 sec (=20W) (single phase counter)
+  //force update after 90 sec (<20W) (single phase counter only)
   if (!sensorValue1 & (now - lastNegFlank1 > 90000)){
     powerHeating = 0;
     powerUpdateHeating     = nextUpdateHeating < now;
@@ -147,63 +154,113 @@ void loop() {
   }
 
 
-  //a permanent off (> 600s) could be an error condition (grid counter)
+  //a permanent off (> 600s) could be an error condition (Utility counter only)
   if (!sensorValue & (now - lastNegFlank > 600000)){
-    systemError   = true;
-    powerUpdateGrid   = nextUpdateGrid < now;
-    if (powerUpdateGrid) nextUpdateGrid    = now + 5000;   
+    errorUtility   = true;
+    powerUpdateUtility   = nextUpdateUtility < now;
+    if (powerUpdateUtility) nextUpdateUtility    = now + 5000;   
+  }
+  
+  //a permanent on (> 2s) could be an error condition (single phase counter only)
+  if (sensorValue1 & (now - lastPosFlank1 > 2000)){
+    errorHeating          = true;
+    powerUpdateHeating    = nextUpdateHeating < now;
+    if (powerUpdateHeating) nextUpdateHeating = now + 90000;   
+  }
+  if (sensorValue2 & (now - lastPosFlank2 > 2000)){
+    errorPV               = true;
+    powerUpdatePV         = nextUpdatePV < now;
+    if (powerUpdatePV) nextUpdatePV = now + 90000;   
   }
 
-  //control algorithm
-  if (powerUpdateGrid){
-    
+  //control algorithm, calculate update
+  if (powerUpdateUtility){
     //calculate controlPower update
     int nxtControlPower = controlPower;
-    if (powerGrid == 0){
+    if (powerUtility == 0){
       incrUp++;
       nxtControlPower+=incrUp;
     }
-    if (powerGrid > 0){
+    if (powerUtility > 0){
       incrUp=0;
-      int powerDecrement  =  (powerGrid - acceptablePower) / powerIncrement;
+      int powerDecrement  =  (powerUtility - acceptablePower) / powerIncrement;
       nxtControlPower = controlPower - powerDecrement; 
     }
     if (nxtControlPower<0) nxtControlPower = 0;
-    if (nxtControlPower>=255) systemError = true;
-    if (systemError)  nxtControlPower = 0;
-
-    //if controlPower becomes 0, get the time
-    if (controlPower>0 & nxtControlPower==0) offTime = now;
-    controlPower = nxtControlPower;
-
-    //write control and enable
-    analogWrite(heatControlPin, controlPower); 
-
-    
+    //if there is a error on the Utility sensor, we got also an error on the control
+    if (errorUtility || errorControl){
+      nxtControlPower = 0;
+      errorControl    = true;
+    }
+    //we got a update
+    powerUpdateControl      = true;
+    controlPower            = nxtControlPower;    
   }
 
-  if (powerUpdateGrid){
-    Serial.print("P_grid:");
-    Serial.println(int(powerGrid));
-    Serial.print("P_control:");
-    Serial.println(int(controlPower*powerIncrement));
-    Serial.print("system_error:");
-    Serial.println(systemError); 
-  }
-
-  if (powerUpdatePV){
-    Serial.print("P_pv:");
-    Serial.println(int(powerPV));    
-  }
-
+  //control algorithm, check with measured power
   if (powerUpdateHeating){
-    Serial.print("P_heat:");
-    Serial.println(int(powerHeating));    
+    int powerDiff           = powerHeating - int(controlPower*powerIncrement);
+    if(powerDiff > 200 ||  powerDiff < -200){
+      //if the difference is too big we got an error
+      controlPower          = 0;
+      errorControl          = true;
+      powerUpdateControl    = true;
+    }
   }
 
-  //use heating and pv power for error checking and control!!!!!!!!!!!
+  //control algorithm, check with measured power
+  if (powerUpdateHeating){
+    int powerDiff           = powerHeating - int(controlPower*powerIncrement);
+    if(powerDiff > 200 ||  powerDiff < -200){
+      //if the difference is too big we got an error
+      controlPower          = 0;
+      errorControl          = true;
+      powerUpdateControl    = true;
+    }
+  }
 
-  //delay a little
-  delay(10);
+  //control algorithm, check with pv power
+  if (powerUpdateHeating){
+    int powerDiff           = int(controlPower*powerIncrement) - powerPV;
+    if(powerDiff > 100){
+      //if the difference is bigger than zero (plus tolerance) we got an errror
+      controlPower            = 0;
+      errorControl            = true;
+      powerUpdateControl      = true;
+    }
+  }
+
+
+  //update the pmw output
+  if (powerUpdateControl){
+    //write control and enable
+    analogWrite(heatControlPin, controlPower);
+  }
+
+  //serial outputs
+  if (powerUpdateControl){
+    Serial.print("powerControl:");
+    Serial.println(int(controlPower*powerIncrement));
+    Serial.print("errorControl:");
+    Serial.println(errorControl); 
+  }
+  if (powerUpdateUtility){
+    Serial.print("powerUtility:");
+    Serial.println(powerUtility);
+    Serial.print("errorUtility:");
+    Serial.println(errorUtility); 
+  }
+  if (powerUpdatePV){
+    Serial.print("powerPV:");
+    Serial.println(powerPV); 
+    Serial.print("errorPV:");
+    Serial.println(errorPV);    
+  }
+  if (powerUpdateHeating){
+    Serial.print("powerHeating:");
+    Serial.println(powerHeating);   
+    Serial.print("errorHeating:");
+    Serial.println(errorHeating);  
+  }
 
 }
