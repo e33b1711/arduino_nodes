@@ -2,11 +2,15 @@
 const int sensorPin         = 4;                        // digital input of the power meter pulses (Utility power, only consumption)
 const int sensorPin1        = 5;                        // power to electric heating
 const int sensorPin2        = 6;                        // power from PV
+const int sensorPin3        = 8;                        // power to utility (eastron)
+const int sensorPin4        = 9;                        // power from utility (estron)
 const int ledPin            = 13;                       // LED output pin
 
-const double meterConstant  = 3600000;                  // 1 Wh / 1ms
-const double meterConstant1 = 1800000;                  // 0.5 Wh / 1ms
+const double meterConstant  = 3600000;                  // 1 mWs
+const double meterConstant1 = 1800000;                  // 0.5 mWs
 const double meterConstant2 = 1800000;                  // "
+const double meterConstant3 = 9000000;                  // 2.5 mWs
+const double meterConstant4 = 9000000;                  // "
 
 const int heatControlPin    = 11;                       // pwm output for controlling the power of the electric heating
 
@@ -31,6 +35,16 @@ bool oldValue2              = false;
 long lastNegFlank2;
 long lastPosFlank2;
 
+bool sensorValue3           = false; 
+bool oldValue3              = false;
+long lastNegFlank3;
+long lastPosFlank3;
+
+bool sensorValue4           = false; 
+bool oldValue4              = false;
+long lastNegFlank4;
+long lastPosFlank4;
+
 int powerUtility;                                           //measured power values & update flags / counters & suppression of first update
 int errorUtility               = false;                     //error condition are not reversible and require a reset
 bool powerUpdateUtility        = false;
@@ -48,6 +62,18 @@ bool errorPV                = false;
 bool powerUpdatePV          = false;
 long nextUpdatePV           = 0;
 bool killUpdate2            = false;
+
+int powerEx;
+bool errorEx                = false;
+bool powerUpdateEx          = false;
+long nextUpdateEx           = 0;
+bool killUpdate3            = false;
+
+int powerIm;
+bool errorIm                = false;
+bool powerUpdateIm          = false;
+long nextUpdateIm           = 0;
+bool killUpdate4            = false;
 
 int controlPower            = 0;                         //variables for the control algorithm
 bool powerUpdateControl     = false;                     //control power is in watt / powerIncrement
@@ -78,10 +104,12 @@ void loop() {
   now               = millis();
   
   //reset update flags
-  powerUpdateUtility       = false;
+  powerUpdateUtility    = false;
   powerUpdatePV         = false;
   powerUpdateHeating    = false;
   powerUpdateControl    = false;
+  powerUpdateEx         = false;
+  powerUpdateIm         = false;
   
   // read the value from the sensor, LED for debbuging
   oldValue          = sensorValue;
@@ -90,6 +118,10 @@ void loop() {
   sensorValue1       = digitalRead(sensorPin1);
   oldValue2          = sensorValue2;
   sensorValue2       = digitalRead(sensorPin2);
+  oldValue3          = sensorValue3;
+  sensorValue3       = digitalRead(sensorPin3);
+  oldValue4          = sensorValue4;
+  sensorValue4       = digitalRead(sensorPin4);
   digitalWrite(ledPin, sensorValue);
 
   //detect flanks
@@ -99,6 +131,10 @@ void loop() {
   bool posFlank1    = !oldValue1 & sensorValue1;
   bool negFlank2    = oldValue2 & !sensorValue2;
   bool posFlank2    = !oldValue2 & sensorValue2;
+  bool negFlank3    = oldValue3 & !sensorValue3;
+  bool posFlank3    = !oldValue3 & sensorValue3;
+  bool negFlank4    = oldValue4 & !sensorValue4;
+  bool posFlank4    = !oldValue4 & sensorValue4;
 
   //a positive flank just gets stored
   if (posFlank){
@@ -113,12 +149,20 @@ void loop() {
     lastPosFlank2       = now;
     nextUpdatePV        = now;
   }
+  if (posFlank3){
+    lastPosFlank3       = now;
+    nextUpdateEx        = now;
+  }
+  if (posFlank4){
+    lastPosFlank4       = now;
+    nextUpdateIm        = now;
+  }
 
-   //a short pulse (<500ms) signals a 1/1000th / 1/2000th of a kWh (Utility / single phase counter)
+   //a short pulse (<500ms) signals kWh increment
   if (negFlank & (now - lastPosFlank < 500)){
-    powerUtility             = meterConstant/(now - lastNegFlank);
+    powerUtility          = meterConstant/(now - lastNegFlank);
     lastNegFlank          = now;
-    powerUpdateUtility       = killUpdate;     //supress first update
+    powerUpdateUtility    = killUpdate;     //supress first update
     killUpdate            = true;
   }
   if (negFlank1 & (now - lastPosFlank1 < 500)){
@@ -133,6 +177,18 @@ void loop() {
     powerUpdatePV         = killUpdate2;    //supress first update
     killUpdate2           = true;
   }
+  if (negFlank3 & (now - lastPosFlank3 < 500)){
+    powerEx               = meterConstant3/(now - lastNegFlank3);
+    lastNegFlank3         = now;
+    powerUpdateEx         = killUpdate3;    //supress first update
+    killUpdate3           = true;
+  }
+  if (negFlank4 & (now - lastPosFlank4 < 500)){
+    powerIm               = meterConstant4/(now - lastNegFlank4);
+    lastNegFlank4         = now;
+    powerUpdateIm         = killUpdate4;    //supress first update
+    killUpdate4           = true;
+  }
 
   //a permanent on (>500ms) signals 0 kWh (Utility counter only)
   if (sensorValue & (now - lastPosFlank > 500)){
@@ -141,27 +197,38 @@ void loop() {
     if (powerUpdateUtility) nextUpdateUtility = now + 5000;   
   }
 
-  //force update after 90 sec (<20W) (single phase counter only)
+  //force update after 90 sec (<20W) // 200 sec (<45W) (single phase counter only)
   if (!sensorValue1 & (now - lastNegFlank1 > 90000)){
-    powerHeating = 0;
-    powerUpdateHeating     = nextUpdateHeating < now;
+    powerHeating            = 0;
+    powerUpdateHeating      = nextUpdateHeating < now;
     if (powerUpdateHeating) nextUpdateHeating = now + 90000;   
   }
   if (!sensorValue2 & (now - lastNegFlank2 > 90000)){
-    powerPV = 0;
+    powerPV           = 0;
     powerUpdatePV     = nextUpdatePV < now;
     if (powerUpdatePV) nextUpdatePV = now + 90000;   
   }
+    if (!sensorValue3 & (now - lastNegFlank3 > 200000)){
+    powerEx           = 0;
+    powerUpdateEx     = nextUpdateEx < now;
+    if (powerUpdateEx) nextUpdateEx = now + 200000;   
+  }
+  if (!sensorValue4 & (now - lastNegFlank4 > 200000)){
+    powerIm = 0;
+    powerUpdateIm     = nextUpdateIm < now;
+    if (powerUpdateIm) nextUpdateIm = now + 90000;   
+  }
 
-
+  /*
   //a permanent off (> 600s) could be an error condition (Utility counter only)
   if (!sensorValue & (now - lastNegFlank > 600000)){
     errorUtility   = true;
     powerUpdateUtility   = nextUpdateUtility < now;
     if (powerUpdateUtility) nextUpdateUtility    = now + 5000;   
   }
+  */
   
-  //a permanent on (> 2s) could be an error condition (single phase counter only)
+  //a permanent on (> 2s) could be an error condition (single phase counter/ eastron)
   if (sensorValue1 & (now - lastPosFlank1 > 2000)){
     errorHeating          = true;
     powerUpdateHeating    = nextUpdateHeating < now;
@@ -171,6 +238,16 @@ void loop() {
     errorPV               = true;
     powerUpdatePV         = nextUpdatePV < now;
     if (powerUpdatePV) nextUpdatePV = now + 90000;   
+  }
+  if (sensorValue3 & (now - lastPosFlank3 > 2000)){
+    errorEx          = true;
+    powerUpdateEx    = nextUpdateEx < now;
+    if (powerUpdateEx) nextUpdateEx = now + 90000;   
+  }
+  if (sensorValue4 & (now - lastPosFlank4 > 2000)){
+    errorIm               = true;
+    powerUpdateIm         = nextUpdateIm < now;
+    if (powerUpdateIm) nextUpdateIm = now + 90000;   
   }
 
   //control algorithm, calculate update
@@ -261,6 +338,18 @@ void loop() {
     Serial.println(powerHeating);   
     Serial.print("errorHeating:");
     Serial.println(errorHeating);  
+  }
+  if (powerUpdateEx){
+    Serial.print("powerEx:");
+    Serial.println(powerEx); 
+    Serial.print("errorEx:");
+    Serial.println(errorEx);    
+  }
+  if (powerUpdateIm){
+    Serial.print("powerIm:");
+    Serial.println(powerIm);   
+    Serial.print("errorIm:");
+    Serial.println(errorIm);  
   }
 
 }
