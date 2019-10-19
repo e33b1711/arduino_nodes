@@ -2,8 +2,8 @@
 const int sensorPin         = 4;                        // digital input of the power meter pulses (Utility power, only consumption)
 const int sensorPin1        = 5;                        // power to electric heating
 const int sensorPin2        = 6;                        // power from PV
-const int sensorPin3        = 8;                        // power to utility (eastron)
-const int sensorPin4        = 9;                        // power from utility (estron)
+const int sensorPin3        = 8;                        // power export (eastron)
+const int sensorPin4        = 9;                        // power cumalitive ( sum(abs(L1-L3)) estron)
 const int ledPin            = 13;                       // LED output pin
 
 const double meterConstant  = 3600000;                  // 1 mWs
@@ -69,11 +69,15 @@ bool powerUpdateEx          = false;
 long nextUpdateEx           = 0;
 bool killUpdate3            = false;
 
-int powerIm;
-bool errorIm                = false;
-bool powerUpdateIm          = false;
-long nextUpdateIm           = 0;
+int powerCu;
+bool errorCu                = false;
+bool powerUpdateCu          = false;
+long nextUpdateCu           = 0;
 bool killUpdate4            = false;
+
+int powerUt;
+bool errorUt                = false;
+bool powerUpdateUt          = false;
 
 int controlPower            = 0;                         //variables for the control algorithm
 bool powerUpdateControl     = false;                     //control power is in watt / powerIncrement
@@ -109,7 +113,8 @@ void loop() {
   powerUpdateHeating    = false;
   powerUpdateControl    = false;
   powerUpdateEx         = false;
-  powerUpdateIm         = false;
+  powerUpdateCu         = false;
+  powerUpdateUt         = false;
   
   // read the value from the sensor, LED for debbuging
   oldValue          = sensorValue;
@@ -155,7 +160,7 @@ void loop() {
   }
   if (posFlank4){
     lastPosFlank4       = now;
-    nextUpdateIm        = now;
+    nextUpdateCu        = now;
   }
 
    //a short pulse (<500ms) signals kWh increment
@@ -184,9 +189,9 @@ void loop() {
     killUpdate3           = true;
   }
   if (negFlank4 & (now - lastPosFlank4 < 500)){
-    powerIm               = meterConstant4/(now - lastNegFlank4);
+    powerCu               = meterConstant4/(now - lastNegFlank4);
     lastNegFlank4         = now;
-    powerUpdateIm         = killUpdate4;    //supress first update
+    powerUpdateCu         = killUpdate4;    //supress first update
     killUpdate4           = true;
   }
 
@@ -214,9 +219,9 @@ void loop() {
     if (powerUpdateEx) nextUpdateEx = now + 200000;   
   }
   if (!sensorValue4 & (now - lastNegFlank4 > 200000)){
-    powerIm = 0;
-    powerUpdateIm     = nextUpdateIm < now;
-    if (powerUpdateIm) nextUpdateIm = now + 90000;   
+    powerCu = 0;
+    powerUpdateCu     = nextUpdateCu < now;
+    if (powerUpdateCu) nextUpdateCu = now + 90000;   
   }
 
   /*
@@ -245,10 +250,17 @@ void loop() {
     if (powerUpdateEx) nextUpdateEx = now + 90000;   
   }
   if (sensorValue4 & (now - lastPosFlank4 > 2000)){
-    errorIm               = true;
-    powerUpdateIm         = nextUpdateIm < now;
-    if (powerUpdateIm) nextUpdateIm = now + 90000;   
+    errorCu               = true;
+    powerUpdateCu         = nextUpdateCu < now;
+    if (powerUpdateCu) nextUpdateCu = now + 90000;   
   }
+
+  //calculate Utility Power (negative and positive form eastron)
+  if (powerUpdateEx || powerUpdateCu){
+    powerUpdateUt  = true;
+    powerUt   = powerCu - 2*powerEx;
+  }
+  errorUt     = errorCu || errorEx;
 
   //control algorithm, calculate update
   if (powerUpdateUtility){
@@ -345,11 +357,17 @@ void loop() {
     Serial.print("errorEx:");
     Serial.println(errorEx);    
   }
-  if (powerUpdateIm){
-    Serial.print("powerIm:");
-    Serial.println(powerIm);   
-    Serial.print("errorIm:");
-    Serial.println(errorIm);  
+  if (powerUpdateCu){
+    Serial.print("powerCu:");
+    Serial.println(powerCu);   
+    Serial.print("errorCu:");
+    Serial.println(errorCu);  
+  }
+  if (powerUpdateUt){
+    Serial.print("powerUt:");
+    Serial.println(powerUt);   
+    Serial.print("errorUt:");
+    Serial.println(errorUt);  
   }
 
 }
