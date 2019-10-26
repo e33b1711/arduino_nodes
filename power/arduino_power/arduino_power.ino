@@ -6,6 +6,7 @@ const int ledPin            = 13;                       // LED output pin
 
 const int pwmPin            = 9;
 String inString             = "";
+long watchDog;
 
 const double meterConstant  = 3600000;                  // 1 mWs
 const double meterConstant1 = 1800000;                  // 0.5 mWs
@@ -79,10 +80,18 @@ void loop() {
         Serial.print("setPWM:");
         Serial.println(val);
         analogWrite(pwmPin, val);
+        watchDog = millis();
         // clear the string for new input:
       }
        inString = "";
     }
+  }
+
+  if (watchDog + 20000 < millis()){
+     Serial.print("setPWM:");
+        Serial.println(0);
+        analogWrite(pwmPin, 0);
+        watchDog = millis();
   }
 
   //get timestamp
