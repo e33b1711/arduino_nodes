@@ -21,15 +21,18 @@
 */
 
 // These constants won't change. They're used to give names to the pins used:
-const int analogOutPin = 9; // Analog output pin that the LED is attached to
+const int analogOutPin = 11; // Analog output pin that the LED is attached to
+const int otherPin = 7;
 
-int outputValue = 255;        // value output to the PWM (analog out)
+int outputValue = 0;        // value output to the PWM (analog out)
 
 void setup() {
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
   Serial.println("Started. Type + or -.");
   analogWrite(analogOutPin, outputValue);
+
+  pinMode(otherPin, INPUT);
 
 }
 

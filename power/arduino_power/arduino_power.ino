@@ -286,6 +286,7 @@ void loop() {
     controlPower            = nxtControlPower;    
   }
 
+/*
   //control algorithm, check with measured power
   if (powerUpdateHeating){
     int powerDiff           = powerHeating - int(controlPower*powerIncrement);
@@ -297,16 +298,6 @@ void loop() {
     }
   }
 
-  //control algorithm, check with measured power
-  if (powerUpdateHeating){
-    int powerDiff           = powerHeating - int(controlPower*powerIncrement);
-    if(powerDiff > 200 ||  powerDiff < -200){
-      //if the difference is too big we got an error
-      controlPower          = 0;
-      errorControl          = true;
-      powerUpdateControl    = true;
-    }
-  }
 
   //control algorithm, check with pv power
   if (powerUpdateHeating){
@@ -318,6 +309,7 @@ void loop() {
       powerUpdateControl      = true;
     }
   }
+  */
 
 
   //update the pmw output
@@ -329,7 +321,7 @@ void loop() {
   //serial outputs
   if (powerUpdateControl){
     Serial.print("powerControl:");
-    Serial.println(int(controlPower*powerIncrement));
+    Serial.println(controlPower);
     Serial.print("errorControl:");
     Serial.println(errorControl); 
   }
