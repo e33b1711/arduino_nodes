@@ -9,6 +9,8 @@ const int ethernet_sc_pin = 10;
 const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 };
 const IPAddress ip(192,168,178,200);
 const IPAddress server(192,168,178,222);
+const IPAddress gateway(192,168,178,1);
+const IPAddress subnet(255,255,255,0);
 const int port = 8888;
 
   

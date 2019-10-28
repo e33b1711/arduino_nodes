@@ -7,8 +7,10 @@ const String unit_name = "eg_ost";
 #include <Ethernet.h>
 const int ethernet_sc_pin = 10;
 const byte mac[] = {0xDE, 0xAA, 0x7E, 0xEF, 0xFE, 0x04 };
-IPAddress ip(192,168,178,211);
-IPAddress server(192,168,178,222);
+const IPAddress ip(192,168,178,211);
+const IPAddress server(192,168,178,222);
+const IPAddress gateway(192,168,178,1);
+const IPAddress subnet(255,255,255,0);
 const int port = 8888;
 
 
