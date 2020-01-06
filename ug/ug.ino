@@ -29,7 +29,7 @@ int prev_value_b[]={
 //2 GA_HK
 //3 HK
 //4 GA_notHK
-//5 LA
+//5 HN
 //6 WK
 //7 HO
 //8 
@@ -75,7 +75,7 @@ int value_h[]={0, 0, 0, 0, 0, 0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=8;
-const String l_address[]={      "BELL", "LI_UG_HO", "PUMP", "LI_UG_LA", "LI_UG_GA", "LI_UG_WK", "LI_UG_GA", "LI_UG_HK"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]={      "BELL", "LI_UG_HO", "PUMP", "LI_UG_HN", "LI_UG_GA", "LI_UG_WK", "LI_UG_GA", "LI_UG_HK"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]={             22,24,26,28,30,32,34,36};                //digitaler pin
 int value_l[]={                 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={               0, 0, 0, 0, 0, 0, 0, 0};
@@ -160,15 +160,30 @@ void user_logic()
      toggle_state("LI_UG_GA");
     
   }
-  //7 Hobby
+  //7 Hobby Süd
   i=7;
-  if (value_c[i]==1){
-     toggle_state("LI_UG_HO");
+  if (value_c[i]==-1){
+    //verriegeln auf auf
+     if (time_c_pos[i]+700>time_c_neg[i]){
+       toggle_state("LI_UG_HO
+       ");
+     }
+     else{
+       write_state("LI_UG_HN",0);
+       write_state("LI_UG_HO",0);
+     }
   }
-  //5 Lager
+  //5 Hobby Nord
   i=5;
-  if (value_c[i]==1){
-     toggle_state("LI_UG_LA");
+  if (value_c[i]==-1){
+    //verriegeln auf auf
+     if (time_c_pos[i]+700>time_c_neg[i]){
+       toggle_state("LI_UG_HN");
+     }
+     else{
+       write_state("LI_UG_HN",0);
+       write_state("LI_UG_HO",0);
+     }
   }
   //6 Waschküche
   i=6;
