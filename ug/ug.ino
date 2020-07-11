@@ -16,7 +16,7 @@ int port = 8888;
 int counter_a=0;
 const int num_b_states=8;
 const int b_pin[]={           
-2, 3, 4, 5, 6, 7, 8, 9, 7, 11, 12, 13, 14, 15, 16, 17};       //a state auf der selben unit                         
+2, 3, 4, 5, 6, 7, 8, 9};       //a state auf der selben unit                         
 int value_b[]={               
 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -24,14 +24,14 @@ int prev_value_b[]={
 
 
 //constants and variables for c states (flanke eines b states)
-//0 
-//1 
-//2 GA_HK
-//3 HK
-//4 GA_notHK
+//0 HK
+//1 GA_HK
+//2 WA
+//3 GA
+//4 HS
 //5 HN
-//6 WK
-//7 HO
+//6 
+//7 
 //8 
 //9 
 //10 
@@ -57,7 +57,7 @@ const long period_t=1800000;                                                    
 const String t_address[]={    
 "TI_UG_HS", "TI_UG_HN", "TI_UG_HK", "TI_UG_GA", "TI_UG_LA", "TI_UG_WK"};                                       //addresse
 const int t_pin[]={             
-44,  45,  46,  47,  48, 49};
+42, 43, 44, 45, 46, 47, 48, 49};
 int value_t[]={                 
 0,   0,   0,   0,   0,   0};                                            //temperatur
 int aux_value_t[]={             
@@ -75,8 +75,8 @@ int value_h[]={0, 0, 0, 0, 0, 0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=8;
-const String l_address[]={      "BELL", "LI_UG_HO", "PUMP", "LI_UG_HN", "LI_UG_GA", "LI_UG_WK", "LI_UG_GA", "LI_UG_HK"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]={             22,24,26,28,30,32,34,36};                //digitaler pin
+const String l_address[]={      "BELL", "LI_UG_HK", "LI_UG_HO", "LI_UG_WK", "PUMP", "LI_UG_GA", "LI_UG_HN", "LI_UG_GA"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]={             22,30,24,25,26,27,28,29};                //digitaler pin
 int value_l[]={                 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={               0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -124,7 +124,7 @@ long stop_time_s[]={
 //                              hobby1           hobby2             hobby3            gang          lager             waschküche
 const int num_u_states=6;
 const String u_address[]={"U_UG_WK", "U_UG_LA",         "U_UG_GA",        "U_UG_H1",     "U_UG_H2",       "U_UG_H3"};        //addresse
-const int u_pin[]={23, 25, 29, 31, 33, 35};               //pwm-pin  
+const int u_pin[]={37, 31, 33, 34, 35, 36};               //pwm-pin  
 const unsigned long u_interval= 240000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis=0;
 int u_phase=0;
@@ -135,42 +135,42 @@ void user_logic()
 {
     int i;
 
-  //2 GA_HK
-//3 HK
-//4 GA_notHK
-//5 LA
-//6 WK
-//7 HO
-  
+//0 HK
+//1 GA_HK
+//2 WA
+//3 GA
+//4 HS
+//5 HN
+
 
   //taster verküpfungen
-  //3 HK
-  i=3;
+  //0 HK
+  i=0;
     if (value_c[i]==1){
      toggle_state("LI_UG_HK");
     }
-  //4, 2 Gang
+  //1, 3 Gang
+  i=1;
+  if (value_c[i]==1){
+     toggle_state("LI_UG_GA");
+    
+  }
+  i=3;
+  if (value_c[i]==1){
+     toggle_state("LI_UG_GA");
+    
+  }
+  //4 Hobby Süd
   i=4;
-  if (value_c[i]==1){
-     toggle_state("LI_UG_GA");
-    
-  }
-  i=2;
-  if (value_c[i]==1){
-     toggle_state("LI_UG_GA");
-    
-  }
-  //7 Hobby Süd
-  i=7;
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-       toggle_state("LI_UG_HO
-       ");
+       toggle_state("LI_UG_HO");
      }
      else{
        write_state("LI_UG_HN",0);
        write_state("LI_UG_HO",0);
+       Serial.println("hello4");
      }
   }
   //5 Hobby Nord
@@ -183,10 +183,11 @@ void user_logic()
      else{
        write_state("LI_UG_HN",0);
        write_state("LI_UG_HO",0);
+       Serial.println("hello5");
      }
   }
-  //6 Waschküche
-  i=6;
+  //2 Waschküche
+  i=2;
   if (value_c[i]==1){
      toggle_state("LI_UG_WK");
   }
