@@ -6,8 +6,8 @@ const String unit_name = "ug";
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x05 };
-const int ethernet_sc_pin = 10;
-IPAddress ip(192,168,178,204);
+const int ethernet_sc_pin = 53;
+IPAddress ip(192,168,178,203);
 IPAddress server(192,168,178,222);
 int port = 8888;
 
@@ -16,7 +16,7 @@ int port = 8888;
 int counter_a=0;
 const int num_b_states=8;
 const int b_pin[]={           
-2, 3, 4, 5, 6, 7, 8, 9};       //a state auf der selben unit                         
+2, 3, 16, 17, 22, 23, 24, 25};       //a state auf der selben unit                         
 int value_b[]={               
 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,   0,  0,  0,  0};       //an/aus
 int prev_value_b[]={          
@@ -24,14 +24,14 @@ int prev_value_b[]={
 
 
 //constants and variables for c states (flanke eines b states)
-//0 HK
-//1 GA_HK
-//2 WA
-//3 GA
-//4 HS
+//0 
+//1 
+//2 HK
+//3 GA_HK
+//4 GA
 //5 HN
-//6 
-//7 
+//6 WK
+//7 HS
 //8 
 //9 
 //10 
@@ -55,13 +55,14 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};       //zeit
 const int num_t_states=6;
 const long period_t=1800000;                                                                                  //update periode in ms
 const String t_address[]={    
-"TI_UG_HS", "TI_UG_HN", "TI_UG_HK", "TI_UG_GA", "TI_UG_LA", "TI_UG_WK"};                                       //addresse
+"TI_UG_WK", "TI_UG_HN", "TI_UG_LA", "TI_UG_GA", "TI_UG_HK", "TI_UG_HS",};                                       //addresse
+//"TI_26", "TI_27", "TI_28", "TI_29", "TI_30", "TI_31", "TI_32", "TI_33"};  
 const int t_pin[]={             
-42, 43, 44, 45, 46, 47, 48, 49};
+26, 27, 28, 29, 30, 31, 32, 33};
 int value_t[]={                 
-0,   0,   0,   0,   0,   0};                                            //temperatur
+0,   0,   0,   0,   0,   0, 0, 0};                                            //temperatur
 int aux_value_t[]={             
-0,   0,   0,   0,   0,   0};                                            //feuchtigkeit
+0,   0,   0,   0,   0,   0, 0, 0};                                            //feuchtigkeit
 long time_t=0;                                                                                          //update timer
 int i_t=0;                                                                                              //cycle_counter
 
@@ -69,14 +70,15 @@ int i_t=0;                                                                      
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states=6;
 const String h_address[]={      
-"HI_UG_HS", "HI_UG_HN", "HI_UG_HK", "HI_UG_GA", "HI_UG_LA", "HI_UG_WK"};       //addresse
-int value_h[]={0, 0, 0, 0, 0, 0};
+"HI_UG_WK", "HI_UG_HN", "HI_UG_LA", "HI_UG_GA", "HI_UG_HK", "HI_UG_HS"};          //addresse
+//"HI_26", "HI_27", "HI_28", "HI_29", "HI_30", "HI_31", "HI_32", "HI_33"};  
+int value_h[]={0, 0, 0, 0, 0, 0, 0, 0};
 
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=8;
-const String l_address[]={      "BELL", "LI_UG_HK", "LI_UG_HO", "LI_UG_WK", "PUMP", "LI_UG_GA", "LI_UG_HN", "LI_UG_GA"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]={             22,30,24,25,26,27,28,29};                //digitaler pin
+const String l_address[]={      "LI_UG_HO", "LI_UG_HK", "LI_UG_GA", "BELL", "PUMP", "LI_UG_GA", "LI_UG_WK", "LI_UG_HN"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]={             42, 43, 44, 45, 46, 47, 48, 49};                //digitaler pin
 int value_l[]={                 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={               0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -124,7 +126,7 @@ long stop_time_s[]={
 //                              hobby1           hobby2             hobby3            gang          lager             waschküche
 const int num_u_states=6;
 const String u_address[]={"U_UG_WK", "U_UG_LA",         "U_UG_GA",        "U_UG_H1",     "U_UG_H2",       "U_UG_H3"};        //addresse
-const int u_pin[]={37, 31, 33, 34, 35, 36};               //pwm-pin  
+const int u_pin[]={34, 35, 36, 37, 38, 39, 40, 41};               //pwm-pin  
 const unsigned long u_interval= 240000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis=0;
 int u_phase=0;
@@ -135,33 +137,33 @@ void user_logic()
 {
     int i;
 
-//0 HK
-//1 GA_HK
-//2 WA
-//3 GA
-//4 HS
+//2 HK
+//3 GA_HK
+//4 GA
 //5 HN
+//6 WK
+//7 HS
 
 
   //taster verküpfungen
-  //0 HK
-  i=0;
+  //2 HK
+  i=2;
     if (value_c[i]==1){
      toggle_state("LI_UG_HK");
     }
-  //1, 3 Gang
-  i=1;
-  if (value_c[i]==1){
-     toggle_state("LI_UG_GA");
-    
-  }
+  //3, 4 Gang
   i=3;
   if (value_c[i]==1){
      toggle_state("LI_UG_GA");
     
   }
-  //4 Hobby Süd
   i=4;
+  if (value_c[i]==1){
+     toggle_state("LI_UG_GA");
+    
+  }
+  //7 Hobby Süd
+  i=7;
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -186,15 +188,15 @@ void user_logic()
        Serial.println("hello5");
      }
   }
-  //2 Waschküche
-  i=2;
+  //6 Waschküche
+  i=6;
   if (value_c[i]==1){
      toggle_state("LI_UG_WK");
   }
 
   //turn off BELL trigger after one second
-  i=0;
-  if ((value_l[i]==1) && set_time_l[i]+1000<millis()){
+  i=3;
+  if ((value_l[i]==1) && set_time_l[i]+5000<millis()){
     write_l("BELL",0); 
     send_message("w", l_address[i], value_l[i]);
   }
