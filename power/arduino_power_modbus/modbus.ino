@@ -1,13 +1,14 @@
 
 #include <ModbusMaster.h> // EXTREN LIB...  have to be included
 ModbusMaster node; //MODBUS NODE NUMBER OF SDM630 .. must be the same as configured in SDM630
-const int SDM_SIZE = 8; 
+const int SDM_SIZE                    = 8; 
 float sdm_data[SDM_SIZE];
-bool modbus_data_valid[SDM_SIZE];
-static int MAX_ITERATION = 1; //maximum read MODBUS Value if checksum fails
-int round_counter=0;
+bool sdm_data_valid[SDM_SIZE];
+static int MAX_ITERATION              = 1; //maximum read MODBUS Value if checksum fails
 //                                      Power L1-3              Voltage L1-3            Phase A. Freq
-const uint16_t sdm_adresses[SDM_SIZE]= {0x000C, 0x000E, 0x0010, 0x0000, 0x0002, 0x0004,  0x0042, 0x0046};
+const uint16_t sdm_adresses[SDM_SIZE] = {0x000C, 0x000E, 0x0010, 0x0000, 0x0002, 0x0004,  0x0042, 0x0046};
+long lastModbusUpdate;
+long modbusPeriod = 11000;
 
 
 
@@ -18,15 +19,17 @@ void setup_modbus(){
   Serial.println("===============================");
   Serial.println("Setting up modbus.");
   Serial.println("===============================");
+
+  lastModbusUpdate=millis();
 }
 
 //called form heat control
 bool modbus_get_bal_power(){
-  modbus_data_valid[0]  = getRTUMore(sdm_adresses[0],1,0);
-  modbus_data_valid[1]  = getRTUMore(sdm_adresses[1],1,1);
-  modbus_data_valid[2]  = getRTUMore(sdm_adresses[2],1,2);
+  sdm_data_valid[0]  = getRTUMore(sdm_adresses[0],1,0);
+  sdm_data_valid[1]  = getRTUMore(sdm_adresses[1],1,1);
+  sdm_data_valid[2]  = getRTUMore(sdm_adresses[2],1,2);
   bal_power             = sdm_data[0] + sdm_data[1] + sdm_data[2];
-  bal_power_valid =  modbus_data_valid[0] & modbus_data_valid[1] & modbus_data_valid[2];
+  bal_power_valid =  sdm_data_valid[0] & sdm_data_valid[1] & sdm_data_valid[2];
   return bal_power_valid;
 }
 
@@ -61,9 +64,12 @@ boolean getRTUMore(uint16_t m_startAddress,uint8_t m_length,int arrayPosition){
 } 
 
 //called form server
-void modbus_poll_others() {
-  for (int i=3; i++; i<SDM_SIZE){
-    modbus_data_valid[round_counter] = getRTUMore(sdm_adresses[round_counter],1,round_counter);
+void handle_modbus() {
+  if (lastModbusUpdate+modbusPeriod<millis()) {
+    lastModbusUpdate = millis();
+    for (int i=3; i++; i<SDM_SIZE){
+      sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
+    }
   }
 }
 
@@ -88,7 +94,7 @@ void modbus_to_serial()
 {
   Serial.print("Modbus data vaild:");
   for(int i=0; i++; i<SDM_SIZE){
-    Serial.print(modbus_data_valid[i]);
+    Serial.print(sdm_data_valid[i]);
   }
   Serial.println(" ");
   Serial.print("Leistungen: ");

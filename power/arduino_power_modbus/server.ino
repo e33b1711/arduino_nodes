@@ -50,28 +50,49 @@ void setup_server(){
 
 //called form main loop
 void handle_server(){
-
-  EthernetClient client = server.available();
-
-  // when the client sends the first byte, say hello:
-  /*
-  if (client) {
-      // clear out the input buffer:
-      client.flush();
-      Serial.println("New Server Client");
-      alreadyConnected = true;
-    }
-  */
+    
   if (lastServerUpdate+serverUpdatePeriod<millis()) {
     //TODO: usefull info
     //TODO: also to debug
     Serial.println("DEBUG: Sending server update.");
-    server.println("Power Info 0.");
-    server.println("Power Info 1.");
-    server.println("Power Info 2.");
+    server.println("===========================");
+    //heating
+    server.print("bal_power:        ");
+    server.println(bal_power);
+    server.print("bal_power_valid:  ");
+    server.println(bal_power_valid);
+    server.print("pwm_setpoint: ");
+    server.println(pwm_setpoint);
+    server.print("watchdog_counter: ");
+    server.println(watchdog_counter);
+    //modbus
+    server.print("sdm_data:         ");
+    for(int i=0; i++; i<SDM_SIZE){
+      Serial.print(sdm_data[i]);
+      Serial.print(", ");
+    }
+    Serial.println("");
+    server.print("sdm_data_valid:   ");
+    for(int i=0; i++; i<SDM_SIZE){
+      Serial.print(sdm_data_valid[i]);
+      Serial.print(", ");
+    };
+    Serial.println("");
+    //s0 sensors
+    server.print("powerUtility:     ");
+    server.println(powerUtility);
+    server.print("errorUtility:     ");
+    server.println(errorUtility);
+    server.print("powerHeating:     ");
+    server.println(powerHeating);
+    server.print("errorUtility:     ");
+    server.println(errorUtility);
+    server.print("powerPV:          ");
+    server.println(powerPV);
+    server.print("errorPV:          ");
+    server.println(errorPV);
+    server.println("===========================");
     lastServerUpdate = millis(); 
   }
-  //TODO: incoming: power setpoint / direct mode
-
   
 }

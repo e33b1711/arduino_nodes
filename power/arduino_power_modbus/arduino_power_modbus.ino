@@ -3,6 +3,17 @@ extern bool bal_power_valid;
 extern int pwm_setpoint;
 extern long watchdog_counter;
 
+extern float sdm_data[];
+extern bool sdm_data_valid[];
+
+extern int powerUtility;    
+extern int errorUtility;
+extern int powerHeating;
+extern bool errorHeating;
+extern int powerPV;
+extern bool errorPV;
+
+
 void setup() {
 
   setup_debug();
@@ -13,8 +24,10 @@ void setup() {
   
 }
 
-//TO DO: count energy today, ntp protocol?
-//TO DO: over heat counter measures
+//TODO: count energy today, ntp protocol?
+//TODO: over heat counter measures
+//TODO: detect if heating is off / overheated
+//TODO: direct mode
 
 
 void loop() {

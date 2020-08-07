@@ -10,6 +10,7 @@ float bal_power             = 0;
 bool bal_power_valid        = false;
 int pwm_setpoint            = 0;
 long watchdog_counter       = 0;
+bool h_control_off          = false;
 
 void setup_heating(){
   pinMode(pwmPin, OUTPUT);
@@ -20,7 +21,6 @@ void setup_heating(){
   heatingLastUpdate = millis();
 }
 
-//TODO: detect if heating is off / overheated
 
 //called form main loop
 void update_heating(){
