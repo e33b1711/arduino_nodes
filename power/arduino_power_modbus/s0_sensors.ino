@@ -1,3 +1,69 @@
+
+
+const int sensorPin         = 9;                        // digital input of the power meter pulses (Utility power, only consumption)
+const int sensorPin1        = 10;                        // power to electric heating
+const int sensorPin2        = 11;                        // power from PV
+const int ledPin            = 13;                       // LED output pin
+
+
+const double meterConstant  = 3600000;                  // 1 mWs
+const double meterConstant1 = 1800000;                  // 0.5 mWs
+const double meterConstant2 = 1800000;                  // "
+
+long now;                                               //timestamp in milliseconds (now())
+
+bool sensorValue            = false;                    //flank detection and timestamps of flanks         
+bool oldValue               = false;
+long lastNegFlank;
+long lastPosFlank;
+
+bool sensorValue1           = false; 
+bool oldValue1              = false;
+long lastNegFlank1;
+long lastPosFlank1;
+
+bool sensorValue2           = false; 
+bool oldValue2              = false;
+long lastNegFlank2;
+long lastPosFlank2;
+
+int powerUtility;                                           //measured power values & update flags / counters & suppression of first update
+int errorUtility               = false;                     //error condition are not reversible and require a reset
+bool powerUpdateUtility        = false;
+long nextUpdateUtility         = 0;
+bool killUpdate             = false;
+
+int powerHeating;
+bool errorHeating           = false;
+bool powerUpdateHeating     = false;
+long nextUpdateHeating      = 0;
+bool killUpdate1            = false;
+
+int powerPV;
+bool errorPV                = false;
+bool powerUpdatePV          = false;
+long nextUpdatePV           = 0;
+bool killUpdate2            = false;
+
+void setup_s0(){
+  //setup pins
+  pinMode(sensorPin, INPUT_PULLUP);
+  pinMode(sensorPin1, INPUT_PULLUP);
+  pinMode(sensorPin2, INPUT_PULLUP);
+  pinMode(ledPin, OUTPUT);
+
+    //needed to supress wrong messages at startup
+  lastNegFlank  = millis();
+  lastNegFlank1  = millis();
+  lastNegFlank2  = millis();
+  
+  Serial.println("===============================");
+  Serial.println("Setting S0 sensors.");
+  Serial.println("===============================");
+}
+
+
+//called form main loop
 void update_s0(){
 //get timestamp
   now               = millis();
