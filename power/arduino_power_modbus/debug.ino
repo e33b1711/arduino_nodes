@@ -4,7 +4,7 @@ const long debug_update_interval = 5000;
 void setup_debug(){
   Serial.begin(9600);
   Serial.println("===============================");
-  Serial.println("Power controller unit started.");
+  Serial.println("Power controller unit statrted.");
   Serial.println("===============================");
   last_update_debug = millis();
 }
