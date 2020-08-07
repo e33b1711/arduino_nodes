@@ -68,16 +68,16 @@ void handle_server(){
     //modbus
     server.print("sdm_data:         ");
     for(int i=0; i++; i<SDM_SIZE){
-      Serial.print(sdm_data[i]);
-      Serial.print(", ");
+      server.print(sdm_data[i]);
+      server.print(", ");
     }
-    Serial.println("");
+    server.println("");
     server.print("sdm_data_valid:   ");
     for(int i=0; i++; i<SDM_SIZE){
-      Serial.print(sdm_data_valid[i]);
-      Serial.print(", ");
+      server.print(sdm_data_valid[i]);
+      server.print(", ");
     };
-    Serial.println("");
+    server.println("");
     //s0 sensors
     server.print("powerUtility:     ");
     server.println(powerUtility);

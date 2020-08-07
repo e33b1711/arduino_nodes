@@ -147,15 +147,6 @@ void update_s0(){
     powerUpdatePV     = nextUpdatePV < now;
     if (powerUpdatePV) nextUpdatePV = now + 90000;   
   }
-
-  /*
-  //a permanent off (> 600s) could be an error condition (Utility counter only)
-  if (!sensorValue & (now - lastNegFlank > 600000)){
-    errorUtility   = true;
-    powerUpdateUtility   = nextUpdateUtility < now;
-    if (powerUpdateUtility) nextUpdateUtility    = now + 5000;   
-  }
-  */
   
   //a permanent on (> 2s) could be an error condition (single phase counter/ eastron)
   if (sensorValue1 & (now - lastPosFlank1 > 2000)){
@@ -191,9 +182,8 @@ void print_s0_info(){
   Serial.print(" ");
   Serial.println(errorHeating);
   
-    Serial.println("===================================");
-      
-  }
+  Serial.println("===================================");
+}
 
 
 

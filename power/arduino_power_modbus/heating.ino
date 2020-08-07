@@ -68,14 +68,14 @@ void update_heating(){
 
 
 void print_heating_info(){
-   Serial.println("=============HEATING INFO==========");
+  Serial.println("=============HEATING INFO==========");
   Serial.print("Balanced power:");
-      Serial.println(bal_power);
-      Serial.print("Balanced power valid:");
-      Serial.println(bal_power_valid);
-      Serial.print("PWM setpoint:  ");
-      Serial.println(pwm_setpoint);
-      Serial.print("Watch dog counter: ");
-      Serial.println(watchdog_counter);
-      Serial.println("===================================");
+  Serial.println(bal_power);
+  Serial.print("Balanced power valid:");
+  Serial.println(bal_power_valid);
+  Serial.print("PWM setpoint:  ");
+  Serial.println(pwm_setpoint);
+  Serial.print("Watch dog counter: ");
+  Serial.println(watchdog_counter);
+  Serial.println("===================================");
   }

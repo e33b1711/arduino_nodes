@@ -92,6 +92,7 @@ void print_param(int START,int END)
 //called from debug
 void modbus_to_serial()
 {
+  Serial.println("=============MODBUS INFO==========");
   Serial.print("Modbus data vaild:");
   for(int i=0; i++; i<SDM_SIZE){
     Serial.print(sdm_data_valid[i]);
@@ -105,4 +106,5 @@ void modbus_to_serial()
   print_param( 6, 6);     // Parameter  34
   Serial.print("Freq:");
   print_param( 7, 7);     // Parameter  36 -  37
+  Serial.println("==================================");
 }
