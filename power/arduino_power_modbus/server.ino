@@ -15,6 +15,8 @@ long lastServerUpdate;
 long serverUpdatePeriod = 10000;
 
 
+
+
 void setup_server(){
   Serial.println("===============================");
   Serial.println("Setting up server...");
@@ -52,9 +54,7 @@ void setup_server(){
 void handle_server(){
     
   if (lastServerUpdate+serverUpdatePeriod<millis()) {
-    //TODO: usefull info
-    //TODO: also to debug
-    Serial.println("DEBUG: Sending server update.");
+    //Serial.println("DEBUG: Sending server update.");
     server.println("===========================");
     //heating
     server.print("bal_power:        ");
@@ -67,13 +67,14 @@ void handle_server(){
     server.println(watchdog_counter);
     //modbus
     server.print("sdm_data:         ");
-    for(int i=0; i++; i<SDM_SIZE){
+    for(int i=0; i<SDM_SIZE; i++){
+      //server.print(get_sdm_data(i));
       server.print(sdm_data[i]);
       server.print(", ");
     }
     server.println("");
     server.print("sdm_data_valid:   ");
-    for(int i=0; i++; i<SDM_SIZE){
+    for(int i=0; i<SDM_SIZE; i++){
       server.print(sdm_data_valid[i]);
       server.print(", ");
     };
@@ -85,8 +86,8 @@ void handle_server(){
     server.println(errorUtility);
     server.print("powerHeating:     ");
     server.println(powerHeating);
-    server.print("errorUtility:     ");
-    server.println(errorUtility);
+    server.print("errorHeating:     ");
+    server.println(errorHeating);
     server.print("powerPV:          ");
     server.println(powerPV);
     server.print("errorPV:          ");

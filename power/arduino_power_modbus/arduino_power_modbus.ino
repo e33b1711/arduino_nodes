@@ -25,9 +25,8 @@ void setup() {
 }
 
 //TODO: count energy today, ntp protocol?
-//TODO: over heat counter measures
 //TODO: detect if heating is off / overheated
-//TODO: direct mode
+//TODO: direct mode over serial
 
 
 void loop() {
@@ -36,5 +35,6 @@ void loop() {
   handle_server();
   update_s0();
   handle_debug();
+  handle_modbus();
 
 }

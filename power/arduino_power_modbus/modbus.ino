@@ -67,7 +67,7 @@ boolean getRTUMore(uint16_t m_startAddress,uint8_t m_length,int arrayPosition){
 void handle_modbus() {
   if (lastModbusUpdate+modbusPeriod<millis()) {
     lastModbusUpdate = millis();
-    for (int i=3; i++; i<SDM_SIZE){
+    for (int i=3; i<SDM_SIZE; i++){
       sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
     }
   }
@@ -94,7 +94,7 @@ void modbus_to_serial()
 {
   Serial.println("=============MODBUS INFO==========");
   Serial.print("Modbus data vaild:");
-  for(int i=0; i++; i<SDM_SIZE){
+  for(int i=0; i<SDM_SIZE; i++){
     Serial.print(sdm_data_valid[i]);
   }
   Serial.println(" ");
