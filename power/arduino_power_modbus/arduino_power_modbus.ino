@@ -13,6 +13,9 @@ extern bool errorHeating;
 extern int powerPV;
 extern bool errorPV;
 
+const String fw_verion = "1st with OTA";
+
+
 
 void setup() {
 

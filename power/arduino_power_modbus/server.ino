@@ -12,7 +12,12 @@ const int port = 8889;
 EthernetServer server(port);
 bool alreadyConnected = false; // whether or not the client was connected previously
 long lastServerUpdate;
-long serverUpdatePeriod = 10000;
+long lastOTAUpdate;
+long serverUpdatePeriod   = 10000;
+long OTAUpdatePeriod      = 11000;
+
+
+#include <ArduinoOTA.h>
 
 
 
@@ -21,7 +26,8 @@ void setup_server(){
   Serial.println("===============================");
   Serial.println("Setting up server...");
 
-  lastServerUpdate = millis();
+  lastServerUpdate  = millis();
+  lastOTAUpdate     = millis();
 
   //reset via pin
   pinMode(ethernet_reset_pin, OUTPUT);
@@ -39,6 +45,7 @@ void setup_server(){
       Serial.println("ERROR: Ethernet cable is not connected.");
     }else{
       server.begin();
+      ArduinoOTA.begin(Ethernet.localIP(), "Arduino", "password", InternalStorage);
       Serial.print("Server address:");
       Serial.println(Ethernet.localIP());
       Serial.print("Chat server port:");
@@ -52,10 +59,17 @@ void setup_server(){
 
 //called form main loop
 void handle_server(){
+
+   if (lastOTAUpdate+OTAUpdatePeriod<millis()) {
+      lastServerUpdate = millis(); 
+      ArduinoOTA.poll();
+   }
     
   if (lastServerUpdate+serverUpdatePeriod<millis()) {
     //Serial.println("DEBUG: Sending server update.");
     server.println("===========================");
+    server.print("version:          ");
+    server.print(fw_verion);
     //heating
     server.print("bal_power:        ");
     server.println(bal_power);
