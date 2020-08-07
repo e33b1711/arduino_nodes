@@ -1,3 +1,8 @@
+extern float bal_power;
+extern bool bal_power_valid;
+extern int pwm_setpoint;
+extern long watchdog_counter;
+
 void setup() {
 
   setup_debug();
@@ -8,7 +13,7 @@ void setup() {
   
 }
 
-//TO DO: count energy
+//TO DO: count energy today, ntp protocol?
 //TO DO: over heat counter measures
 
 

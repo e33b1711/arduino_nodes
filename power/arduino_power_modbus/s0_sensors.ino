@@ -169,3 +169,43 @@ void update_s0(){
     if (powerUpdatePV) nextUpdatePV = now + 90000;   
   }
 }
+
+
+
+
+void print_s0_info(){
+  Serial.println("=============S0 INFO===============");
+   
+  Serial.print("Utility: ");
+  Serial.print(powerUtility);
+  Serial.print(" ");
+  Serial.println(errorUtility);
+
+  Serial.print("PV: ");
+  Serial.print(powerPV);
+  Serial.print(" ");
+  Serial.println(errorPV);
+
+  Serial.print("Heating: ");
+  Serial.print(powerHeating);
+  Serial.print(" ");
+  Serial.println(errorHeating);
+  
+    Serial.println("===================================");
+      
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

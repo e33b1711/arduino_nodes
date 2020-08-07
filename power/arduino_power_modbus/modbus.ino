@@ -21,12 +21,13 @@ void setup_modbus(){
 }
 
 //called form heat control
-bool modbus_get_bal_power(float &bal_power){
-  modbus_data_valid[0]  = getRTUMore(sdm_adresses[3],1,round_counter);
-  modbus_data_valid[1]  = getRTUMore(sdm_adresses[4],1,round_counter);
-  modbus_data_valid[2]  = getRTUMore(sdm_adresses[5],1,round_counter);
+bool modbus_get_bal_power(){
+  modbus_data_valid[0]  = getRTUMore(sdm_adresses[0],1,0);
+  modbus_data_valid[1]  = getRTUMore(sdm_adresses[1],1,1);
+  modbus_data_valid[2]  = getRTUMore(sdm_adresses[2],1,2);
   bal_power             = sdm_data[0] + sdm_data[1] + sdm_data[2];
-  return modbus_data_valid[0] & modbus_data_valid[1] & modbus_data_valid[2];
+  bal_power_valid =  modbus_data_valid[0] & modbus_data_valid[1] & modbus_data_valid[2];
+  return bal_power_valid;
 }
 
 //internal

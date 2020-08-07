@@ -54,16 +54,18 @@ void handle_server(){
   EthernetClient client = server.available();
 
   // when the client sends the first byte, say hello:
+  /*
   if (client) {
       // clear out the input buffer:
       client.flush();
       Serial.println("New Server Client");
       alreadyConnected = true;
     }
-  if (client.available() > 0 and lastServerUpdate+serverUpdatePeriod>millis()) {
+  */
+  if (lastServerUpdate+serverUpdatePeriod<millis()) {
     //TODO: usefull info
     //TODO: also to debug
-    Serial.println("Sending server update.");
+    Serial.println("DEBUG: Sending server update.");
     server.println("Power Info 0.");
     server.println("Power Info 1.");
     server.println("Power Info 2.");
