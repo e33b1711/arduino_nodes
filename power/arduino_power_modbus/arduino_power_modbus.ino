@@ -21,7 +21,7 @@ float sdm_data[SDM_SIZE];
 bool modbus_data_valid[SDM_SIZE];
 static int MAX_ITERATION = 1; //maximum read MODBUS Value if checksum fails
 long last_modbus_update;
-const long modbus_update_i = 10000;
+const long modbus_update_i = 1000;
 bool modbus_update      = true;
 int round_counter=0;
 //                                      Voltage L1-3            Power L1-3              Phase A. Freq
@@ -34,6 +34,7 @@ const int sensorPin2        = 11;                        // power from PV
 const int ledPin            = 13;                       // LED output pin
 
 const int pwmPin            = 4;
+int pwm_setpoint             = 0;
 String inString             = "";
 long watchDog;
 
@@ -111,13 +112,15 @@ void loop() {
 
   update_s0();
 
-  update_heating();
+  if (modbus_update){
+    update_heating();
+  }
 
   
 
 
  
- 
+ /*
   if (powerUpdateUtility){
     Serial.print("powerUtility:");
     Serial.println(powerUtility);
@@ -130,12 +133,14 @@ void loop() {
     Serial.print("errorPV:");
     Serial.println(errorPV);    
   }
+  */
   if (powerUpdateHeating){
     Serial.print("powerHeating:");
     Serial.println(powerHeating);   
     Serial.print("errorHeating:");
     Serial.println(errorHeating);  
   }
+  /*
   if (modbus_update){
     Serial.println("debug: modbus_to_serial...");
     modbus_to_serial();
@@ -143,6 +148,7 @@ void loop() {
     modbus_to_tcp();
     Serial.println("debug: done.");
   }
+  */
   
 
 

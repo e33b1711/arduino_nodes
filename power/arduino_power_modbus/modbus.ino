@@ -34,9 +34,6 @@ void poll_modbus() {
   }else{
     modbus_data_valid[round_counter] = getRTUMore(sdm_adresses[round_counter],1,round_counter);
     round_counter = (round_counter+1);
-
-    Serial.println(round_counter);
-    
     if (round_counter == SDM_SIZE){
       round_counter = 0;
       modbus_update = true;

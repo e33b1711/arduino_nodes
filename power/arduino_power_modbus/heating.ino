@@ -1,29 +1,23 @@
 void update_heating(){
 
-while (Serial.available() > 0) {
-    char inChar = Serial.read();
+  int pwm_setpoint_new;
 
-      inString += (char)inChar;
-    
-    // if you get a newline, print the string, then the string's value:
-    if (inChar == '\n') {
-      if (inString.substring(0,4)=="pwm:"){
-        int val = inString.substring(4).toInt();
-        Serial.print("setPWM:");
-        Serial.println(val);
-        analogWrite(pwmPin, val);
-        watchDog = millis();
-        // clear the string for new input:
-      }
-       inString = "";
-    }
+  float bal_power = (sdm_data[3] + sdm_data[4] + sdm_data[5]);
+  if (!(modbus_data_valid[3] and modbus_data_valid[4] and modbus_data_valid[5])) bal_power = 100000; 
+  Serial.print("Balanced Power: "); Serial.println(bal_power);
+  
+  
+  const float c_down = 1.0/10;
+  const float c_up = 1.0/15;
+  if (bal_power>0){
+    pwm_setpoint_new = pwm_setpoint - (bal_power*c_down);
   }
-
-  if (watchDog + 60000 < millis()){
-     Serial.print("setPWM:");
-        Serial.println(0);
-        analogWrite(pwmPin, 0);
-        watchDog = millis();
+  if (bal_power<-50){
+    pwm_setpoint_new = pwm_setpoint - (bal_power*c_up);
   }
-
+  if (pwm_setpoint_new >200)  pwm_setpoint_new = 200;
+  if (pwm_setpoint_new <0)    pwm_setpoint_new = 0;
+  pwm_setpoint = pwm_setpoint_new;
+  Serial.print("New pwm setpoint: "); Serial.println(pwm_setpoint);
+  analogWrite(pwmPin, pwm_setpoint);
 }
