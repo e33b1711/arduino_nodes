@@ -11,5 +11,3 @@ gnd / 5V
 uno => isp sketch
 (mega 2560 (optiboot) as board)
 burn bootloader
-
-copy platform.local.txt nxt to platform.txt
