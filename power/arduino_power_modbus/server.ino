@@ -57,40 +57,40 @@ void handle_server(){
     //Serial.println("DEBUG: Sending server update.");
     server.println("===========================");
     //heating
-    server.print("bal_power:        ");
+    server.print("bal_power:");
     server.println(bal_power);
-    server.print("bal_power_valid:  ");
+    server.print("bal_power_valid:");
     server.println(bal_power_valid);
-    server.print("pwm_setpoint: ");
+    server.print("pwm_setpoint:");
     server.println(pwm_setpoint);
-    server.print("watchdog_counter: ");
+    server.print("watchdog_counter:");
     server.println(watchdog_counter);
     //modbus
-    server.print("sdm_data:         ");
+    server.print("sdm_data:");
     for(int i=0; i<SDM_SIZE; i++){
       //server.print(get_sdm_data(i));
       server.print(sdm_data[i]);
       server.print(", ");
     }
     server.println("");
-    server.print("sdm_data_valid:   ");
+    server.print("sdm_data_valid:");
     for(int i=0; i<SDM_SIZE; i++){
       server.print(sdm_data_valid[i]);
       server.print(", ");
     };
     server.println("");
     //s0 sensors
-    server.print("powerUtility:     ");
+    server.print("powerUtility:");
     server.println(powerUtility);
-    server.print("errorUtility:     ");
+    server.print("errorUtility:");
     server.println(errorUtility);
-    server.print("powerHeating:     ");
+    server.print("powerHeating:");
     server.println(powerHeating);
-    server.print("errorHeating:     ");
+    server.print("errorHeating:");
     server.println(errorHeating);
-    server.print("powerPV:          ");
+    server.print("powerPV:");
     server.println(powerPV);
-    server.print("errorPV:          ");
+    server.print("errorPV:");
     server.println(errorPV);
     server.println("===========================");
     lastServerUpdate = millis(); 
