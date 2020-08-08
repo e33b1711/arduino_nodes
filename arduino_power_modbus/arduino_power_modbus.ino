@@ -1,6 +1,6 @@
 const char* unit_name  = "power";
 const char* password   = "pass";
-const char* vers       = "v0.9";
+const char* vers       = "v0.91";
 
 extern float bal_power;
 extern bool bal_power_valid;
