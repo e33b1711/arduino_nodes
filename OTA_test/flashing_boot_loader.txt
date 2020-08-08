@@ -1,0 +1,13 @@
+uno as programmer
+mega as target
+
+d11 mosi => d51
+d12 miso => d50
+d13 sck  => d52
+d10 	 => reset 
+gnd / 5V
+
+(uno as board)
+uno => isp sketch
+(mega 2560 (optiboot) as board)
+burn bootloader
