@@ -10,50 +10,50 @@ const double meterConstant  = 3600000;                  // 1 mWs
 const double meterConstant1 = 1800000;                  // 0.5 mWs
 const double meterConstant2 = 1800000;                  // "
 
-long now;                                               //timestamp in milliseconds (now())
+unsigned long now;                                               //timestamp in milliseconds (now())
 
 bool sensorValue            = false;                    //flank detection and timestamps of flanks         
 bool oldValue               = false;
-long lastNegFlank;
-long lastPosFlank;
+unsigned long lastNegFlank;
+unsigned long lastPosFlank;
 
 bool sensorValue1           = false; 
 bool oldValue1              = false;
-long lastNegFlank1;
-long lastPosFlank1;
+unsigned long lastNegFlank1;
+unsigned long lastPosFlank1;
 
 bool sensorValue2           = false; 
 bool oldValue2              = false;
-long lastNegFlank2;
-long lastPosFlank2;
+unsigned long lastNegFlank2;
+unsigned long lastPosFlank2;
 
 int powerUtility;                                           //measured power values & update flags / counters & suppression of first update
 int errorUtility               = false;                     //error condition are not reversible and require a reset
 bool powerUpdateUtility        = false;
-long nextUpdateUtility         = 0;
+unsigned long nextUpdateUtility         = 0;
 bool killUpdate             = false;
 
 int powerHeating;
 bool errorHeating           = false;
 bool powerUpdateHeating     = false;
-long nextUpdateHeating      = 0;
+unsigned long nextUpdateHeating      = 0;
 bool killUpdate1            = false;
 
 int powerPV;
 bool errorPV                = false;
 bool powerUpdatePV          = false;
-long nextUpdatePV           = 0;
+unsigned long nextUpdatePV           = 0;
 bool killUpdate2            = false;
 
-long energyUtility           = 0;
-long energyHeat              = 0;
-long energyPV                = 0;
-long lastEnergyUtility       = 0;
-long lastEnergyHeat          = 0;
-long lastEnergyPV            = 0;
-const long     energyConstant  = 1000;                  // mWh
-const long     energyConstant1 = 500;                   // mWh
-const long     energyConstant2 = 500;                   // mWh
+unsigned long energyUtility           = 1000;
+unsigned long energyHeat              = 0;
+unsigned long energyPV                = 0;
+unsigned long lastEnergyUtility       = 0;
+unsigned long lastEnergyHeat          = 0;
+unsigned long lastEnergyPV            = 0;
+const unsigned long     energyConstant  = 1000;                  // mWh
+const unsigned long     energyConstant1 = 500;                   // mWh
+const unsigned long     energyConstant2 = 500;                   // mWh
 
 void setup_s0(){
   //setup pins

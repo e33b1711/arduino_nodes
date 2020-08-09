@@ -1,14 +1,22 @@
 
 #include <ModbusMaster.h> // EXTREN LIB...  have to be included
 ModbusMaster node; //MODBUS NODE NUMBER OF SDM630 .. must be the same as configured in SDM630
-const int SDM_SIZE                    = 8; 
+const int SDM_SIZE                    = 5; 
 float sdm_data[SDM_SIZE];
 bool sdm_data_valid[SDM_SIZE];
 static int MAX_ITERATION              = 1; //maximum read MODBUS Value if checksum fails
-//                                      Power L1-3              Voltage L1-3            Phase A. Freq
-const uint16_t sdm_adresses[SDM_SIZE] = {0x000C, 0x000E, 0x0010, 0x0000, 0x0002, 0x0004,  0x0042, 0x0046};
-long lastModbusUpdate;
-long modbusPeriod = 11000;
+//                                      Power L1-3              Import        Export  (nicht salierend!!)
+const uint16_t sdm_adresses[SDM_SIZE] = {0x000C, 0x000E, 0x0010, 0x000048, 0x00004A};
+unsigned long lastModbusUpdate;
+unsigned long modbusPeriod = 31000;
+
+//energy counter
+unsigned long unsalEnergyImportZero =0;
+unsigned long unsalEnergyExportZero =0;
+unsigned long unsalEnergyImport     =0;
+unsigned long unsalEnergyExport     =0;
+unsigned long lastEngeryExport      =0;
+unsigned long energyExport          =0;
 
 
 
@@ -19,7 +27,10 @@ void setup_modbus(){
   Serial.println("===============================");
   Serial.println("Setting up modbus.");
   Serial.println("===============================");
-
+  for (int i=0; i<SDM_SIZE; i++){
+      sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
+  }
+  new_day_sdm();
   lastModbusUpdate=millis();
 }
 
@@ -70,24 +81,11 @@ void handle_modbus() {
     for (int i=3; i<SDM_SIZE; i++){
       sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
     }
+    update_sdm_energy();
   }
 }
 
-//internal
-void print_param(int START,int END)
-{
-  for(int i = START; i <= END; i++)
-  {
-    //Serial.println("p");
-    //Serial.println(startparam);
-    //Serial.println("=");
-    Serial.print(sdm_data[i]);
-    Serial.print("   ");
-    //Serial.println("&");
-  }
-  Serial.println(" ");
-  
-}
+
 
 //called from debug
 void modbus_to_serial()
@@ -98,13 +96,20 @@ void modbus_to_serial()
     Serial.print(sdm_data_valid[i]);
   }
   Serial.println(" ");
-  Serial.print("Leistungen: ");
-  print_param(  0,  2);     // Parameter   1 -   3
-  Serial.print("Spannungen: ");
-  print_param(  3, 5);     // Parameter   7 -   9
-  Serial.print("phase angle:");
-  print_param( 6, 6);     // Parameter  34
-  Serial.print("Freq:");
-  print_param( 7, 7);     // Parameter  36 -  37
   Serial.println("==================================");
+}
+
+
+
+void update_sdm_energy(){
+  unsigned long unsalEnergyImport =  sdm_data[3]*1000000 - unsalEnergyImportZero;
+  unsigned long unsalEnergyExport =  sdm_data[4]*1000000 - unsalEnergyExportZero;
+  energyExport = unsalEnergyExport + unsalEnergyImport - energyUtility;
+  
+}
+
+void new_day_sdm(){
+  unsalEnergyImportZero   = sdm_data[3]*1000000;
+  unsalEnergyExportZero   = sdm_data[4]*1000000;
+  lastEngeryExport = energyExport;
 }

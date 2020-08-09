@@ -1,5 +1,5 @@
-long last_update_debug;
-const long debug_update_interval = 5000;
+unsigned long last_update_debug;
+const unsigned long debug_update_interval = 4300;
 
 void setup_debug(){
   Serial.begin(9600);

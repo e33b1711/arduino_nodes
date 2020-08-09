@@ -1,16 +1,16 @@
-const int pwmPin            = 4;
-long heatingLastUpdate;
-const float c_down          = 1.0/10;
-const float c_up            = 1.0/15;
-const float c_hist          = 50;
-const float c_pwm_max       = 200;
-const long time_out         = 10000; 
-const long h_update_period  = 1000;
-float bal_power             = 0;
-bool bal_power_valid        = false;
-int pwm_setpoint            = 0;
-long watchdog_counter       = 0;
-bool h_control_off          = false;
+const int pwmPin                      = 4;
+unsigned long heatingLastUpdate;
+const float c_down                    = 1.0/10;
+const float c_up                      = 1.0/15;
+const float c_hist                    = 50;
+const float c_pwm_max                 = 200;
+const unsigned long time_out          = 10000; 
+const unsigned long h_update_period   = 1000;
+float bal_power                       = 0;
+bool bal_power_valid                  = false;
+int pwm_setpoint                      = 0;
+unsigned long watchdog_counter        = 0;
+bool h_control_off                    = false;
 
 void setup_heating(){
   pinMode(pwmPin, OUTPUT);

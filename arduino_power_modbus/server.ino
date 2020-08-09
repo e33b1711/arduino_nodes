@@ -17,8 +17,8 @@ const IPAddress remIP(192,168,178,222);
 const int remPort    = 8889;
 const int localPort     = 8888;
 bool alreadyConnected = false; // whether or not the client was connected previously
-long lastServerUpdate;
-const long serverUpdatePeriod = 10000;
+unsigned long lastServerUpdate;
+const unsigned long serverUpdatePeriod = 11500;
 
 
 //ntp
@@ -89,55 +89,59 @@ void handle_server(){
     update_time();
   }
 
-  //check new day / get time
-  unsigned long epoch           = epoch_at_millis0 + millis()/1000;
-  unsigned long secondes_today  = epoch % seconds_per_day;
-  unsigned long unix_day        = epoch / seconds_per_day;
-  if (last_unix_day < unix_day){
-    Serial.println("New UTC/unix day.");
-    last_unix_day = unix_day;
-    new_day_S0();
-    //new_day_sdm();
-    last_day_is_whole = day_is_whole;
-    day_is_whole  = true;
-  }
+  
   
 
 
     if (lastServerUpdate+serverUpdatePeriod<millis()) {
 
+      //check new day / get time
+      unsigned long epoch           = epoch_at_millis0 + millis()/1000;
+      unsigned long secondes_today  = epoch % seconds_per_day;
+      unsigned long unix_day        = epoch / seconds_per_day;
+      if (last_unix_day < unix_day){
+        Serial.println("New UTC/unix day.");
+        last_unix_day = unix_day;
+        new_day_S0();
+        new_day_sdm();
+        last_day_is_whole = day_is_whole;
+        day_is_whole  = true;
+      }
 
      sprintf(packetBuffer,  "===========================\n");                        send_packet();
      //
-     sprintf(packetBuffer,  "unit name: %s\n", unit_name);                           send_packet();
-     sprintf(packetBuffer,  "Version: %s\n", vers);                                  send_packet();
-     sprintf(packetBuffer,  "Unix epoch: %lu\n", epoch );                            send_packet();
+     sprintf(packetBuffer,  "unit name:          %s\n", unit_name);                           send_packet();
+     sprintf(packetBuffer,  "Version:            %s\n", vers);                                  send_packet();
+     sprintf(packetBuffer,  "Unix epoch:         %lu\n", epoch );                            send_packet();
      sprintf(packetBuffer,  "Unix seconds today: %lu\n",secondes_today );            send_packet();
-     sprintf(packetBuffer,  "Unix day : %lu\n", unix_day);                           send_packet();
-     sprintf(packetBuffer,  "Day is whole : %i\n", day_is_whole);                    send_packet();
+     sprintf(packetBuffer,  "Unix day :          %lu\n", unix_day);                           send_packet();
+     sprintf(packetBuffer,  "Day is whole :      %i\n", day_is_whole);                    send_packet();
      sprintf(packetBuffer,  "Last day is whole : %i\n", last_day_is_whole);          send_packet();
      //
-     sprintf(packetBuffer,  "bal_power: %i\n", (int)bal_power);                      send_packet();
-     sprintf(packetBuffer,  "bal_power_valid: %i\n", bal_power_valid);               send_packet();
-     sprintf(packetBuffer,  "pwm_setpoint: %i\n", pwm_setpoint);                     send_packet();
-     sprintf(packetBuffer,  "watchdog_counter: %i\n", watchdog_counter);             send_packet();
+     sprintf(packetBuffer,  "bal_power:          %i\n", (int)bal_power);                      send_packet();
+     sprintf(packetBuffer,  "bal_power_valid:    %i\n", bal_power_valid);               send_packet();
+     sprintf(packetBuffer,  "pwm_setpoint:       %i\n", pwm_setpoint);                     send_packet();
+     sprintf(packetBuffer,  "watchdog_counter:   %i\n", watchdog_counter);             send_packet();
      //
-     sprintf(packetBuffer,  "powerUtility: %i\n", powerUtility);                     send_packet();
-     sprintf(packetBuffer,  "errorUtility: %i\n", errorUtility);                     send_packet();
-     sprintf(packetBuffer,  "powerHeating: %i\n", powerHeating);                     send_packet();
-     sprintf(packetBuffer,  "errorHeating: %i\n", errorHeating);                     send_packet();
-     sprintf(packetBuffer,  "powerPV: %i\n", powerPV);                               send_packet();
-     sprintf(packetBuffer,  "errorPV: %i\n", errorPV);                               send_packet();
+     sprintf(packetBuffer,  "powerUtility:       %i\n", powerUtility);                     send_packet();
+     sprintf(packetBuffer,  "errorUtility:       %i\n", errorUtility);                     send_packet();
+     sprintf(packetBuffer,  "powerHeating:       %i\n", powerHeating);                     send_packet();
+     sprintf(packetBuffer,  "errorHeating:       %i\n", errorHeating);                     send_packet();
+     sprintf(packetBuffer,  "powerPV:            %i\n", powerPV);                               send_packet();
+     sprintf(packetBuffer,  "errorPV:            %i\n", errorPV);                               send_packet();
      //
-     sprintf(packetBuffer,  "energyUtility: %lu\n", energyUtility);                  send_packet();
-     sprintf(packetBuffer,  "energyHeat: %lu\n", energyHeat);                        send_packet();
-     sprintf(packetBuffer,  "energyPV: %i\n", energyPV);                             send_packet();
-     sprintf(packetBuffer,  "lastEnergyUtility: %lu\n", lastEnergyUtility);          send_packet();
-     sprintf(packetBuffer,  "lastEnergyHeat: %lu\n", lastEnergyHeat);                send_packet();
-     sprintf(packetBuffer,  "lastEnergyPV: %lu\n", lastEnergyPV);                    send_packet();
-     //
-     sprintf(packetBuffer,  "sdm_data: %i, %i, %i, %i, %i, %i, %i, %i\n", (int)sdm_data[0], (int)sdm_data[1], (int)sdm_data[2], (int)sdm_data[3], (int)sdm_data[4], (int)sdm_data[5], (int)sdm_data[6], (int)sdm_data[7]); send_packet();
-     sprintf(packetBuffer,  "sdm_data_valid: %i, %i, %i, %i, %i, %i, %i, %i\n", sdm_data_valid[0],sdm_data_valid[1], sdm_data_valid[2], sdm_data_valid[3], sdm_data_valid[4], sdm_data_valid[5], sdm_data_valid[6], sdm_data_valid[7]); send_packet();
+     sprintf(packetBuffer,  "All energies in mWh.\n");                                        send_packet();
+     sprintf(packetBuffer,  "energyUtility:      %lu\n", energyUtility);                      send_packet();
+     sprintf(packetBuffer,  "energyHeat:         %lu\n", energyHeat);                         send_packet();
+     sprintf(packetBuffer,  "energyPV:           %lu\n", energyPV);                           send_packet();
+     sprintf(packetBuffer,  "energyExport:       %lu\n", energyExport);                       send_packet();
+     sprintf(packetBuffer,  "unsalEnergyExport:  %lu\n", unsalEnergyExport);                  send_packet();
+     sprintf(packetBuffer,  "unsalEnergyImport:  %lu\n", unsalEnergyImport);                  send_packet();
+     sprintf(packetBuffer,  "lastEnergyUtility:  %lu\n", lastEnergyUtility);                  send_packet();
+     sprintf(packetBuffer,  "lastEnergyHeat:     %lu\n", lastEnergyHeat);                     send_packet();
+     sprintf(packetBuffer,  "lastEnergyPV:       %lu\n", lastEnergyPV);                       send_packet();
+     sprintf(packetBuffer,  "lastEngeryExport:   %lu\n", lastEngeryExport);                   send_packet();
+     sprintf(packetBuffer,  "sdm_data_valid:     %i, %i, %i, %i, %i\n", sdm_data_valid[0],sdm_data_valid[1], sdm_data_valid[2], sdm_data_valid[3], sdm_data_valid[4]); send_packet();
      //
      sprintf(packetBuffer,  "===========================\n");             send_packet();
       
