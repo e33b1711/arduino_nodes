@@ -45,6 +45,16 @@ bool powerUpdatePV          = false;
 long nextUpdatePV           = 0;
 bool killUpdate2            = false;
 
+long energyUtility           = 0;
+long energyHeat              = 0;
+long energyPV                = 0;
+long lastEnergyUtility       = 0;
+long lastEnergyHeat          = 0;
+long lastEnergyPV            = 0;
+const long     energyConstant  = 1000;                  // mWh
+const long     energyConstant1 = 500;                   // mWh
+const long     energyConstant2 = 500;                   // mWh
+
 void setup_s0(){
   //setup pins
   pinMode(sensorPin, INPUT_PULLUP);
@@ -97,16 +107,19 @@ void update_s0(){
 
   //a positive flank just gets stored
   if (posFlank){
-    lastPosFlank        = now;
-    nextUpdateUtility      = now;
+    lastPosFlank            = now;
+    nextUpdateUtility       = now;
+    energyUtility           += energyConstant;
   }
   if (posFlank1){
     lastPosFlank1       = now;
     nextUpdateHeating   = now;
+    energyHeat          += energyConstant1;
   }
   if (posFlank2){
     lastPosFlank2       = now;
     nextUpdatePV        = now;
+    energyPV          += energyConstant2;
   }
 
    //a short pulse (<500ms) signals kWh increment
@@ -186,7 +199,14 @@ void print_s0_info(){
 }
 
 
-
+void new_day_S0(){
+  lastEnergyUtility       = energyUtility;
+  lastEnergyHeat          = energyHeat;
+  lastEnergyPV            = energyPV;
+  energyUtility           = 0;
+  energyHeat              = 0;
+  energyPV                = 0; 
+}
 
 
 

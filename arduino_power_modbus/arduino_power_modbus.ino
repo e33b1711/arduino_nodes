@@ -17,6 +17,20 @@ extern bool errorHeating;
 extern int powerPV;
 extern bool errorPV;
 
+//ntp / time related
+extern unsigned long  epoch_at_millis0;
+extern void update_time();
+extern void new_day_S0();
+
+//TODO: ntp
+//ntp: 
+//=>epoch at startup
+//=>resync at 00:00
+//energy counter, letzter tag / aktuell:
+//netzbezug
+//pv erzeugt
+//heizung verbraucht
+//verschenkt (energie-menge über modbus - bezug)??
 
 void setup() {
 
