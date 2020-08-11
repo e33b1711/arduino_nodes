@@ -102,14 +102,18 @@ void modbus_to_serial()
 
 
 void update_sdm_energy(){
-  unsigned long unsalEnergyImport =  sdm_data[3]*1000000 - unsalEnergyImportZero;
-  unsigned long unsalEnergyExport =  sdm_data[4]*1000000 - unsalEnergyExportZero;
-  energyExport = unsalEnergyExport + unsalEnergyImport - energyUtility;
+  unsalEnergyImport =  (unsigned long)(sdm_data[3]*1000000.0) - unsalEnergyImportZero;
+  unsalEnergyExport =  (unsigned long)(sdm_data[4]*1000000.0) - unsalEnergyExportZero;
+  energyExport = unsalEnergyExport - unsalEnergyImport + energyUtility;
   
 }
 
 void new_day_sdm(){
-  unsalEnergyImportZero   = sdm_data[3]*1000000;
-  unsalEnergyExportZero   = sdm_data[4]*1000000;
+  unsalEnergyImportZero   = (unsigned long)(sdm_data[3]*1000000.0);
+  unsalEnergyExportZero   = (unsigned long)(sdm_data[4]*1000000.0);
+  Serial.print("DEBUG: unsalEnergyImportZero: ");
+  Serial.print(unsalEnergyImportZero);
+  Serial.print("DEBUG: unsalEnergyExportZeroportZero: ");
+  Serial.print(unsalEnergyExportZero);
   lastEngeryExport = energyExport;
 }
