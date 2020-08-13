@@ -111,9 +111,5 @@ void update_sdm_energy(){
 void new_day_sdm(){
   unsalEnergyImportZero   = (unsigned long)(sdm_data[3]*1000000.0);
   unsalEnergyExportZero   = (unsigned long)(sdm_data[4]*1000000.0);
-  Serial.print("DEBUG: unsalEnergyImportZero: ");
-  Serial.print(unsalEnergyImportZero);
-  Serial.print("DEBUG: unsalEnergyExportZeroportZero: ");
-  Serial.print(unsalEnergyExportZero);
   lastEngeryExport = energyExport;
 }

@@ -1,43 +1,80 @@
 //for udp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
-#include <Ethernet.h>
-#include <ArduinoOTA.h>
-#include <EthernetUdp.h>
+#include <SPI.h>
+#include "Adafruit_MQTT.h"
+#include "Adafruit_MQTT_Client.h"
 
+#include <Ethernet.h>
+#include <EthernetClient.h>
+#include <Dns.h>
+#include <Dhcp.h>
+#include <ArduinoOTA.h>
 
 
 const int ethernet_sc_pin     = 53;
 const int ethernet_reset_pin  = 50;
+
 const byte mac[] = {0x4E, 0xAB, 0x7E, 0xEF, 0xFE, 0x04 };
-const IPAddress ip(192,168,178,213);
-const IPAddress gateway(192,168,178,1);
-const IPAddress myDns(192,168,178,1);
-const IPAddress subnet(255,255,255,0);
-const IPAddress remIP(192,168,178,222);
-const int remPort    = 8889;
-const int localPort     = 8888;
-bool alreadyConnected = false; // whether or not the client was connected previously
+IPAddress ip(192,168,178,213);
+//const IPAddress gateway(192,168,178,1);
+//const IPAddress myDns(192,168,178,1);
+//const IPAddress subnet(255,255,255,0);
+
+
+
+#define AIO_SERVER      "192.168.178.222"
+#define AIO_SERVERPORT  1883
+#define AIO_USERNAME    "power_control"
+#define AIO_KEY         ""
+/************ Global State (you don't need to change this!) ******************/
+
+//Set up the ethernet client
+EthernetClient client;
+
+Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
+
+// You don't need to change anything below this line!
+#define halt(s) { Serial.println(F( s )); while(1);  }
+
+
+/****************************** Feeds ***************************************/
+
+// Setup a feed called 'photocell' for publishing.
+// Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
+Adafruit_MQTT_Publish powerUtilityPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerUtility");
+Adafruit_MQTT_Publish powerPVPub        = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerPV");
+Adafruit_MQTT_Publish powerHeatingPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerHeating");
+Adafruit_MQTT_Publish powerBalPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerBal");
+
+Adafruit_MQTT_Publish energyImportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyImport");
+Adafruit_MQTT_Publish energyExportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyExport");
+Adafruit_MQTT_Publish energyPVPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyPV");
+Adafruit_MQTT_Publish energyHeatPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyHeat");
+
+
 unsigned long lastServerUpdate;
 const unsigned long serverUpdatePeriod = 11500;
 
 
 //ntp
+#include <EthernetUdp.h>
+EthernetUDP Udp;
+unsigned int localPort = 8888;       // local port to listen for UDP packets
 const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
+byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
 const char timeServer[] = "time.nist.gov"; // time.nist.gov NTP server
 unsigned long  epoch_at_millis0;
 const unsigned long seconds_per_day = 86400;
 unsigned long last_unix_day;
+unsigned long startup_unix_day;
+unsigned long startup_seconds_today;
 bool day_is_whole = false;
 bool last_day_is_whole = false;
-
-EthernetUDP Udp;
-// buffers for receiving and sending data
-char packetBuffer[NTP_PACKET_SIZE];  // buffer to hold incoming packet,
 
 
 void setup_server(){
   Serial.println("===============================");
-  Serial.println("Setting up server...");
+  Serial.println("Setting up ethernet / mqtt / ntp / ota");
 
   lastServerUpdate = millis();
 
@@ -47,54 +84,45 @@ void setup_server(){
   delay(10);
   digitalWrite(ethernet_reset_pin, LOW);
 
-  //setup sever
+  //setup mttq
+  Serial.println(F("\nInit the mqtt client..."));
   Ethernet.init(ethernet_sc_pin);
-  Ethernet.begin(mac, ip, myDns, gateway, subnet);
-  if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-    Serial.println("ERROR: Ethernet shield was not found.");
-  }else{
-    if (Ethernet.linkStatus() == LinkOFF) {
-      Serial.println("ERROR: Ethernet cable is not connected.");
-    }else{
-      Udp.begin(localPort);
-      ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
-      Serial.print("Server address:");
-      Serial.println(Ethernet.localIP());
-      Serial.print("Port:");
-      Serial.println(localPort);
-      Serial.println("SUCESS!");
-      Serial.print("The gateway IP address is: ");
-      Serial.println(Ethernet.gatewayIP());
-      Serial.print("The DNS server IP address is: ");
-      Serial.println(Ethernet.dnsServerIP());
-      update_time();
-      unsigned long epoch           = epoch_at_millis0 + millis()/1000;
-      unsigned long secondes_today  = epoch % seconds_per_day;
-      unsigned long unix_day        = epoch / seconds_per_day;
-      last_unix_day                 = unix_day;
-  }
+  Ethernet.begin(mac, ip);
+  delay(1000); //give the ethernet a second to initialize
+
+  //setup ntp
+  Udp.begin(localPort);
+  update_time();
+  unsigned long epoch           = epoch_at_millis0 + millis()/1000;
+  unsigned long secondes_today  = epoch % seconds_per_day;
+  unsigned long unix_day        = epoch / seconds_per_day;
+  startup_unix_day              = unix_day;
+  startup_seconds_today         = secondes_today;
+
+  lastServerUpdate=millis();
+
+  ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
+  
   Serial.println("===============================");
-  }
+  
   
 }
 
 //called form main loop
 void handle_server(){
-
-  //look for OTA Update
   ArduinoOTA.poll();
 
+ 
   //update the time before millis() overflows
   if(millis() > 0x0FFFFFFF){
     update_time();
   }
-
-  
   
 
 
     if (lastServerUpdate+serverUpdatePeriod<millis()) {
 
+      
       //check new day / get time
       unsigned long epoch           = epoch_at_millis0 + millis()/1000;
       unsigned long secondes_today  = epoch % seconds_per_day;
@@ -108,63 +136,52 @@ void handle_server(){
         day_is_whole  = true;
       }
 
-     sprintf(packetBuffer,  "===================================\n");                 send_packet();
-     //
-     sprintf(packetBuffer,  "unit name:          %s\n", unit_name);                   send_packet();
-     sprintf(packetBuffer,  "Version:            %s\n", vers);                        send_packet();
-     sprintf(packetBuffer,  "Unix epoch:         %lu\n", epoch );                     send_packet();
-     sprintf(packetBuffer,  "Unix seconds today: %lu\n",secondes_today );             send_packet();
-     sprintf(packetBuffer,  "Unix day :          %lu\n", unix_day);                   send_packet();
-     //
-     sprintf(packetBuffer,  "===================================\n");                 send_packet();
-     sprintf(packetBuffer,  "bal_power:          %i\n", (int)bal_power);              send_packet();
-     sprintf(packetBuffer,  "bal_power_valid:    %i\n", bal_power_valid);             send_packet();
-     sprintf(packetBuffer,  "pwm_setpoint:       %i\n", pwm_setpoint);                send_packet();
-     sprintf(packetBuffer,  "watchdog_counter:   %i\n", watchdog_counter);            send_packet();
-     //
-     sprintf(packetBuffer,  "===================================\n");                 send_packet();
-     sprintf(packetBuffer,  "powerUtility:       %i\n", powerUtility);                send_packet();
-     sprintf(packetBuffer,  "errorUtility:       %i\n", errorUtility);                send_packet();
-     sprintf(packetBuffer,  "powerHeating:       %i\n", powerHeating);                send_packet();
-     sprintf(packetBuffer,  "errorHeating:       %i\n", errorHeating);                send_packet();
-     sprintf(packetBuffer,  "powerPV:            %i\n", powerPV);                     send_packet();
-     sprintf(packetBuffer,  "errorPV:            %i\n", errorPV);                     send_packet();
-     //
-     sprintf(packetBuffer,  "===================================\n");                 send_packet();
-     sprintf(packetBuffer,  "All energies in mWh.\n");                                send_packet();
-     sprintf(packetBuffer,  "Day is whole :      %i\n", day_is_whole);                send_packet();
-     sprintf(packetBuffer,  "energyUtility:      %lu\n", energyUtility);              send_packet();
-     sprintf(packetBuffer,  "energyHeat:         %lu\n", energyHeat);                 send_packet();
-     sprintf(packetBuffer,  "energyPV:           %lu\n", energyPV);                   send_packet();
-     sprintf(packetBuffer,  "energyExport:       %lu\n", energyExport);               send_packet();
-     sprintf(packetBuffer,  "unsalEnergyExport:  %lu\n", unsalEnergyExport);          send_packet();
-     sprintf(packetBuffer,  "unsalEnergyImport:  %lu\n", unsalEnergyImport);          send_packet();
-     //
-     sprintf(packetBuffer,  "===================================\n");                 send_packet();
-     sprintf(packetBuffer,  "Last day is whole : %i\n", last_day_is_whole);           send_packet();
-     sprintf(packetBuffer,  "lastEnergyUtility:  %lu\n", lastEnergyUtility);          send_packet();
-     sprintf(packetBuffer,  "lastEnergyHeat:     %lu\n", lastEnergyHeat);             send_packet();
-     sprintf(packetBuffer,  "lastEnergyPV:       %lu\n", lastEnergyPV);               send_packet();
-     sprintf(packetBuffer,  "lastEngeryExport:   %lu\n", lastEngeryExport);           send_packet();
-     sprintf(packetBuffer,  "sdm_data_valid:     %i, %i, %i, %i, %i\n", sdm_data_valid[0],sdm_data_valid[1], sdm_data_valid[2], sdm_data_valid[3], sdm_data_valid[4]); send_packet();
-     //
-     sprintf(packetBuffer,  "===================================\n");                 send_packet();
+      Serial.println("=====================================");
+      Serial.println("Publishing via mqtt...");
+      Serial.print("Unix day: ");
+      Serial.println(unix_day);
+      Serial.print("Unix secondes today: ");
+      Serial.println(secondes_today);
       
+      if(MQTT_connect()){
+        powerUtilityPub.publish(uint32_t(powerUtility));
+        powerPVPub.publish(uint32_t(powerPV));
+        powerHeatingPub.publish(uint32_t(powerHeating));
+        powerBalPub.publish(uint32_t(bal_power));
+        energyImportPub.publish(uint32_t(energyUtility));
+        energyExportPub.publish(uint32_t(energyExport));
+        energyPVPub.publish(uint32_t(energyPV));
+        energyHeatPub.publish(uint32_t(energyHeat));
+      }else{
+        Serial.print("ERROR: MQTT Broker not rechable. ");
+      }
+
       lastServerUpdate = millis(); 
+      Serial.println("=====================================");
     }
-  
-
-
  
-  
 }
 
 
-void send_packet(){
+bool MQTT_connect() {
+  int8_t ret;
 
-Udp.beginPacket(remIP, remPort);
-      Udp.write(packetBuffer);
-      Udp.endPacket();
+  // Stop if already connected.
+  if (mqtt.connected()) {
+    return;
+  }
+
+  Serial.print("Connecting to MQTT... ");
+
+  if ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
+       Serial.println(mqtt.connectErrorString(ret));
+       Serial.println("Retrying MQTT connection in 5 seconds...");
+       mqtt.disconnect();
+       return false;
+  }else{
+    Serial.println("MQTT Connected!");
+    return true;
+  }
 }
 
 
