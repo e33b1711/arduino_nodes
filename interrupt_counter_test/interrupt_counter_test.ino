@@ -22,15 +22,16 @@ unsigned long pulseTime1,lastTime1, timeout1;
 unsigned long pulseTime2,lastTime2, timeout2;
 
 //power and energy
-unsigned long powerUtility, energyImport, lastEnergyImport  = 0;
-unsigned long powerHeat, energyHeat, lastEnergyHeat           = 0;
-unsigned long powerPV, energyPV, lastEnergyPV                 = 0;
+unsigned long powerUtility, energyUtility;
+unsigned long powerHeat, energyHeat;
+unsigned long powerPV, energyPV;
 
 //Number of pulses per wh - found or set on the meter.
 int ppwh = 1; //1000 pulses/kwh = 1 pulse per wh
 
-void setup_s0()
+void setup()
 {
+    Serial.begin(115200);
 
     // KWH interrupt attached to IRQ 1 = pin3
     attachInterrupt(digitalPinToInterrupt(sensorPin0), onPulse0, RISING);
@@ -41,9 +42,9 @@ void setup_s0()
     timeout2 = millis();
 }
 
-void update_s0()
+void loop()
 {
-    /*
+    
     Serial.print("powerUtility: ");
     Serial.println(powerUtility);
     Serial.print("energyUtility: ");
@@ -58,7 +59,6 @@ void update_s0()
     Serial.println(energyPV);
     Serial.println("==============================");
     delay(4000);
-    */
 
   
     //a permanent on (>500ms) signals 0 kWh (Utility counter only)
@@ -72,7 +72,7 @@ void update_s0()
     if (power < powerUtility){
       powerUtility = power;
     }
-    //Serial.println(">>>>>>>Timeout 0");
+    Serial.println(">>>>>>>Timeout 0");
   }
 
   //force update every 4 sec (simulation a pulse)
@@ -82,7 +82,7 @@ void update_s0()
     if (power < powerHeat){
       powerHeat = power;
     }
-    //Serial.println(">>>>>>>Timeout 1");
+    Serial.println(">>>>>>>Timeout 1");
   }
    if (millis() - timeout2 > 4000){
     timeout2 = millis();
@@ -90,7 +90,7 @@ void update_s0()
     if (power < powerPV){
       powerPV = power;
     }
-    //Serial.println(">>>>>Timeout 2");
+    Serial.println(">>>>>Timeout 2");
   }
 
 }
@@ -107,7 +107,7 @@ void onPulse0()
     //Calculate power
     powerUtility = (powerConstant0 / (pulseTime0 - lastTime0));
     //Find kwh elapsed
-    energyExport = pulseCount0 / energyConstant0;
+    energyUtility = pulseCount0 / energyConstant0;
     Serial.println(".");
 }
 
@@ -142,44 +142,3 @@ void onPulse2()
     energyPV = pulseCount2 / energyConstant2;
     Serial.println("...");
 }
-
-
-
-
-void print_s0_info(){
-  Serial.println("=============S0 INFO===============");
-   
-  Serial.print("Utility: ");
-  Serial.println(powerUtility);
-
-  Serial.print("PV: ");
-  Serial.println(powerPV);
-
-  Serial.print("Heating: ");
-  Serial.println(powerHeat);
-
-  
-  Serial.println("===================================");
-}
-
-
-void new_day_S0(){
-  lastEnergyExport        = energyExport;
-  lastEnergyHeat          = energyHeat;
-  lastEnergyPV            = energyPV;
-  energyImport            = 0;
-  energyHeat              = 0;
-  energyPV                = 0; 
-}
-
-
-
-
-
-
-
-
-
-
-
-  

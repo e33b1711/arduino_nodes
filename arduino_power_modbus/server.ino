@@ -41,9 +41,8 @@ Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO
 
 // Setup a feed called 'photocell' for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-Adafruit_MQTT_Publish powerUtilityPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerUtility");
 Adafruit_MQTT_Publish powerPVPub        = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerPV");
-Adafruit_MQTT_Publish powerHeatingPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerHeating");
+Adafruit_MQTT_Publish powerHeatPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerHeat");
 Adafruit_MQTT_Publish powerBalPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerBal");
 
 Adafruit_MQTT_Publish energyImportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyImport");
@@ -51,9 +50,18 @@ Adafruit_MQTT_Publish energyExportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USER
 Adafruit_MQTT_Publish energyPVPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyPV");
 Adafruit_MQTT_Publish energyHeatPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyHeat");
 
+Adafruit_MQTT_Publish lastEnergyImportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/lastEnergyImport");
+Adafruit_MQTT_Publish lastEnergyExportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/lastEnergyExport");
+Adafruit_MQTT_Publish lastEnergyPVPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/lastEnergyPV");
+Adafruit_MQTT_Publish lastEnergyHeatPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/lastEnergyHeat");
+
+Adafruit_MQTT_Publish versionPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/version");
+
+Adafruit_MQTT_Publish statusPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/status");
+
 
 unsigned long lastServerUpdate;
-const unsigned long serverUpdatePeriod = 11500;
+const unsigned long serverUpdatePeriod = 10000;
 
 
 //ntp
@@ -89,6 +97,13 @@ void setup_server(){
   Ethernet.init(ethernet_sc_pin);
   Ethernet.begin(mac, ip);
   delay(1000); //give the ethernet a second to initialize
+
+   if(MQTT_connect()){
+        versionPub.publish(vers,20);
+        statusPub.publish("Started.",8);
+    }else{
+        Serial.print("ERROR: MQTT Broker not rechable. ");
+    }
 
   //setup ntp
   Udp.begin(localPort);
@@ -134,6 +149,12 @@ void handle_server(){
         new_day_sdm();
         last_day_is_whole = day_is_whole;
         day_is_whole  = true;
+        if(last_day_is_whole){
+          lastEnergyImportPub.publish(uint32_t(lastEnergyImport));
+          lastEnergyExportPub.publish(uint32_t(lastEnergyExport));
+          lastEnergyPVPub.publish(uint32_t(lastEnergyPV));
+          lastEnergyHeatPub.publish(uint32_t(lastEnergyHeat));
+        }
       }
 
       Serial.println("=====================================");
@@ -144,11 +165,11 @@ void handle_server(){
       Serial.println(secondes_today);
       
       if(MQTT_connect()){
-        powerUtilityPub.publish(uint32_t(powerUtility));
         powerPVPub.publish(uint32_t(powerPV));
-        powerHeatingPub.publish(uint32_t(powerHeating));
-        powerBalPub.publish(uint32_t(bal_power));
-        energyImportPub.publish(uint32_t(energyUtility));
+        powerHeatPub.publish(uint32_t(powerHeat));
+        powerBalPub.publish(bal_power, 4);
+        //
+        energyImportPub.publish(uint32_t(energyImport));
         energyExportPub.publish(uint32_t(energyExport));
         energyPVPub.publish(uint32_t(energyPV));
         energyHeatPub.publish(uint32_t(energyHeat));

@@ -11,12 +11,11 @@ unsigned long lastModbusUpdate;
 unsigned long modbusPeriod = 31000;
 
 //energy counter
-unsigned long unsalEnergyImportZero =0;
-unsigned long unsalEnergyExportZero =0;
-unsigned long unsalEnergyImport     =0;
-unsigned long unsalEnergyExport     =0;
-unsigned long lastEngeryExport      =0;
-unsigned long energyExport          =0;
+unsigned long unsalEnergyImportZero               = 0;
+unsigned long unsalEnergyExportZero               = 0;
+unsigned long unsalEnergyImport                   = 0;
+unsigned long unsalEnergyExport                   = 0;
+unsigned long energyExport,lastEnergyExport       = 0;
 
 
 
@@ -104,12 +103,12 @@ void modbus_to_serial()
 void update_sdm_energy(){
   unsalEnergyImport =  (unsigned long)(sdm_data[3]*1000000.0) - unsalEnergyImportZero;
   unsalEnergyExport =  (unsigned long)(sdm_data[4]*1000000.0) - unsalEnergyExportZero;
-  energyExport = unsalEnergyExport - unsalEnergyImport + energyUtility;
+  energyExport = unsalEnergyExport - unsalEnergyImport + energyExport;
   
 }
 
 void new_day_sdm(){
   unsalEnergyImportZero   = (unsigned long)(sdm_data[3]*1000000.0);
   unsalEnergyExportZero   = (unsigned long)(sdm_data[4]*1000000.0);
-  lastEngeryExport = energyExport;
+  lastEnergyExport = energyExport;
 }

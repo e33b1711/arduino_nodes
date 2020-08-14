@@ -1,6 +1,6 @@
 const char* unit_name  = "power";
 const char* password   = "pass";
-const char* vers       = "v0.88";
+const char* vers       = "v0.88                 ";
 
 extern float bal_power;
 extern bool bal_power_valid;
@@ -10,16 +10,13 @@ extern unsigned long watchdog_counter;
 extern float sdm_data[];
 extern bool sdm_data_valid[];
 
-extern int powerUtility;    
-extern int errorUtility;
-extern int powerHeating;
-extern bool errorHeating;
-extern int powerPV;
-extern bool errorPV;
-extern unsigned long energyUtility;
-extern unsigned long energyHeat;
-extern unsigned long energyPV;
-extern unsigned long energyExport;
+extern unsigned long powerUtility;    
+extern unsigned long powerHeating;
+extern unsigned long powerPV;
+extern unsigned long energyImport, lastEnergyImport;
+extern unsigned long energyHeat, lastEnergyHeat;
+extern unsigned long energyPV, lastEnergyPV;
+extern unsigned long energyExport,lastEnergyExport;
 extern unsigned long unsalEnergyImport;
 extern unsigned long unsalEnergyExport;
 
