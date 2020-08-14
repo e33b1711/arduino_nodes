@@ -1,5 +1,5 @@
-const int sensorPin0         = 20;                        // digital input of the power meter pulses (Utility power, only consumption)
-const int sensorPin1        = 21;                        // power to electric heating
+const int sensorPin0         = 2;                        // digital input of the power meter pulses (Utility power, only consumption)
+const int sensorPin1        = 3;                        // power to electric heating
 const int sensorPin2        = 19;                        // power from PV
 
 

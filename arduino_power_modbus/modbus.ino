@@ -21,16 +21,16 @@ unsigned long energyExport,lastEnergyExport       = 0;
 
 void setup_modbus(){
   //modbus
-  Serial2.begin(9600);
-  node.begin(1, Serial2);
   Serial.println("===============================");
   Serial.println("Setting up modbus.");
-  Serial.println("===============================");
+  Serial3.begin(9600);
+  node.begin(1, Serial3);
   for (int i=0; i<SDM_SIZE; i++){
       sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
   }
   new_day_sdm();
   lastModbusUpdate=millis();
+  Serial.println("===============================");
 }
 
 //called form heat control

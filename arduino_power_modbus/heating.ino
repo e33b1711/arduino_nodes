@@ -1,4 +1,4 @@
-const int pwmPin                      = 4;
+const int pwmPin                      = 5;
 unsigned long heatingLastUpdate;
 const float c_down                    = 1.0/10;
 const float c_up                      = 1.0/15;
