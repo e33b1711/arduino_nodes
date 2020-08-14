@@ -1,3 +1,24 @@
+/*TODO
+Status:
+modbus Error (no response)
+Heating Error (no powerHeat when pwm)
+s0 Error (balPower>0 and powerImport=0, balPower<0 and powerPV=0)
+no ntp time 
+=> non-persistent status
+=> persistent status (later resetable)
+
+Control over mqtt
+=> set target power
+=> reset status
+=> direct mode (control off)
+
+Check data types over mqtt (all floats)
+
+last day data / time
+
+*/
+
+
 const char* unit_name  = "power";
 const char* password   = "pass";
 const char* vers       = "v0.88                 ";
@@ -10,15 +31,15 @@ extern unsigned long watchdog_counter;
 extern float sdm_data[];
 extern bool sdm_data_valid[];
 
-extern unsigned long powerUtility;    
-extern unsigned long powerHeating;
-extern unsigned long powerPV;
-extern unsigned long energyImport, lastEnergyImport;
-extern unsigned long energyHeat, lastEnergyHeat;
-extern unsigned long energyPV, lastEnergyPV;
-extern unsigned long energyExport,lastEnergyExport;
-extern unsigned long unsalEnergyImport;
-extern unsigned long unsalEnergyExport;
+extern float powerUtility;    
+extern float powerHeating;
+extern float powerPV;
+extern float energyImport, lastEnergyImport;
+extern float energyHeat, lastEnergyHeat;
+extern float energyPV, lastEnergyPV;
+extern float energyExport,lastEnergyExport;
+extern float unsalEnergyImport;
+extern float unsalEnergyExport;
 
 //ntp / time related
 extern unsigned long  epoch_at_millis0;

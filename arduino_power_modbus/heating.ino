@@ -13,12 +13,18 @@ unsigned long watchdog_counter        = 0;
 bool h_control_off                    = false;
 
 void setup_heating(){
+  Serial.println("===============================");
   pinMode(pwmPin, OUTPUT);
   analogWrite(pwmPin, 0);
-  Serial.println("===============================");
+  
   Serial.println("Setting up heating.");
-  Serial.println("===============================");
+  Serial.print("Switching on...");
+  analogWrite(pwmPin, 150);
+  delay(4000);
+  Serial.println(" and off.");
+  analogWrite(pwmPin, 0);
   heatingLastUpdate = millis();
+  Serial.println("===============================");
 }
 
 
@@ -70,9 +76,7 @@ void update_heating(){
 void print_heating_info(){
   Serial.println("=============HEATING INFO==========");
   Serial.print("Balanced power:");
-  Serial.println(bal_power);
-  Serial.print("Balanced power valid:");
-  Serial.println(bal_power_valid);
+  Serial.println(bal_power,3);
   Serial.print("PWM setpoint:  ");
   Serial.println(pwm_setpoint);
   Serial.print("Watch dog counter: ");

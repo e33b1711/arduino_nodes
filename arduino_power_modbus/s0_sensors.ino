@@ -8,13 +8,13 @@ long pulseCount0 = 0;
 long pulseCount1 = 0;
 long pulseCount2 = 0;
 
-const long powerConstant0 = 3600000;                  // 1 mWs
-const long powerConstant1 = 1800000;                  // 0.5 mWs
-const long powerConstant2 = 1800000;                  // "
+const float powerConstant0 = 3600000;                  // 1 mWs
+const float powerConstant1 = 1800000;                  // 0.5 mWs
+const float powerConstant2 = 1800000;                  // "
 
-const long energyConstant0 = 1;                  // 1 mWs
-const long energyConstant1 = 2;                  // 0.5 mWs
-const long energyConstant2 = 2;                  // "
+const float energyConstant0 = 0.001;                  // 1 mWs
+const float energyConstant1 = 0.0005;                  // 0.5 mWs
+const float energyConstant2 = 0.0005;                  // "
 
 //Used to measure power.
 unsigned long pulseTime0,lastTime0, timeout0;
@@ -22,12 +22,9 @@ unsigned long pulseTime1,lastTime1, timeout1;
 unsigned long pulseTime2,lastTime2, timeout2;
 
 //power and energy
-unsigned long powerUtility, energyImport, lastEnergyImport  = 0;
-unsigned long powerHeat, energyHeat, lastEnergyHeat           = 0;
-unsigned long powerPV, energyPV, lastEnergyPV                 = 0;
-
-//Number of pulses per wh - found or set on the meter.
-int ppwh = 1; //1000 pulses/kwh = 1 pulse per wh
+float powerUtility, energyImport, lastEnergyImport  = 0;
+float powerHeat, energyHeat, lastEnergyHeat         = 0;
+float powerPV, energyPV, lastEnergyPV               = 0;
 
 void setup_s0()
 {
@@ -68,7 +65,7 @@ void update_s0()
   //force update every 10 sec (simulation a pulse)
   if (millis() - timeout0 > 4000){
     timeout0 = millis();
-    unsigned long  power = (powerConstant0 / (timeout0 - lastTime0));
+    float  power = (powerConstant0 / (timeout0 - lastTime0));
     if (power < powerUtility){
       powerUtility = power;
     }
@@ -78,7 +75,7 @@ void update_s0()
   //force update every 4 sec (simulation a pulse)
   if (millis() - timeout1 > 4000){
     timeout1 = millis();
-    unsigned long  power = (powerConstant1 / (timeout1 - lastTime1));
+    float power = (powerConstant1 / (timeout1 - lastTime1));
     if (power < powerHeat){
       powerHeat = power;
     }
@@ -86,7 +83,7 @@ void update_s0()
   }
    if (millis() - timeout2 > 4000){
     timeout2 = millis();
-    unsigned long  power = (powerConstant2 / (timeout2 - lastTime2));
+    float  power = (powerConstant2 / (timeout2 - lastTime2));
     if (power < powerPV){
       powerPV = power;
     }
@@ -107,8 +104,8 @@ void onPulse0()
     //Calculate power
     powerUtility = (powerConstant0 / (pulseTime0 - lastTime0));
     //Find kwh elapsed
-    energyExport = pulseCount0 / energyConstant0;
-    Serial.println(".");
+    energyImport = energyConstant0 * pulseCount0;
+    //Serial.println(".");
 }
 
 // The interrupt routine
@@ -123,8 +120,8 @@ void onPulse1()
     //Calculate power
     powerHeat = (powerConstant1 / (pulseTime1 - lastTime1));
     //Find kwh elapsed
-    energyHeat = pulseCount1 / energyConstant1;
-    Serial.println("..");
+    energyHeat = energyConstant1 * pulseCount1;
+    //Serial.println("..");
 }
 
 // The interrupt routine
@@ -139,8 +136,8 @@ void onPulse2()
     //Calculate power
     powerPV = (powerConstant2 / (pulseTime2 - lastTime2));
     //Find kwh elapsed
-    energyPV = pulseCount2 / energyConstant2;
-    Serial.println("...");
+    energyPV = energyConstant2 * pulseCount2;
+    //Serial.println("...");
 }
 
 
@@ -149,15 +146,40 @@ void onPulse2()
 void print_s0_info(){
   Serial.println("=============S0 INFO===============");
    
-  Serial.print("Utility: ");
-  Serial.println(powerUtility);
+  Serial.print("powerUtility: ");
+  Serial.println(powerUtility,3);
 
-  Serial.print("PV: ");
-  Serial.println(powerPV);
+  Serial.print("powerPV: ");
+  Serial.println(powerPV,3);
 
-  Serial.print("Heating: ");
-  Serial.println(powerHeat);
+  Serial.print("powerHeat: ");
+  Serial.println(powerHeat,3);
 
+  Serial.print("energyImport: ");
+  Serial.println(energyImport,3);
+
+  Serial.print("energyPV: ");
+  Serial.println(energyPV,3);
+
+  Serial.print("energyHeat: ");
+  Serial.println(energyHeat,3);
+
+  /*
+  Serial.print("pulseCount0: ");
+  Serial.println(pulseCount0);
+
+  Serial.print("pulseCount1: ");
+  Serial.println(pulseCount1);
+
+  Serial.print("pulseCount2: ");
+  Serial.println(pulseCount2);
+
+  Serial.print("energyConstant0: ");
+  Serial.println(energyConstant0);
+
+  Serial.print("pulseCount0*energyConstant0: ");
+  Serial.println(pulseCount0*energyConstant0);
+  */
   
   Serial.println("===================================");
 }

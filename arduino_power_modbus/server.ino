@@ -150,35 +150,36 @@ void handle_server(){
         last_day_is_whole = day_is_whole;
         day_is_whole  = true;
         if(last_day_is_whole){
-          lastEnergyImportPub.publish(uint32_t(lastEnergyImport));
-          lastEnergyExportPub.publish(uint32_t(lastEnergyExport));
-          lastEnergyPVPub.publish(uint32_t(lastEnergyPV));
-          lastEnergyHeatPub.publish(uint32_t(lastEnergyHeat));
+          lastEnergyImportPub.publish(lastEnergyImport,4);
+          lastEnergyExportPub.publish(lastEnergyExport,4);
+          lastEnergyPVPub.publish(lastEnergyPV,4);
+          lastEnergyHeatPub.publish(lastEnergyHeat,4);
         }
       }
-
+      /*
       Serial.println("=====================================");
       Serial.println("Publishing via mqtt...");
       Serial.print("Unix day: ");
       Serial.println(unix_day);
       Serial.print("Unix secondes today: ");
       Serial.println(secondes_today);
+      */
       
       if(MQTT_connect()){
-        powerPVPub.publish(uint32_t(powerPV));
-        powerHeatPub.publish(uint32_t(powerHeat));
+        powerPVPub.publish(powerPV, 4);
+        powerHeatPub.publish(powerHeat, 4);
         powerBalPub.publish(bal_power, 4);
         //
-        energyImportPub.publish(uint32_t(energyImport));
-        energyExportPub.publish(uint32_t(energyExport));
-        energyPVPub.publish(uint32_t(energyPV));
-        energyHeatPub.publish(uint32_t(energyHeat));
+        energyImportPub.publish(energyImport, 4);
+        energyExportPub.publish(energyExport, 4);
+        energyPVPub.publish(energyPV, 4);
+        energyHeatPub.publish(energyHeat, 4);
       }else{
         Serial.print("ERROR: MQTT Broker not rechable. ");
       }
 
       lastServerUpdate = millis(); 
-      Serial.println("=====================================");
+      //Serial.println("=====================================");
     }
  
 }

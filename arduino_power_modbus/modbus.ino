@@ -11,11 +11,11 @@ unsigned long lastModbusUpdate;
 unsigned long modbusPeriod = 31000;
 
 //energy counter
-unsigned long unsalEnergyImportZero               = 0;
-unsigned long unsalEnergyExportZero               = 0;
-unsigned long unsalEnergyImport                   = 0;
-unsigned long unsalEnergyExport                   = 0;
-unsigned long energyExport,lastEnergyExport       = 0;
+float unsalEnergyImportZero               = 0;
+float unsalEnergyExportZero               = 0;
+float unsalEnergyImport                   = 0;
+float unsalEnergyExport                   = 0;
+float energyExport,lastEnergyExport       = 0;
 
 
 
@@ -95,20 +95,26 @@ void modbus_to_serial()
     Serial.print(sdm_data_valid[i]);
   }
   Serial.println(" ");
+  Serial.print("energyExport: ");
+  Serial.println(energyExport,3);
+  Serial.print("unsalEnergyExport: ");
+  Serial.println(unsalEnergyExport,3);
+  Serial.print("unsalEnergyImport: ");
+  Serial.println(unsalEnergyImport,3);
   Serial.println("==================================");
 }
 
 
 
 void update_sdm_energy(){
-  unsalEnergyImport =  (unsigned long)(sdm_data[3]*1000000.0) - unsalEnergyImportZero;
-  unsalEnergyExport =  (unsigned long)(sdm_data[4]*1000000.0) - unsalEnergyExportZero;
-  energyExport = unsalEnergyExport - unsalEnergyImport + energyExport;
+  unsalEnergyImport =  sdm_data[3] - unsalEnergyImportZero;
+  unsalEnergyExport =  sdm_data[4] - unsalEnergyExportZero;
+  energyExport = unsalEnergyExport - unsalEnergyImport + energyImport;
   
 }
 
 void new_day_sdm(){
-  unsalEnergyImportZero   = (unsigned long)(sdm_data[3]*1000000.0);
-  unsalEnergyExportZero   = (unsigned long)(sdm_data[4]*1000000.0);
+  unsalEnergyImportZero   = sdm_data[3];
+  unsalEnergyExportZero   = sdm_data[4];
   lastEnergyExport = energyExport;
 }
