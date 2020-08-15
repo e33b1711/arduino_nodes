@@ -6,6 +6,7 @@ s0 Error (balPower>0 and powerImport=0, balPower<0 and powerPV=0)
 no ntp time 
 => non-persistent status
 => persistent status (later resetable)
+=> check all dependencies of status <> functions
 
 Control over mqtt
 => set target power / control mode over serial (done)
@@ -16,7 +17,11 @@ Control over mqtt
 
 Check data types over mqtt (all floats) (done) (use all floats)
 
-last day data / time / rotatting log / restore values
+last day data / time
+
+rotatting log / restore values (done)
+clear log over debug (done)
+day whole <> log
 
 */
 
