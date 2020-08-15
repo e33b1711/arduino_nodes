@@ -7,7 +7,7 @@ const float c_pwm_max                 = 200;
 const unsigned long time_out          = 10000; 
 const unsigned long h_update_period   = 1000;
 float bal_power                       = 0;
-float target_power                    = -50;
+float target_power                    = -25;
 int control_mode                      =  1; //0=off, 1=control balanced power, 2=control heat power
 bool bal_power_valid                  = false;
 int pwm_setpoint                      = 0;
@@ -33,49 +33,54 @@ void setup_heating(){
 //called form main loop
 void update_heating(){
 
-  int pwm_setpoint_new;
+  float pwm_set_point_new = 0;
 
   //try to get a modbus update and regulate the power setting
   if (heatingLastUpdate+h_update_period<millis()){
     //reset watchtdog timer
     heatingLastUpdate = millis();
       
-    bool control_on;
-    float control_power;
-    switch control_mode{
-      case 1:
-        control_on = modbus_get_bal_power();
-        control_power = bal_power;
-        break;
-      case 2:
-        control_on = true;  //TODO: check s0 error condition here!
-        control_power = powerHeat;
-        break;
-      default:
-        control_on = false;
-        break;
-    }
-    
-    if (control_on){
+    //default is off
+    int pwm_setpoint_new= 0;
+
+    //mode 1 control
+    if (modbus_get_bal_power() and control_mode==1){
       
       // P-Controller with up/down weigth
-      if (control_power>target_power+c_hist){
-        pwm_setpoint_new = pwm_setpoint - (control_power*c_down);
+      float power_diff = target_power-bal_power;
+      //Serial.print("DEBUG: power_diff:"); Serial.println(power_diff);
+      
+      if (power_diff>c_hist){
+        pwm_setpoint_new = (power_diff*c_up) + pwm_setpoint;
       }
-      if (control_power<target_power-c_hist){
-        pwm_setpoint_new = pwm_setpoint - (control_power*c_up);
+      //Serial.print("DEBUG: (power_diff*c_up):"); Serial.println((power_diff*c_up));
+      //Serial.print("DEBUG: pwm_setpoint_new:"); Serial.println(pwm_setpoint_new);
+      if (power_diff<c_hist){
+        pwm_setpoint_new = (power_diff*c_down) + pwm_setpoint;
       }
+      //Serial.print("DEBUG: (power_diff*c_down):"); Serial.println((power_diff*c_down));
+      //Serial.print("DEBUG: pwm_setpoint_new:"); Serial.println(pwm_setpoint_new);
       
       //saturation
       if (pwm_setpoint_new >c_pwm_max)  pwm_setpoint_new = c_pwm_max;
       if (pwm_setpoint_new <0)    pwm_setpoint_new = 0;
-  
-      //update
-      pwm_setpoint = pwm_setpoint_new;
-    }else{
-      pwm_setpoint = 0;
+      //Serial.print("DEBUG: pwm_setpoint_new:"); Serial.println(pwm_setpoint_new);
+      
     }
+
+    //mode 2 set pwm direct
+    if (control_mode==2){
+      pwm_setpoint_new = int(target_power);
+      //saturation
+      if (pwm_setpoint_new >c_pwm_max)  pwm_setpoint_new = c_pwm_max;
+      if (pwm_setpoint_new <0)    pwm_setpoint_new = 0;
+      
+    }
+    pwm_setpoint = pwm_setpoint_new;
+    Serial.print("DEBUG: pwm_setpoint:"); Serial.println(pwm_setpoint);
+    Serial.print("DEBUG: pwm_setpoint_new:"); Serial.println(pwm_setpoint_new);
   }
+  
 
   //watchdog
   if (heatingLastUpdate+time_out<millis()){
@@ -96,9 +101,9 @@ void print_heating_info(){
   Serial.println("=============HEATING INFO==========");
   Serial.print("Balanced power: ");
   Serial.println(bal_power,3);
-  Serial.println("target_power: ");
+  Serial.print("target_power: ");
   Serial.println(target_power);
-  Serial.println("control_mode: ");
+  Serial.print("control_mode: ");
   Serial.println(control_mode);
   Serial.print("PWM setpoint:  ");
   Serial.println(pwm_setpoint);

@@ -105,7 +105,7 @@ void onPulse0()
     powerUtility = (powerConstant0 / (pulseTime0 - lastTime0));
     //Find kwh elapsed
     energyImport = energyConstant0 * pulseCount0;
-    Serial.println(".");
+    //Serial.println(".");
 }
 
 // The interrupt routine
@@ -121,7 +121,7 @@ void onPulse1()
     powerHeat = (powerConstant1 / (pulseTime1 - lastTime1));
     //Find kwh elapsed
     energyHeat = energyConstant1 * pulseCount1;
-    Serial.println("..");
+    //Serial.println("..");
 }
 
 // The interrupt routine
@@ -137,7 +137,7 @@ void onPulse2()
     powerPV = (powerConstant2 / (pulseTime2 - lastTime2));
     //Find kwh elapsed
     energyPV = energyConstant2 * pulseCount2;
-    Serial.println("...");
+    //Serial.println("...");
 }
 
 

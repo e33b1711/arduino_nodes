@@ -102,7 +102,7 @@ void setup_server(){
         versionPub.publish(vers,20);
         statusPub.publish("Started.",8);
     }else{
-        Serial.print("ERROR: MQTT Broker not rechable. ");
+        Serial.println("ERROR: MQTT Broker not rechable. ");
     }
 
   //setup ntp

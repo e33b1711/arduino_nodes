@@ -8,13 +8,15 @@ no ntp time
 => persistent status (later resetable)
 
 Control over mqtt
-=> set target power
-=> reset status
-=> direct mode (control off)
+=> set target power / control mode over serial (done)
+=> set target power / control mode over mqtt
+=> reset status over mqtt
+=> reset status over debug
+=> direct mode (control off) (done)
 
-Check data types over mqtt (all floats)
+Check data types over mqtt (all floats) (done) (use all floats)
 
-last day data / time
+last day data / time / rotatting log / restore values
 
 */
 
@@ -27,12 +29,14 @@ extern float bal_power;
 extern bool bal_power_valid;
 extern int pwm_setpoint;
 extern unsigned long watchdog_counter;
+extern float target_power;
+extern int control_mode;
 
 extern float sdm_data[];
 extern bool sdm_data_valid[];
 
 extern float powerUtility;    
-extern float powerHeating;
+extern float powerHeat;
 extern float powerPV;
 extern float energyImport, lastEnergyImport;
 extern float energyHeat, lastEnergyHeat;
