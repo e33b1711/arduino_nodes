@@ -43,16 +43,16 @@ void update_heating(){
     bool control_on;
     float control_power;
     switch control_mode{
-      case: 0
-        control_on = false;
-        break;
-      case: 1
+      case 1:
         control_on = modbus_get_bal_power();
         control_power = bal_power;
         break;
-      case: 2
+      case 2:
         control_on = true;  //TODO: check s0 error condition here!
         control_power = powerHeat;
+        break;
+      default:
+        control_on = false;
         break;
     }
     
