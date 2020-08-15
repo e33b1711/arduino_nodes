@@ -78,6 +78,13 @@ void setup_log(){
     if (got_entry){
       Serial.print("Found log entry at:"); Serial.println(log_pointer);
       print_log_entry(this_le);
+      
+      //renew log
+      Serial.println("Renewing log...");
+      this_le.epoch = epoch;
+      EEPROM.put(log_pointer,this_le);
+      
+      //set pointer / restore data
       log_pointer +=sizeof(log_entry);
       pulseCount0 = this_le.pulseCount0;
       pulseCount1 = this_le.pulseCount1;
