@@ -78,6 +78,7 @@ unsigned long startup_unix_day;
 unsigned long startup_seconds_today;
 bool day_is_whole = false;
 bool last_day_is_whole = false;
+bool timebase_valid = false;
 
 
 void setup_server(){
@@ -93,7 +94,7 @@ void setup_server(){
   digitalWrite(ethernet_reset_pin, LOW);
 
   //setup mttq
-  Serial.println(F("\nInit the mqtt client..."));
+  Serial.println(F("Init the mqtt client..."));
   Ethernet.init(ethernet_sc_pin);
   Ethernet.begin(mac, ip);
   delay(1000); //give the ethernet a second to initialize
@@ -129,6 +130,7 @@ void handle_server(){
 
  
   //update the time before millis() overflows
+  //TO DO: how good is the arduinos clock??
   if(millis() > 0x0FFFFFFF){
     update_time();
   }
@@ -175,7 +177,7 @@ void handle_server(){
         energyPVPub.publish(energyPV, 4);
         energyHeatPub.publish(energyHeat, 4);
       }else{
-        Serial.print("ERROR: MQTT Broker not rechable. ");
+        Serial.println("ERROR: MQTT Broker not rechable. ");
       }
 
       lastServerUpdate = millis(); 
@@ -257,6 +259,7 @@ void update_time(){
     // subtract seventy years:
     unsigned long epoch = secsSince1900 - seventyYears;
     epoch_at_millis0 = epoch - millis()/1000;
+    timebase_valid = true;
     // print Unix time:
     Serial.println(epoch);
 
@@ -279,6 +282,7 @@ void update_time(){
     */
   }else{
     Serial.println("ERROR: Got no ntp response");
+    timebase_valid = false;
   }
   Serial.println("==================");
 }

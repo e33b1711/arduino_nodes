@@ -28,7 +28,6 @@ void setup_modbus(){
   for (int i=0; i<SDM_SIZE; i++){
       sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
   }
-  new_day_sdm();
   lastModbusUpdate=millis();
   Serial.println("===============================");
 }

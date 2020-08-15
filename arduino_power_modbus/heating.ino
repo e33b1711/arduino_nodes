@@ -20,11 +20,13 @@ void setup_heating(){
   analogWrite(pwmPin, 0);
   
   Serial.println("Setting up heating.");
+  /*
   Serial.print("Switching on...");
   analogWrite(pwmPin, 150);
   delay(4000);
   Serial.println(" and off.");
   analogWrite(pwmPin, 0);
+  */
   heatingLastUpdate = millis();
   Serial.println("===============================");
 }
@@ -77,8 +79,6 @@ void update_heating(){
       
     }
     pwm_setpoint = pwm_setpoint_new;
-    Serial.print("DEBUG: pwm_setpoint:"); Serial.println(pwm_setpoint);
-    Serial.print("DEBUG: pwm_setpoint_new:"); Serial.println(pwm_setpoint_new);
   }
   
 

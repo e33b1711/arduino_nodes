@@ -47,6 +47,9 @@ void handle_debug(){
         Serial.println(control_mode);
        
       }
+      if (inString.substring(0,12)=="clear_eeprom"){
+        clear_eeprom();
+      }
       inString = "";
     }
   }
