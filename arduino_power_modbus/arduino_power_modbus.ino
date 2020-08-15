@@ -23,13 +23,17 @@ rotatting log / restore values (done)
 clear log over debug (done)
 day whole <> log
 
+make heating control trigger by timer uínterrupt
+
+lower cutoff power heating / how to prevent switching on/off
+
 */
 
 struct log_entry{
   long epoch;
-  unsigned long pulseCount0;
-  unsigned long pulseCount1;
-  unsigned long pulseCount2;
+  long pulseCount0;
+  long pulseCount1;
+  long pulseCount2;
   float unsalEnergyImport;
   float unsalEnergyExport;
 };
@@ -63,6 +67,7 @@ extern long pulseCount2;
 extern float energyExport,lastEnergyExport;
 extern float unsalEnergyImport;
 extern float unsalEnergyExport;
+
 
 //ntp / time related
 extern boolean timebase_valid;

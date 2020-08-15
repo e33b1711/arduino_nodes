@@ -13,7 +13,7 @@ struct log_entry{
 
 const unsigned int num_entries = EEPROM.length()/sizeof(log_entry);
 unsigned long lastLogUpdate;
-const unsigned int max_age = 3600;  //TODO: make me shorter later
+const unsigned long max_age = 3600;  //TODO: make me shorter later
 unsigned int log_pointer = 0;
 bool checked_log = false;
 

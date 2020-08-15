@@ -113,6 +113,7 @@ void setup_server(){
   unsigned long secondes_today  = epoch % seconds_per_day;
   unsigned long unix_day        = epoch / seconds_per_day;
   startup_unix_day              = unix_day;
+  last_unix_day                 = unix_day;
   startup_seconds_today         = secondes_today;
 
   lastServerUpdate=millis();
