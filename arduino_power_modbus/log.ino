@@ -37,6 +37,33 @@ void clear_eeprom(){
   Serial.println("==============================================================================");
 }
 
+void readback_log(){
+   Serial.println("=======================================");
+   Serial.print("num_entries: "); Serial.println(num_entries);
+   Serial.print("sizeof(log_entry): "); Serial.println(sizeof(log_entry));
+   unsigned int log_pointer_m1 = (log_pointer+((num_entries-1)*sizeof(log_entry))) % (num_entries*sizeof(log_entry));
+   Serial.print("Current Log Entry: log pointer: "); Serial.println(log_pointer);
+   Serial.print("Current Log Entry: log pointer-sizeof(): "); Serial.println(log_pointer_m1);
+   Serial.print("Milis til next log entry: "); Serial.println(lastLogUpdate+(max_age*500)-millis());
+   log_entry this_le;
+   EEPROM.get(log_pointer_m1,this_le);
+   print_log_entry(this_le);
+   unsigned long epoch = epoch_at_millis0 + millis()/1000;
+   Serial.print("Actual epoch: "); Serial.println(epoch);
+   Serial.print("max_age: "); Serial.println(max_age);
+   Serial.println("=======================================");
+}
+
+void readback_log(int val){
+   Serial.println("=======================================");
+   unsigned int rp = val % (num_entries*sizeof(log_entry));
+   Serial.print("Reading back Log Entry at: "); Serial.println(rp);
+   log_entry this_le;
+   EEPROM.get(rp,this_le);
+   print_log_entry(this_le);
+   Serial.println("=======================================");
+}
+
 
 
 
@@ -85,7 +112,8 @@ void setup_log(){
       EEPROM.put(log_pointer,this_le);
       
       //set pointer / restore data
-      log_pointer +=sizeof(log_entry);
+      log_pointer = (log_pointer + sizeof(log_entry)) % (sizeof(log_entry)*num_entries);
+      Serial.print("Setting log pointer to: "); Serial.println(log_pointer);
       pulseCount0 = this_le.pulseCount0;
       pulseCount1 = this_le.pulseCount1;
       pulseCount2 = this_le.pulseCount2;
@@ -130,7 +158,5 @@ void handle_log(){
     }else{
       Serial.println("ERROR: Logging is not setup. Restart.");
     }
-  }
-  
-  
+  } 
 }

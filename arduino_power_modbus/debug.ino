@@ -50,6 +50,13 @@ void handle_debug(){
       if (inString.substring(0,12)=="clear_eeprom"){
         clear_eeprom();
       }
+      if (inString.substring(0,12)=="readback_at:"){
+        int val = inString.substring(12).toInt();
+        readback_log(val);
+      }
+      if (inString.substring(0,12)=="readback_log"){
+        readback_log();
+      }
       inString = "";
     }
   }

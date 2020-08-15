@@ -25,7 +25,7 @@ day whole <> log
 
 make heating control trigger by timer uínterrupt
 
-lower cutoff power heating / how to prevent switching on/off
+lower cutoff power heating / how to prevent toggling?
 
 */
 
@@ -39,6 +39,8 @@ struct log_entry{
 };
 
 void clear_eeprom();
+void readback_log();
+void readback_log(int val);
 
 
 const char* unit_name  = "power";
