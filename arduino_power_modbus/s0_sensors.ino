@@ -105,7 +105,7 @@ void onPulse0()
     powerUtility = (powerConstant0 / (pulseTime0 - lastTime0));
     //Find kwh elapsed
     energyImport = energyConstant0 * pulseCount0;
-    //Serial.println(".");
+    Serial.println(".");
 }
 
 // The interrupt routine
@@ -121,7 +121,7 @@ void onPulse1()
     powerHeat = (powerConstant1 / (pulseTime1 - lastTime1));
     //Find kwh elapsed
     energyHeat = energyConstant1 * pulseCount1;
-    //Serial.println("..");
+    Serial.println("..");
 }
 
 // The interrupt routine
@@ -137,7 +137,7 @@ void onPulse2()
     powerPV = (powerConstant2 / (pulseTime2 - lastTime2));
     //Find kwh elapsed
     energyPV = energyConstant2 * pulseCount2;
-    //Serial.println("...");
+    Serial.println("...");
 }
 
 
@@ -164,7 +164,7 @@ void print_s0_info(){
   Serial.print("energyHeat: ");
   Serial.println(energyHeat,3);
 
-  /*
+  
   Serial.print("pulseCount0: ");
   Serial.println(pulseCount0);
 
@@ -173,25 +173,21 @@ void print_s0_info(){
 
   Serial.print("pulseCount2: ");
   Serial.println(pulseCount2);
-
-  Serial.print("energyConstant0: ");
-  Serial.println(energyConstant0);
-
-  Serial.print("pulseCount0*energyConstant0: ");
-  Serial.println(pulseCount0*energyConstant0);
-  */
   
   Serial.println("===================================");
 }
 
 
 void new_day_S0(){
-  lastEnergyExport        = energyExport;
+  lastEnergyImport        = energyImport;
   lastEnergyHeat          = energyHeat;
   lastEnergyPV            = energyPV;
+  pulseCount0             = 0;
+  pulseCount1             = 0;
+  pulseCount2             = 0;
   energyImport            = 0;
   energyHeat              = 0;
-  energyPV                = 0; 
+  energyPV                = 0;
 }
 
 

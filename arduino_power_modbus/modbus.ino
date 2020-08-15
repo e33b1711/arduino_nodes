@@ -110,7 +110,7 @@ void update_sdm_energy(){
   unsalEnergyImport =  sdm_data[3] - unsalEnergyImportZero;
   unsalEnergyExport =  sdm_data[4] - unsalEnergyExportZero;
   energyExport = unsalEnergyExport - unsalEnergyImport + energyImport;
-  
+  if (energyExport<0) energyExport=0; //to compensate errors between utility counter and modbus counter
 }
 
 void new_day_sdm(){

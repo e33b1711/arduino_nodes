@@ -2,11 +2,13 @@ const int pwmPin                      = 5;
 unsigned long heatingLastUpdate;
 const float c_down                    = 1.0/10;
 const float c_up                      = 1.0/15;
-const float c_hist                    = 50;
+const float c_hist                    = 25;   //hystereses
 const float c_pwm_max                 = 200;
 const unsigned long time_out          = 10000; 
 const unsigned long h_update_period   = 1000;
-float bal_power                    = 0;
+float bal_power                       = 0;
+float target_power                    = -50;
+int control_mode                      =  1; //0=off, 1=control balanced power, 2=control heat power
 bool bal_power_valid                  = false;
 int pwm_setpoint                      = 0;
 unsigned long watchdog_counter        = 0;
@@ -35,14 +37,33 @@ void update_heating(){
 
   //try to get a modbus update and regulate the power setting
   if (heatingLastUpdate+h_update_period<millis()){
-    if (modbus_get_bal_power()){
+    //reset watchtdog timer
+    heatingLastUpdate = millis();
+      
+    bool control_on;
+    float control_power;
+    switch control_mode{
+      case: 0
+        control_on = false;
+        break;
+      case: 1
+        control_on = modbus_get_bal_power();
+        control_power = bal_power;
+        break;
+      case: 2
+        control_on = true;  //TODO: check s0 error condition here!
+        control_power = powerHeat;
+        break;
+    }
+    
+    if (control_on){
       
       // P-Controller with up/down weigth
-      if (bal_power>0){
-        pwm_setpoint_new = pwm_setpoint - (bal_power*c_down);
+      if (control_power>target_power+c_hist){
+        pwm_setpoint_new = pwm_setpoint - (control_power*c_down);
       }
-      if (bal_power<-c_hist){
-        pwm_setpoint_new = pwm_setpoint - (bal_power*c_up);
+      if (control_power<target_power-c_hist){
+        pwm_setpoint_new = pwm_setpoint - (control_power*c_up);
       }
       
       //saturation
@@ -51,10 +72,8 @@ void update_heating(){
   
       //update
       pwm_setpoint = pwm_setpoint_new;
-  
-      //reset watchtdog timer
-      heatingLastUpdate = millis();
-      
+    }else{
+      pwm_setpoint = 0;
     }
   }
 
@@ -75,8 +94,12 @@ void update_heating(){
 
 void print_heating_info(){
   Serial.println("=============HEATING INFO==========");
-  Serial.print("Balanced power:");
+  Serial.print("Balanced power: ");
   Serial.println(bal_power,3);
+  Serial.println("target_power: ");
+  Serial.println(target_power);
+  Serial.println("control_mode: ");
+  Serial.println(control_mode);
   Serial.print("PWM setpoint:  ");
   Serial.println(pwm_setpoint);
   Serial.print("Watch dog counter: ");
