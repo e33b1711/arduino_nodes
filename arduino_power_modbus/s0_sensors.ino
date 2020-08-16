@@ -21,10 +21,7 @@ unsigned long pulseTime0,lastTime0, timeout0;
 unsigned long pulseTime1,lastTime1, timeout1;
 unsigned long pulseTime2,lastTime2, timeout2;
 
-//power and energy
-float powerUtility, energyImport, lastEnergyImport  = 0;
-float powerHeat, energyHeat, lastEnergyHeat         = 0;
-float powerPV, energyPV, lastEnergyPV               = 0;
+float powerUtility, powerHeat, powerPV = 0;
 
 void setup_s0()
 {
@@ -104,10 +101,7 @@ void onPulse0()
     timeout0 = pulseTime0;
     //pulseCounter
     pulseCount0++;
-    //Calculate power
     powerUtility = (powerConstant0 / (pulseTime0 - lastTime0));
-    //Find kwh elapsed
-    energyImport = energyConstant0 * pulseCount0;
     //Serial.println(".");
 }
 
@@ -120,10 +114,7 @@ void onPulse1()
     timeout1 = pulseTime1;
     //pulseCounter
     pulseCount1++;
-    //Calculate power
     powerHeat = (powerConstant1 / (pulseTime1 - lastTime1));
-    //Find kwh elapsed
-    energyHeat = energyConstant1 * pulseCount1;
     //Serial.println("..");
 }
 
@@ -136,13 +127,19 @@ void onPulse2()
     timeout2 = pulseTime2;
     //pulseCounter
     pulseCount2++;
-    //Calculate power
     powerPV = (powerConstant2 / (pulseTime2 - lastTime2));
-    //Find kwh elapsed
-    energyPV = energyConstant2 * pulseCount2;
     //Serial.println("...");
 }
 
+float energyImport(){
+  return energyConstant0 * pulseCount0;
+}
+float energyHeat(){
+  return energyConstant1 * pulseCount1;
+}
+float energyPV(){
+  return energyConstant2 * pulseCount2;
+}
 
 
 
@@ -159,13 +156,13 @@ void print_s0_info(){
   Serial.println(powerHeat,3);
 
   Serial.print("energyImport: ");
-  Serial.println(energyImport,3);
+  Serial.println(energyImport(),3);
 
   Serial.print("energyPV: ");
-  Serial.println(energyPV,3);
+  Serial.println(energyPV(),3);
 
   Serial.print("energyHeat: ");
-  Serial.println(energyHeat,3);
+  Serial.println(energyHeat(),3);
 
   
   Serial.print("pulseCount0: ");

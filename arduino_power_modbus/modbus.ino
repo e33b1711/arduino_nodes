@@ -8,7 +8,7 @@ static int MAX_ITERATION              = 1; //maximum read MODBUS Value if checks
 //                                      Power L1-3              Import        Export  (nicht salierend!!)
 const uint16_t sdm_adresses[SDM_SIZE] = {0x000C, 0x000E, 0x0010, 0x000048, 0x00004A};
 unsigned long lastModbusUpdate;
-unsigned long modbusPeriod = 31000;
+unsigned long modbusPeriod = 30000;
 float bal_power                       = 0;
 bool bal_power_valid                  = false;
 
@@ -111,6 +111,6 @@ void print_modbus_info()
 void update_sdm_energy(){
   unsalEnergyImport =  sdm_data[3] - unsalEnergyImportZero;
   unsalEnergyExport =  sdm_data[4] - unsalEnergyExportZero;
-  energyExport = unsalEnergyExport - unsalEnergyImport + energyImport;
+  energyExport = unsalEnergyExport - unsalEnergyImport + energyImport();
   if (energyExport<0) energyExport=0; //to compensate errors between utility counter and modbus counter
 }

@@ -1,4 +1,4 @@
-//ntp
+//for ntp time & OTA
 #include <EthernetUdp.h>
 #include <ArduinoOTA.h>
 EthernetUDP Udp;
@@ -61,7 +61,7 @@ Adafruit_MQTT_Publish energyHeatPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USER
 Adafruit_MQTT_Publish versionPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/version");
 Adafruit_MQTT_Publish statusPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/status");
 
-
+//server throttle timer
 unsigned long lastServerUpd;
 const unsigned long serverUpdPeriod = 10000;
 
@@ -70,6 +70,8 @@ const unsigned long serverUpdPeriod = 10000;
 
 
 void setup_server(){
+
+  //ethernet & mqtt
   Serial.println("===============================");
   Serial.println("Setting up ethernet / mqtt / ntp / ota");
   lastServerUpd = millis();
@@ -92,12 +94,9 @@ void setup_server(){
   }else{
     Serial.println("ERROR: MQTT Broker not rechable. ");
   }
-
-  
-  
-
   Serial.println("===============================");
 
+  //time & OTA
   Serial.println("===============================");
   Serial.println("Setting up time and OTA....");
   Udp.begin(localPort);
@@ -133,10 +132,10 @@ void handle_server(){
         powerHeatPub.publish(powerHeat, 4);
         powerBalPub.publish(bal_power, 4);
         //
-        energyImportPub.publish(energyImport, 4);
+        energyImportPub.publish(energyImport(), 4);
         energyExportPub.publish(energyExport, 4);
-        energyPVPub.publish(energyPV, 4);
-        energyHeatPub.publish(energyHeat, 4);
+        energyPVPub.publish(energyPV(), 4);
+        energyHeatPub.publish(energyHeat(), 4);
       }else{
         Serial.println("ERROR: MQTT Broker not rechable. ");
       }

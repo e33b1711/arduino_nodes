@@ -15,14 +15,7 @@ Control:
 => reset status over debug
 => direct mode (control off) (done)
 
-Check data types over mqtt (all floats) (done) (use all floats)
-
-
-rotatting log / restore values (done)
-clear log over debug (done)
-day whole <> log       (done)
-
-writte long time statistics
+write long time statistics, WIP, new day!!
 
 lower cutoff power heating / how to prevent toggling?
 
@@ -61,12 +54,10 @@ extern float sdm_data[];
 extern bool sdm_data_valid;
 
 //S0
-extern float powerUtility;    
-extern float powerHeat;
-extern float powerPV;
-extern float energyImport, lastEnergyImport;
-extern float energyHeat, lastEnergyHeat;
-extern float energyPV, lastEnergyPV;
+extern float powerUtility, powerHeat, powerPV;
+float energyImport();
+float energyHeat();
+float energyPV();
 extern long pulseCount0;
 extern long pulseCount1;
 extern long pulseCount2;
@@ -91,6 +82,7 @@ void setup() {
   setup_s0();
   setup_heating();
   setup_log();
+  setup_extern_log();
   
 }
 
@@ -108,5 +100,6 @@ void loop() {
   handle_debug();
   handle_modbus();
   handle_log();
+  handle_extern_log();
 
 }
