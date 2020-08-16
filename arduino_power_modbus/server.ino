@@ -62,8 +62,8 @@ Adafruit_MQTT_Publish versionPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAM
 Adafruit_MQTT_Publish statusPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/status");
 
 
-unsigned long lastServerUpdate;
-const unsigned long serverUpdatePeriod = 10000;
+unsigned long lastServerUpd;
+const unsigned long serverUpdPeriod = 10000;
 
 
 
@@ -72,7 +72,7 @@ const unsigned long serverUpdatePeriod = 10000;
 void setup_server(){
   Serial.println("===============================");
   Serial.println("Setting up ethernet / mqtt / ntp / ota");
-  lastServerUpdate = millis();
+  lastServerUpd = millis();
 
   //reset via pin
   pinMode(ethernet_reset_pin, OUTPUT);
@@ -121,17 +121,12 @@ void setup_server(){
 
 //called form main loop
 void handle_server(){
-
    
-
-      /*
+  if((lastServerUpd+serverUpdPeriod)<millis()){
+    lastServerUpd = millis();
+     
       Serial.println("=====================================");
       Serial.println("Publishing via mqtt...");
-      Serial.print("Unix day: ");
-      Serial.println(unix_day);
-      Serial.print("Unix secondes today: ");
-      Serial.println(secondes_today);
-      */
       
       if(MQTT_connect()){
         powerPVPub.publish(powerPV, 4);
@@ -146,8 +141,9 @@ void handle_server(){
         Serial.println("ERROR: MQTT Broker not rechable. ");
       }
  
-      //Serial.println("=====================================");
+      Serial.println("=====================================");
     }
+}
  
 
 
@@ -170,4 +166,11 @@ bool MQTT_connect() {
     Serial.println("MQTT Connected!");
     return true;
   }
+}
+
+void print_server_info(){
+  Serial.println("===========server==============");
+  Serial.print("lastServerUpd+serverUpdPeriod: "); Serial.println(lastServerUpd+serverUpdPeriod);
+  Serial.print("millis: "); Serial.println(millis());
+   Serial.println("=============================");
 }

@@ -28,9 +28,7 @@ void handle_time(){
    if (unix_day_update>unix_day)  new_day();
    unix_day                       = unix_day_update;
 
-    if (lastServerUpdate+serverUpdatePeriod<millis()) {
-      lastServerUpdate = millis(); 
-  }
+
 }
 
 
