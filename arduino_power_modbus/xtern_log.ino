@@ -30,9 +30,9 @@ void handle_extern_log(){
     unsigned long pc1        = pulseCount1;
     unsigned long pc2        = pulseCount2;
 
-    unsigned long d_pc0      = extPulseCount0 - pc0;
-    unsigned long d_pc1      = extPulseCount1 - pc1;
-    unsigned long d_pc2      = extPulseCount2 - pc2;
+    unsigned long d_pc0      = pc0 - extPulseCount0;
+    unsigned long d_pc1      = pc1 - extPulseCount1;
+    unsigned long d_pc2      = pc2 - extPulseCount2;
     unsigned long im_unsal  = (sdm_data[3] - extEnergyImportUnsal)*1000000;
     unsigned long ex_unsal  = (sdm_data[4] - extEnergyExportUnsal)*1000000;
 
