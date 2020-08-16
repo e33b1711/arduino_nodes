@@ -83,7 +83,7 @@ boolean getRTUMore(uint16_t m_startAddress,uint8_t m_length,int arrayPosition){
 void handle_modbus() {
   if (lastModbusUpdate+modbusPeriod<millis()) {
     lastModbusUpdate = millis();
-    for (int i=3; i<SDM_SIZE; i++){
+    for (int i=0; i<SDM_SIZE; i++){
       sdm_data_valid    = true;
       sdm_data_valid    &= getRTUMore(sdm_adresses[i],1,i);
     }

@@ -1,49 +1,18 @@
-//ntp
-#include <EthernetUdp.h>
-EthernetUDP Udp;
-unsigned int localPort = 8888;                // local port to listen for UDP packets
-const int NTP_PACKET_SIZE = 48;               // NTP time stamp is in the first 48 bytes of the message
-byte packetBuffer[NTP_PACKET_SIZE];           //buffer to hold incoming and outgoing packets
-const char timeServer[] = "time.nist.gov";    // time.nist.gov NTP server
-
-const unsigned long seconds_per_day = 86400;  //exactly what it says 
-
-unsigned long  epoch_at_millis0;          //timebase referneced to millis=0
-unsigned long  epoch_at_timebase;         //time we got the timebase
-unsigned long startup_unix_day;           //unix day at statrtup
-unsigned long startup_seconds_today;      //unix secondes at statrtup
-bool timebase_valid = false;              //do we have a timebase?
-unsigned long epoch;                      //epoch updated every cycle
-unsigned long seconds_today;              //recent uninx seconds of this day
-unsigned long unix_day;                   // this unix day 
 
 
-
-
+/*
+ * done at server
 void setup_time(){
  //setup ntp
- Serial.println("===============================");
-  Serial.println("Setting up time....");
-  Udp.begin(localPort);
-  update_time();
-    if(!timebase_valid){
-    //stop
-    Serial.println("FATAL ERROR: no timebase, restart!");
-    while(true){};
-  }
-  unsigned long epoch           = epoch_at_millis0 + millis()/1000;
-  unsigned long secondes_today  = epoch % seconds_per_day;
-  unsigned long unix_day        = epoch / seconds_per_day;
-  startup_unix_day              = unix_day;
-  startup_seconds_today         = secondes_today;
-  Serial.println("done.");
-  Serial.println("===============================");
+ 
 }
+*/
 
 
 
+void handle_time(){
 
- void handle_time(){
+   ArduinoOTA.poll();
   
   //update the time before millis() overflows
   //TO DO: how good is the arduinos clock??
@@ -58,6 +27,10 @@ void setup_time(){
    unsigned long unix_day_update  = (epoch / seconds_per_day);
    if (unix_day_update>unix_day)  new_day();
    unix_day                       = unix_day_update;
+
+    if (lastServerUpdate+serverUpdatePeriod<millis()) {
+      lastServerUpdate = millis(); 
+  }
 }
 
 
@@ -70,12 +43,12 @@ void  new_day(){
 
 void print_time_info(){
   Serial.println("===========time==============");
-  Serial.print("Epoch: "); Serial.println(epoch);
-  Serial.print("Unix_day: "); Serial.println(unix_day);
-  Serial.print("Seconds today"); Serial.println(seconds_today);
-  Serial.print("Age of ntp refernece in secs: "); Serial.println(epoch_at_timebase);
-  Serial.print("startup_unix_day"); Serial.println(startup_unix_day);
-  Serial.print("startup_seconds_today"); Serial.println(startup_seconds_today);
+  Serial.print("Epoch:                 "); Serial.println(epoch);
+  Serial.print("Unix_day:              "); Serial.println(unix_day);
+  Serial.print("Seconds today:         "); Serial.println(seconds_today);
+  Serial.print("Epoch of timebase:     "); Serial.println(epoch_at_timebase);
+  Serial.print("startup_unix_day:      "); Serial.println(startup_unix_day);
+  Serial.print("startup_seconds_today: "); Serial.println(startup_seconds_today);
    Serial.println("=============================");
 }
 

@@ -81,11 +81,12 @@ extern unsigned long seconds_today;              //recent uninx seconds of this 
 extern unsigned long unix_day;                    // this unix day 
 
 
+
 void setup() {
 
   setup_debug();
   setup_server();
-  setup_time();
+  //setup_time() --at server
   setup_modbus();
   setup_s0();
   setup_heating();
@@ -101,8 +102,8 @@ void setup() {
 void loop() {
 
   handle_time();
-  update_heating();
   handle_server();
+  update_heating();
   update_s0();
   handle_debug();
   handle_modbus();

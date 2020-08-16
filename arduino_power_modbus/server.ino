@@ -1,3 +1,25 @@
+//ntp
+#include <EthernetUdp.h>
+#include <ArduinoOTA.h>
+EthernetUDP Udp;
+unsigned int localPort = 8888;                // local port to listen for UDP packets
+const int NTP_PACKET_SIZE = 48;               // NTP time stamp is in the first 48 bytes of the message
+byte packetBuffer[NTP_PACKET_SIZE];           //buffer to hold incoming and outgoing packets
+const char timeServer[] = "time.nist.gov";    // time.nist.gov NTP server
+
+const unsigned long seconds_per_day = 86400;  //exactly what it says 
+
+unsigned long  epoch_at_millis0;          //timebase referneced to millis=0
+unsigned long  epoch_at_timebase;         //time we got the timebase
+unsigned long startup_unix_day;           //unix day at statrtup
+unsigned long startup_seconds_today;      //unix secondes at statrtup
+bool timebase_valid = false;              //do we have a timebase?
+unsigned long epoch;                      //epoch updated every cycle
+unsigned long seconds_today;              //recent uninx seconds of this day
+unsigned long unix_day;                   // this unix day 
+
+
+
 //for udp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <SPI.h>
@@ -8,7 +30,7 @@
 #include <EthernetClient.h>
 #include <Dns.h>
 #include <Dhcp.h>
-#include <ArduinoOTA.h>
+
 
 //ethernet
 const int ethernet_sc_pin     = 53;
@@ -71,18 +93,36 @@ void setup_server(){
     Serial.println("ERROR: MQTT Broker not rechable. ");
   }
 
-  ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
+  
   
 
   Serial.println("===============================");
+
+  Serial.println("===============================");
+  Serial.println("Setting up time and OTA....");
+  Udp.begin(localPort);
+  update_time();
+    if(!timebase_valid){
+    //stop
+    Serial.println("FATAL ERROR: no timebase, restart!");
+    while(true){};
+  }
+  epoch           = epoch_at_millis0 + millis()/1000;
+  seconds_today   = epoch % seconds_per_day;
+  unix_day        = epoch / seconds_per_day;
+  startup_unix_day              = unix_day;
+  startup_seconds_today         = seconds_today;
+
+  ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
+  Serial.println("done.");
+  Serial.println("===============================");
+  
 }
 
 //called form main loop
 void handle_server(){
-  ArduinoOTA.poll();
 
-    if (lastServerUpdate+serverUpdatePeriod<millis()) {
-      lastServerUpdate = millis(); 
+   
 
       /*
       Serial.println("=====================================");
@@ -109,7 +149,6 @@ void handle_server(){
       //Serial.println("=====================================");
     }
  
-}
 
 
 bool MQTT_connect() {
