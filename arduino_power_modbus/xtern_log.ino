@@ -4,14 +4,14 @@ const unsigned long extLogPeriod = 60000;
 IPAddress log_ip(192, 168, 178, 222);
 unsigned int log_port = 1999;
 
-float extEnergyImport, extEnergyPV, extEnergyHeat, extEnergyImportUnsal, extEnergyExportUnsal;
+float extPulseCount0, extPulseCount1, extPulseCount2, extEnergyImportUnsal, extEnergyExportUnsal;
 
 
 void setup_extern_log(){
   lastExtLog = millis();
-  extEnergyImport       = energyImport();
-  extEnergyPV           = energyExport;
-  extEnergyHeat         = energyHeat();
+  extPulseCount0        = pulseCount0;
+  extPulseCount1        = pulseCount1;
+  extPulseCount2        = pulseCount2;
   extEnergyImportUnsal  = sdm_data[3];
   extEnergyExportUnsal  = sdm_data[4];
 }
@@ -26,17 +26,20 @@ void handle_extern_log(){
     lastExtLog = millis();
 
     //calc diffs
-    float energyIm          = energyImport(); //need to sample this, could change will interput
-    unsigned int import    = (energyIm - extEnergyImport)*1000000;
-    unsigned int pv        = (energyPV() - extEnergyPV)*1000000;
-    unsigned int heat      = (energyHeat() - extEnergyHeat)*1000000;
-    unsigned int im_unsal  = (sdm_data[3] - extEnergyImportUnsal)*1000000;
-    unsigned int ex_unsal  = (sdm_data[4] - extEnergyExportUnsal)*1000000;
+    unsigned long pc0        = pulseCount0;
+    unsigned long pc1        = pulseCount1;
+    unsigned long pc2        = pulseCount2;
+
+    unsigned long d_pc0      = extPulseCount0 - pc0;
+    unsigned long d_pc1      = extPulseCount1 - pc1;
+    unsigned long d_pc2      = extPulseCount2 - pc2;
+    unsigned long im_unsal  = (sdm_data[3] - extEnergyImportUnsal)*1000000;
+    unsigned long ex_unsal  = (sdm_data[4] - extEnergyExportUnsal)*1000000;
 
     //set reference
-    extEnergyImport       = energyIm;
-    extEnergyPV           = energyExport;
-    extEnergyHeat         = energyHeat();
+    extPulseCount0        = pc0;
+    extPulseCount1        = pc1;
+    extPulseCount2        = pc2;
     extEnergyImportUnsal  = sdm_data[3];
     extEnergyExportUnsal  = sdm_data[4];
     
@@ -48,7 +51,7 @@ void handle_extern_log(){
                             "%d\n"
                             "%d\n"
                             "%d\n"
-                            "%d\n", epoch, import, pv, heat, im_unsal, ex_unsal);     
+                            "%d\n", epoch, d_pc0, d_pc1, d_pc2, im_unsal, ex_unsal);     
 
     //send packet
     Udp.beginPacket(log_ip, log_port);
