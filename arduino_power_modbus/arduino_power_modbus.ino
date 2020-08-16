@@ -34,8 +34,8 @@ struct log_entry{
   long pulseCount0;
   long pulseCount1;
   long pulseCount2;
-  float unsalEnergyImport;
-  float unsalEnergyExport;
+  float unsalEnergyImportZero;
+  float unsalEnergyExportZero;
 };
 
 void clear_eeprom();
@@ -67,8 +67,8 @@ extern long pulseCount0;
 extern long pulseCount1;
 extern long pulseCount2;
 extern float energyExport,lastEnergyExport;
-extern float unsalEnergyImport;
-extern float unsalEnergyExport;
+extern float unsalEnergyImportZero;
+extern float unsalEnergyExportZero;
 
 
 //ntp / time related

@@ -22,8 +22,8 @@ void print_log_entry(log_entry l_ent){
   Serial.print("pulseCount0:         "); Serial.println(l_ent.pulseCount0); 
   Serial.print("pulseCount1:         "); Serial.println(l_ent.pulseCount1); 
   Serial.print("pulseCount2:         "); Serial.println(l_ent.pulseCount2); 
-  Serial.print("unsalEnergyImport: "); Serial.println(l_ent.unsalEnergyImport); 
-  Serial.print("unsalEnergyExport: "); Serial.println(l_ent.unsalEnergyExport); 
+  Serial.print("unsalEnergyImportZero: "); Serial.println(l_ent.unsalEnergyImportZero); 
+  Serial.print("unsalEnergyExportZero: "); Serial.println(l_ent.unsalEnergyExportZero); 
 }
 
 void clear_eeprom(){
@@ -117,11 +117,12 @@ void setup_log(){
       pulseCount0 = this_le.pulseCount0;
       pulseCount1 = this_le.pulseCount1;
       pulseCount2 = this_le.pulseCount2;
-      unsalEnergyImport = this_le.unsalEnergyImport;
-      unsalEnergyExport = this_le.unsalEnergyExport;
+      unsalEnergyImportZero = this_le.unsalEnergyImportZero;
+      unsalEnergyExportZero = this_le.unsalEnergyExportZero;
     }else{
        Serial.println("Found log no entry. Setting log pointer to 0.");
        log_pointer = 0;
+       //TODO: got to do something about unsalEnergyImportZero / Export!!
     }
     
   }else{
@@ -150,8 +151,8 @@ void handle_log(){
       this_le.pulseCount0 = pulseCount0;
       this_le.pulseCount1 = pulseCount1;
       this_le.pulseCount2 = pulseCount2;
-      this_le.unsalEnergyImport = unsalEnergyImport;
-      this_le.unsalEnergyExport = unsalEnergyExport;
+      this_le.unsalEnergyImportZero = unsalEnergyImportZero;
+      this_le.unsalEnergyExportZero = unsalEnergyExportZero;
       EEPROM.put(log_pointer, this_le);
       Serial.print("DEBUG: Wrote log entry to: "); Serial.println(log_pointer);
       log_pointer = (log_pointer + sizeof(log_entry)) % (sizeof(log_entry)*num_entries);
