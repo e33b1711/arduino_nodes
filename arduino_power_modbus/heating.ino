@@ -6,10 +6,8 @@ const float c_hist                    = 25;   //hystereses
 const float c_pwm_max                 = 200;
 const unsigned long time_out          = 10000; 
 const unsigned long h_update_period   = 1000;
-float bal_power                       = 0;
 float target_power                    = -25;
 int control_mode                      =  1; //0=off, 1=control balanced power, 2=control heat power
-bool bal_power_valid                  = false;
 int pwm_setpoint                      = 0;
 unsigned long watchdog_counter        = 0;
 bool h_control_off                    = false;
@@ -99,8 +97,6 @@ void update_heating(){
 
 void print_heating_info(){
   Serial.println("=============HEATING INFO==========");
-  Serial.print("Balanced power: ");
-  Serial.println(bal_power,3);
   Serial.print("target_power: ");
   Serial.println(target_power);
   Serial.print("control_mode: ");

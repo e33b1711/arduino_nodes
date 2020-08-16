@@ -8,7 +8,7 @@ no ntp time
 => persistent status (later resetable)
 => check all dependencies of status <> functions
 
-Control over mqtt
+Control:
 => set target power / control mode over serial (done)
 => set target power / control mode over mqtt
 => reset status over mqtt
@@ -17,19 +17,25 @@ Control over mqtt
 
 Check data types over mqtt (all floats) (done) (use all floats)
 
-last day data / time
 
 rotatting log / restore values (done)
 clear log over debug (done)
-day whole <> log
+day whole <> log       (done)
 
-make heating control trigger by timer uínterrupt
+writte long time statistics
 
 lower cutoff power heating / how to prevent toggling?
 
 */
 
+//unit's stuff
+const char* unit_name  = "power";
+const char* password   = "pass";
+const char* vers       = "v0.88                 ";
+
+//log stuff
 struct log_entry{
+  bool day_intact;         //data started at 00:00 or stems form a log_entry with day_intact=true;
   long epoch;
   long pulseCount0;
   long pulseCount1;
@@ -37,26 +43,24 @@ struct log_entry{
   float unsalEnergyImportZero;
   float unsalEnergyExportZero;
 };
-
 void clear_eeprom();
 void readback_log();
 void readback_log(int val);
+void new_day_log();
 
-
-const char* unit_name  = "power";
-const char* password   = "pass";
-const char* vers       = "v0.88                 ";
-
-extern float bal_power;
-extern bool bal_power_valid;
+//heat
 extern int pwm_setpoint;
 extern unsigned long watchdog_counter;
 extern float target_power;
 extern int control_mode;
 
+//modbus
+extern float bal_power;
+extern bool bal_power_valid;
 extern float sdm_data[];
-extern bool sdm_data_valid[];
+extern bool sdm_data_valid;
 
+//S0
 extern float powerUtility;    
 extern float powerHeat;
 extern float powerPV;
@@ -72,27 +76,17 @@ extern float unsalEnergyExportZero;
 
 
 //ntp / time related
-extern boolean timebase_valid;
-extern unsigned long  epoch_at_millis0;
-extern void update_time();
-extern void new_day_S0();
-extern void new_day_sdm();
+extern unsigned long epoch;                      //epoch updated every cycle
+extern unsigned long seconds_today;              //recent uninx seconds of this day
+extern unsigned long unix_day;                    // this unix day 
 
-//TODO: ntp
-//ntp: 
-//=>epoch at startup
-//=>resync at 00:00
-//energy counter, letzter tag / aktuell:
-//netzbezug
-//pv erzeugt
-//heizung verbraucht
-//verschenkt (energie-menge über modbus - bezug)??
 
 void setup() {
 
   setup_debug();
-  setup_modbus();
   setup_server();
+  setup_time();
+  setup_modbus();
   setup_s0();
   setup_heating();
   setup_log();
@@ -106,6 +100,7 @@ void setup() {
 
 void loop() {
 
+  handle_time();
   update_heating();
   handle_server();
   update_s0();

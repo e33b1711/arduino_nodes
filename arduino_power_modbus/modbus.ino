@@ -3,19 +3,21 @@
 ModbusMaster node; //MODBUS NODE NUMBER OF SDM630 .. must be the same as configured in SDM630
 const int SDM_SIZE                    = 5; 
 float sdm_data[SDM_SIZE];
-bool sdm_data_valid[SDM_SIZE];
+bool sdm_data_valid                   = false;
 static int MAX_ITERATION              = 1; //maximum read MODBUS Value if checksum fails
 //                                      Power L1-3              Import        Export  (nicht salierend!!)
 const uint16_t sdm_adresses[SDM_SIZE] = {0x000C, 0x000E, 0x0010, 0x000048, 0x00004A};
 unsigned long lastModbusUpdate;
 unsigned long modbusPeriod = 31000;
+float bal_power                       = 0;
+bool bal_power_valid                  = false;
 
 //energy counter
 float unsalEnergyImportZero               = 0;
 float unsalEnergyExportZero               = 0;
 float unsalEnergyImport                   = 0;
 float unsalEnergyExport                   = 0;
-float energyExport,lastEnergyExport       = 0;
+float energyExport                        = 0;
 
 
 
@@ -25,8 +27,13 @@ void setup_modbus(){
   Serial.println("Setting up modbus.");
   Serial3.begin(9600);
   node.begin(1, Serial3);
+  bool all_valid = true;
   for (int i=0; i<SDM_SIZE; i++){
-      sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
+      all_valid &= getRTUMore(sdm_adresses[i],1,i);
+  }
+  if (!all_valid){
+    Serial.println("FATAL ERROR: no modbus, restart!");
+    while(true){};
   }
   lastModbusUpdate=millis();
   Serial.println("===============================");
@@ -34,12 +41,12 @@ void setup_modbus(){
 
 //called form heat control
 bool modbus_get_bal_power(){
-  sdm_data_valid[0]  = getRTUMore(sdm_adresses[0],1,0);
-  sdm_data_valid[1]  = getRTUMore(sdm_adresses[1],1,1);
-  sdm_data_valid[2]  = getRTUMore(sdm_adresses[2],1,2);
+  bool valid = true;
+  valid &= getRTUMore(sdm_adresses[0],1,0);
+  valid &= getRTUMore(sdm_adresses[1],1,1);
+  valid &= getRTUMore(sdm_adresses[2],1,2);
   bal_power             = sdm_data[0] + sdm_data[1] + sdm_data[2];
-  bal_power_valid =  sdm_data_valid[0] & sdm_data_valid[1] & sdm_data_valid[2];
-  return bal_power_valid;
+  return valid;
 }
 
 //internal
@@ -77,7 +84,8 @@ void handle_modbus() {
   if (lastModbusUpdate+modbusPeriod<millis()) {
     lastModbusUpdate = millis();
     for (int i=3; i<SDM_SIZE; i++){
-      sdm_data_valid[i] = getRTUMore(sdm_adresses[i],1,i);
+      sdm_data_valid    = true;
+      sdm_data_valid    &= getRTUMore(sdm_adresses[i],1,i);
     }
     update_sdm_energy();
   }
@@ -86,20 +94,15 @@ void handle_modbus() {
 
 
 //called from debug
-void modbus_to_serial()
+void print_modbus_info()
 {
   Serial.println("=============MODBUS INFO==========");
-  Serial.print("Modbus data vaild:");
-  for(int i=0; i<SDM_SIZE; i++){
-    Serial.print(sdm_data_valid[i]);
-  }
-  Serial.println(" ");
-  Serial.print("energyExport: ");
-  Serial.println(energyExport,3);
-  Serial.print("unsalEnergyExport: ");
-  Serial.println(unsalEnergyExport,3);
-  Serial.print("unsalEnergyImport: ");
-  Serial.println(unsalEnergyImport,3);
+  Serial.print("Modbus data vaild:");   Serial.println(sdm_data_valid);
+  Serial.print("Balanced power: ");     Serial.println(bal_power,3);
+  Serial.print("bal_power_valid: ");    Serial.println(bal_power_valid);
+  Serial.print("energyExport: ");       Serial.println(energyExport,3);
+  Serial.print("unsalEnergyExport: ");  Serial.println(unsalEnergyExport,3);
+  Serial.print("unsalEnergyImport: ");  Serial.println(unsalEnergyImport,3);
   Serial.println("==================================");
 }
 
@@ -110,10 +113,4 @@ void update_sdm_energy(){
   unsalEnergyExport =  sdm_data[4] - unsalEnergyExportZero;
   energyExport = unsalEnergyExport - unsalEnergyImport + energyImport;
   if (energyExport<0) energyExport=0; //to compensate errors between utility counter and modbus counter
-}
-
-void new_day_sdm(){
-  unsalEnergyImportZero   = sdm_data[3];
-  unsalEnergyExportZero   = sdm_data[4];
-  lastEnergyExport = energyExport;
 }

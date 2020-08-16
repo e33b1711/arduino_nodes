@@ -28,7 +28,8 @@ float powerPV, energyPV, lastEnergyPV               = 0;
 
 void setup_s0()
 {
-
+    Serial.println("===============================");
+    Serial.println("Setting up S0.");
     // KWH interrupt attached to IRQ 1 = pin3
     attachInterrupt(digitalPinToInterrupt(sensorPin0), onPulse0, RISING);
     attachInterrupt(digitalPinToInterrupt(sensorPin1), onPulse1, RISING);
@@ -36,6 +37,8 @@ void setup_s0()
     timeout0 = millis();
     timeout1 = millis();
     timeout2 = millis();
+    Serial.println("done.");
+    Serial.println("===============================");
 }
 
 void update_s0()
@@ -176,20 +179,6 @@ void print_s0_info(){
   
   Serial.println("===================================");
 }
-
-
-void new_day_S0(){
-  lastEnergyImport        = energyImport;
-  lastEnergyHeat          = energyHeat;
-  lastEnergyPV            = energyPV;
-  pulseCount0             = 0;
-  pulseCount1             = 0;
-  pulseCount2             = 0;
-  energyImport            = 0;
-  energyHeat              = 0;
-  energyPV                = 0;
-}
-
 
 
 

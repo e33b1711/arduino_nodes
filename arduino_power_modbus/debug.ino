@@ -22,8 +22,9 @@ void handle_debug(){
     Serial.println(vers);
     Serial.println("===============================");
     print_heating_info();
+    print_modbus_info();
     print_s0_info();
-    modbus_to_serial();
+    print_time_info();
   } 
 
 
