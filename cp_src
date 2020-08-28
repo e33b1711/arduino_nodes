@@ -1,5 +1,8 @@
 #!/bin/sh
 
+cp ./eg_ost/* ./initial
+rm ./initial/eg_ost.ino
+
 cp ./eg_ost/* ./eg_west
 rm ./eg_west/eg_ost.ino
 
