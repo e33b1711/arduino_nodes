@@ -1,0 +1,7 @@
+openhabianpi2 		.222
+power 				.213
+ug 					.211
+eg_o				.214
+eg_w 				.215
+og_o	 			.216
+oq_w				.217

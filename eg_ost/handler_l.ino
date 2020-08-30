@@ -3,7 +3,7 @@ void setup_l()
   Serial.println("setup_l");
   int i;
   for (i=0; i<num_l_states; i++){
-  digitalWrite(l_pin[i],HIGH);
+  digitalWrite(l_pin[i],!l_inv[i]);
   pinMode(l_pin[i],OUTPUT);
   value_l[i]=0;
   send_message("w", l_address[i], value_l[i]);
@@ -17,10 +17,10 @@ void update_l()
   for (i=0; i<num_l_states; i++){
   switch(value_l[i]){
   case 1:
-    digitalWrite(l_pin[i],LOW);
+    digitalWrite(l_pin[i],l_inv[i]);
     break;
   default:
-    digitalWrite(l_pin[i],HIGH);
+    digitalWrite(l_pin[i],!l_inv[i]);
     value_l[i]=0;
     break;
     }

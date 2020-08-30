@@ -73,7 +73,7 @@ void init_debug(){
 
 
 void post_all_debug(){
-  Serial.println("unit adress: " + unit_name + ", posting all: start");
+  Serial.println("unit adress: " + String(unit_name) + ", posting all: start");
   int i;  
   for (i=0; i<num_l_states; i++){
     Serial.println(l_address[i] + " " +  value_l[i]);

@@ -1,5 +1,6 @@
 #include <SPI.h>
 #include <Ethernet.h>
+#include <ArduinoOTA.h>
 
 
 EthernetClient client;
@@ -24,7 +25,7 @@ void init_comm()
   Serial.println("init_comm: connecting...");
   if (client.connect(server, port)) {
     Serial.println("init_comm: connected");
-    client.println("Arduino Node "+ unit_name + " started.$");
+    client.println("Arduino Node "+ String(unit_name) + " started.$");
   } 
   else {
     // if you didn't get a connection to the server:
@@ -32,6 +33,9 @@ void init_comm()
   }
   // reserve 100 bytes for the message buffer
   message_buffer.reserve(100);
+
+  //OTA
+  ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
 }
 
 
@@ -170,7 +174,7 @@ void handle_comm(){
 
 
 void post_all(){
-   send_message("info", unit_name + " posting all: start", 0);
+  send_message("info", String(unit_name) + " posting all: start", 0);
   int i;
   for (i=0; i<num_l_states; i++){
     send_message("w", l_address[i], value_l[i]);
@@ -188,5 +192,5 @@ void post_all(){
   for (i=0; i<num_u_states; i++){
     send_message("w", u_address[i], value_u[i]);
   }
-  send_message("info", unit_name + " posting all: end", 0);
+  send_message("info", String(unit_name) + " posting all: end", 0);
 }
