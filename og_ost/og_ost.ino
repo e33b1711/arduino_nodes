@@ -1,15 +1,17 @@
 //this nodes name
-const String unit_name = "og_ost";
+const char* unit_name   = "og_ost";
+const char* password    = "pass";
 
   
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x04 };
-const int ethernet_sc_pin = 10;
-const IPAddress ip(192,168,178,201);
-const IPAddress server(192,168,178,222);
-const int port = 8888;
+const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x15 };
+const IPAddress                 ip(192,168,178,216);
+const IPAddress                 server(192,168,178,222);
+const int port                  = 8888;
+const int ethernet_sc_pin       = 10;
+const int ethernet_reset_pin    = 12;
 
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
@@ -77,8 +79,8 @@ int value_h[]={0, 0, 0, 0, 0, 0};
 const int num_l_states=18;
 const String l_address[]={      
 "VD_OG_SZ_UP", "LI_OG_BA", "VD_OG_SZ_DO", "L25", "DF_OG_SZ_UP", "L27", "DF_OG_SZ_DO", "L29", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "RO_OG_SZ_ON", "L33", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L1", "RO_OG_BA_ON", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]={             
-22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,44,45};                //digitaler pin
+const int l_pin[]           = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40, 41, 42, 43, 44, 45};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]={                 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={

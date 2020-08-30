@@ -1,15 +1,17 @@
 //this nodes name
-const String unit_name = "eg_ost";
+const char* unit_name   = "eg_ost";
+const char* password    = "pass";
 
 
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const int ethernet_sc_pin = 10;
-const byte mac[] = {0xDE, 0xAA, 0x7E, 0xEF, 0xFE, 0x04 };
-IPAddress ip(192,168,178,211);
-IPAddress server(192,168,178,222);
-const int port = 8888;
+const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x13 };
+const IPAddress                 ip(192,168,178,214);
+const IPAddress                 server(192,168,178,222);
+const int port                  = 8888;
+const int ethernet_sc_pin       = 10;
+const int ethernet_reset_pin    = 12;
 
 
 
@@ -82,10 +84,9 @@ int value_h[]={
 const int num_l_states=16;
 const String l_address[]={      
 "LI_EG_GR", "LI_EG_GA", "LI_GA_L1", "LI_EG_WZ_L1", "LI_EG_WZ_L2", "LI_EG_WZ", "LI_EG_WC", "LI_EG_VH", "ZE_EG_VH", "L31", "L40", "L41", "L42", "L43", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]={             
-22,23,24,25,26,27,28,29,30,31,40,41,42,43,44,45};                //digitaler pin
-int value_l[]={                 
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const int l_pin[]           = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40, 41, 42, 43, 44, 45};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 

@@ -1,15 +1,17 @@
 //this nodes name
-const String unit_name = "gr";
+const char* unit_name   = "gr";
+const char* password    = "pass";
 
 
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const int ethernet_sc_pin = 10;
-const byte mac[] = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x14 };
-IPAddress ip(192,168,178,215);
-IPAddress server(192,168,178,222);
-const int port = 8888;
+const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x14 };
+const IPAddress                 ip(192,168,178,215);
+const IPAddress                 server(192,168,178,222);
+const int port                  = 8888;
+const int ethernet_sc_pin       = 10;
+const int ethernet_reset_pin    = 12;
 
 
 
@@ -69,11 +71,12 @@ int value_h[]={0, 0};
  * 1 aussen
  * ...
  */
-const int num_l_states    = 8;
-const String l_address[]  = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP" };       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]         = {23, 25, 27, 29, 31, 33, 35, 37};                //digitaler pin
-int value_l[]             = {0, 0, 0, 0, 0, 0, 0, 0};
-long set_time_l[]         = {0, 0, 0, 0, 0, 0, 0, 0};
+const int num_l_states      = 8;
+const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP" };       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {23, 25, 27, 29, 31, 33, 35, 37};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0};
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0};
 
 
 

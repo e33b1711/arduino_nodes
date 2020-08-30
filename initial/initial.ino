@@ -1,16 +1,17 @@
 //this nodes name
-const String unit_name = "initial";
+const char* unit_name   = "initial";
+const char* password    = "pass";
 
   
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xAC };
-const int ethernet_sc_pin = 53;
-IPAddress ip(192,168,178,202);
-IPAddress server(192,168,178,222);
-int port = 8888;
-const int ethernet_reset_pin = 12;
+const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x18 };
+const IPAddress                 ip(192,168,178,219);
+const IPAddress                 server(192,168,178,222);
+const int port                  = 8888;
+const int ethernet_sc_pin       = 53;
+const int ethernet_reset_pin    = 12;
 
   
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
