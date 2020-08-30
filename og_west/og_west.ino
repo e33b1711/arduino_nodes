@@ -1,7 +1,6 @@
-
 //this nodes name
-const char* unit_name = "og_west";
-const char* password   = "pass";
+const char* unit_name 	= "og_west";
+const char* password   	= "pass";
 
 
 //for tcp communication
