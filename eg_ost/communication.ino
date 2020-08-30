@@ -19,7 +19,7 @@ void init_comm()
 {
   // initialize
   Ethernet.init(ethernet_sc_pin);
-  Ethernet.begin(mac, ip, subnet, gateway);
+  Ethernet.begin(mac, ip, gateway, subnet);
   // give the Ethernet shield a second to initialize:
   delay(500);
   Serial.println("init_comm: connecting...");

@@ -7,7 +7,7 @@ const char* password    = "pass";
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
 const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x14 };
-const IPAddress                 ip(192,168,178,215);
+const IPAddress                 ip(192,168,220,75);
 const IPAddress                 server(192,168,178,222);
 const IPAddress                 gateway(192,168,220,1);
 const IPAddress                 subnet(255,255,255,0);
