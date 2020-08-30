@@ -53,7 +53,7 @@ long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 const int num_t_states      = 3;
 const long period_t         = 1800000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_OG_KS", "TI_OG_KN", "TI_OG_GA"};                                    
+const String t_address[]    = {"TI_OG_KN", "TI_OG_KS", "TI_OG_GA"};                                    
 const int t_pin[]           = {28, 27, 26};
 int value_t[]               = {0,  0,  0};                                            //temperatur
 int aux_value_t[]           = {0,  0,  0};                                           //feuchtigkeit
@@ -69,16 +69,11 @@ int value_h[]               = {0,  0,  0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states      = 28;
-const String l_address[]    = {"LI_34", "RO_OG_KS_DO", "LI_OG_KS", "RO_OG_KS_ON", "LI_OG_KS_L1", "LI_OG_KN_L1", "LI_OG_KN", "RO_OG_KN_ON", "LI_GA_L1", "RO_OG_KN_DO", "LI_OG_GA_L1", "LI_OG_GA", "LI_46", "LI_47", "LI_48", "LI_49", "LI_54", "LI_55", "LI_56", "LI_57", "LI_58", "LI_59", "LI_60", "LI_61", "LI_30", "LI_31", "LI_32", "LI_33"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"LI_34", "RO_OG_KS_DO", "LI_OG_KS", "RO_OG_KS_ON", "LI_OG_KS_L1", "LI_OG_KN_L1", "LI_OG_KN", "RO_OG_KN_ON", "LI_GA_L1", "RO_OG_KN_DO", "LI_OG_GA_L1", "LI_OG_GA", "LI_46", "LI_47", "LI_48", "LI_49", "DF_OG_KN_DO", "DF_OG_GA_DO","DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "DF_OG_KS_DO", "LI_60", "LI_61", "VD_OG_KN_DO", "VD_OG_KS_UP", "VD_OG_KN_UP", "VD_OG_KS_DO"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61, 30, 31, 32, 33};                //digitaler pin
 const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
 long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
-
-/*    
-"", "VD_OG_KS_DO", "VD_OG_KS_UP", "", "VD_OG_KN_UP", "", "VD_OG_KN_DO", "", "", "", "", 
-"", "", "", "", "", "DF_OG_KN_DO", "DF_OG_GA_DO","DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "DF_OG_KS_DO"};       //addresse, zum gleichschalten selbe addresse vergeben
-*/
 
 
 ////constants and variables for r states (rollo)
