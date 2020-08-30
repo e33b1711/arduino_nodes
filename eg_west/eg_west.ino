@@ -6,7 +6,7 @@ const char* password    = "pass";
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x17 }
+const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x17 };
 const IPAddress                 ip(192,168,178,218);
 const IPAddress                 server(192,168,178,222);
 const int port                  = 8888;
@@ -84,6 +84,7 @@ const String l_address[]={
 "LI_EG_AS", "RO_EG_WE_DO", "RO_EG_WE_ON", "RO_EG_SU_ON", "LI_EG_KU_L1", "LI_EG_EZ_KU", "LI_EG_SP", "RO_EG_SU_DO", "LI_EG_AO", "LI_EG_EZ_L1", "LI_EG_EZ_L3", "LI_EG_GA", "LI_EG_AW", "LI_GA_L1", "LI_EG_EZ_KU", "LI_EG_EZ", "L38", "L39","L40", "L41", "L42", "L43", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40, 41, 42, 43, 44, 45};                //digitaler pin
 const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   
 
