@@ -82,10 +82,11 @@ int value_h[]={0, 0, 0, 0, 0};
 const int num_l_states=16;
 const String l_address[]={      
 "LI_EG_AS", "RO_EG_WE_DO", "RO_EG_WE_ON", "RO_EG_SU_ON", "LI_EG_KU_L1", "LI_EG_EZ_KU", "LI_EG_SP", "RO_EG_SU_DO", "LI_EG_AO", "LI_EG_EZ_L1", "LI_EG_EZ_L3", "LI_EG_GA", "LI_EG_AW", "LI_GA_L1", "LI_EG_EZ_KU", "LI_EG_EZ", "L38", "L39","L40", "L41", "L42", "L43", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40, 41, 42, 43, 44, 45};                //digitaler pin
+const int l_pin[]           = {22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45};                //digitaler pin
 const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
-int value_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int value_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 long set_time_l[]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
   
 
 ////constants and variables for r states (rollo)
