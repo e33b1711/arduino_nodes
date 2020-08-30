@@ -48,6 +48,9 @@ void send_message(String out_messageType, String out_address, int out_value){
 
 
 void handle_comm(){
+
+  //OTA
+  ArduinoOTA.poll();
   
   static long last_try=0;               // a string to hold incoming data
   static boolean messageComplete = false;        // whether the string is complete
