@@ -70,7 +70,7 @@ int value_h[]               = {0,  0,  0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states      = 28;
-const String l_address[]    = {"LI_34", "RO_OG_KS_DO", "LI_OG_KS", "RO_OG_KS_ON", "LI_46", "LI_47", "LI_48", "LI_49", "LI_OG_KS_L1", "LI_OG_KN_L1", "LI_OG_KN", "RO_OG_KN_ON", "LI_GA_L1", "RO_OG_KN_DO", "LI_OG_GA_L1", "LI_OG_GA", "DF_OG_KN_DO", "DF_OG_GA_DO","DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "DF_OG_KS_DO", "LI_60", "LI_61", "VD_OG_KN_DO", "VD_OG_KS_UP", "VD_OG_KN_UP", "VD_OG_KS_DO"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"LI_34", "RO_OG_KS_DO", "LI_OG_KS", "RO_OG_KS_ON", "LI_46", "LI_47", "LI_48", "LI_49", "LI_OG_KS_L1", "LI_OG_KN_L1", "LI_OG_KN", "RO_OG_KN_ON", "LI_GA_L1", "RO_OG_KN_DO", "LI_OG_GA_L1", "LI_OG_GA", "DF_OG_GA_UP", "DF_OG_GA_DO","DF_OG_KS_UP", "DF_OG_KS_DO", "LI_58", "DF_OG_KN_UP", "LI_60", "DF_OG_KN_DO", "VD_OG_KN_DO", "VD_OG_KS_UP", "VD_OG_KN_UP", "VD_OG_KS_DO"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61, 30, 31, 32, 33};                //digitaler pin
 const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
@@ -128,11 +128,11 @@ void user_logic()
       toggle_state("LI_OG_GA_L1");
      }
   }
-  i=10;
+  i=13;
   if (value_c[i]==1){
      write_state("DF_OG_GA",1);
   }
-  i=13;
+  i=10;
   if (value_c[i]==1){
      write_state("DF_OG_GA",-1);
   }
