@@ -14,8 +14,8 @@ void setup_t()
 
 void update_t()
 {
-  if (time_t+(period_t)<millis()){
-    time_t=millis();
+  if (s_time_t+(period_t)<millis()){
+    s_time_t=millis();
     i_t++;
     if (i_t==num_t_states){i_t=0;}
     handle_one_t(i_t);
