@@ -1,13 +1,13 @@
 //this nodes name
 const char* unit_name   = "gr";
 const char* password    = "pass";
-
+extern const char *ssid;
+extern const char *pass;
 
 //for tcp communication (node mcu)
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <ESP8266WiFi.h>
-const char *ssid                = "my_ssid"; // your network SSID (name)
-const char *pass                = "my_pass";  // your network password
+
 const IPAddress                 server(192,168,178,222);
 const int port                  = 8888;
 
@@ -18,9 +18,9 @@ const int port                  = 8888;
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a           = 0;
 const int num_b_states  = 3;
-const int b_pin[]       = {2, 0, 4};       //a state auf der selben unit                         
-int value_b[]           = {0, 0, 0};       //an/aus
-int prev_value_b[]      = {0, 0, 0};       //an/aus (alter Wert zur Flankenerkennung)
+const int b_pin[]       = {2, 14, 12};       //a state auf der selben unit                         
+int value_b[]           = {0,  0,  0};       //an/aus
+int prev_value_b[]      = {0,  0,  0};       //an/aus (alter Wert zur Flankenerkennung)
 
 
 //constants and variables for c states (flanke eines b states)
@@ -36,12 +36,13 @@ long time_c_pos[]       = {0,  0,  0};        //zeit der letzen steigenden flank
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
-const int num_t_states      = 2;
+#define DHTTYPE DHT22
+const int num_t_states      = 1;
 const long period_t         = 1800000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_GR", "TI_GR_A"};                                                                                                           //addresse
-const int t_pin[]           = { 5, 16};
-int value_t[]               = { 0,   0};                                            //temperatur
-int aux_value_t[]           = { 0,   0};                                            //feuchtigkeit
+const String t_address[]    = {"TI_GR"};                                                                                                           //addresse
+const int t_pin[]           = {13};
+int value_t[]               = {0};                                            //temperatur
+int aux_value_t[]           = {0};                                            //feuchtigkeit
 long s_time_t               = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                              //cycle_counter
   
@@ -58,12 +59,12 @@ int value_h[]={0, 0};
  * 1 aussen
  * ...
  */
-const int num_l_states      = 8;
-const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP" };       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {1,  3, 15, 13, 13,  13, 12, 14};                //digitaler pin
-const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
-int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0};
-long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0};
+const int num_l_states      = 7;
+const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_TR"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {16, 5,  4,  -1, -1, -1, 0};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0};
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0};
 
 
 
@@ -71,8 +72,8 @@ long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0};
 // über an/aus und richtungsrelais gesteuert
 const int num_r_states            = 1;
 const String r_address[]          = {"DO_GR"};       //addresse
-const String r_trigger_up[]       = {"DO_GR_UP"};         //l state
-const String r_trigger_do[]       = {"DO_GR_DO"};         //l state
+const String r_trigger_up[]       = {"DO_GR_TR"};         //l state
+const String r_trigger_do[]       = {"DO_GR_TR"};         //l state
 const int r_down[]                = {1};         // c state up sensor
 const int r_up[]                  = {2};       // c state down sensor
 int value_r[]                     = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
