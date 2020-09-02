@@ -48,11 +48,11 @@ int aux_value_c[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 long time_c_neg[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};           //zeit der letzen fallenden flanke
 long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};        //zeit der letzen steigenden flanke
        
-
+  
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 const int num_t_states      = 4;
 const long period_t         = 1800000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_33", "TI_32", "TI_31", "TI_30"};                                     
+const String t_address[]    = {"TI_EG_GA", "TI_EG_KU", "TI_EG_WZ", "TI_EG_EZ"};                                     
 const int t_pin[]           = {58, 59, 60, 61};
 int value_t[]               = {0,  0,  0,  0};                                            //temperatur
 int aux_value_t[]           = {0,  0,  0,  0};                                           //feuchtigkeit
@@ -62,7 +62,7 @@ int i_t                     = 0;                                                
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states      = 4;
-const String h_address[]    = {"HI_33", "HI_32", "HI_31", "HI_30"};          //addresse
+const String h_address[]    = {"HI_EG_GA", "HI_EG_KU", "HI_EG_WZ", "HI_EG_EZ"};     //addresse
 int value_h[]               = {0,  0,  0,  0};    
 
   
