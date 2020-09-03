@@ -24,34 +24,16 @@ int value_b[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 int prev_value_b[]      = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};  
 
 
-//0 sz rollo runter
-//1 bad df ho
-//2 bad li
-//3 gang bad
-//4 bewegung
-//5 bad df runter
-//6 sz oben
-//7 sz unten
-//8 sz anselm
-//9 gang sz
-//10 sz rollo hoch
-//11 sz melli
-//12 sz df
-//13  sz df
-//14 bad rollo ho
-//15 bad rollo ru  
-
-
 //constants and variables for c states (flanke eines b states)
 //0 sz unten
 //1 ans
 //2 sz rollo runter
 //3 sz oben 
-//4 bad runter tür
+//4 bewegung
 //5 mell
 //6 sz rollohoch
 //7 gang sz
-//8 bewegung
+//8 bad runter tür
 //9 gang bad
 //10 bad 
 //11 bad hoch tür
@@ -65,11 +47,6 @@ int value_c[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 int aux_value_c[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};          //negative flanke
 long time_c_neg[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};           //zeit der letzen fallenden flanke
 long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};        //zeit der letzen steigenden flanke
-
-
-
-
-// "", "",
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -89,34 +66,26 @@ const String h_address[]    = {"HI_OG_BA", "HI_OG_SZ"};       //addresse
 int value_h[]               = {0,  0};    
 
 
-
-//"VD_OG_SZ_UP", "LI_OG_BA", "VD_OG_SZ_DO", "L25", "DF_OG_SZ_UP", "L27", "DF_OG_SZ_DO", "L29", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "RO_OG_SZ_ON", "L33", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L1", "RO_OG_BA_ON", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
-
-41 roolo on
-42 bad
-43 rollo bad do
-44 sz
-45 anselm
-46 rollo do
-47 melli
-48 steckdose?
-49 rollo bad on
-
-60 vd zu
-58 vd auf
-59 df zu
-61 df auf
-
-
-
-
 //constants and variables for l states (einfaches licht / verbraucher)
-const int num_l_states      = 24;
-const String l_address[]    = {"LI_34", "LI_35", "LI_36", "LI_37", "LI_38", "LI_39", "LI_40", "LI_41", "LI_42", "LI_43", "LI_44", "LI_45", "LI_46", "LI_47", "LI_48", "LI_49", "LI_54", "LI_55", "LI_56", "LI_57", "LI_58", "LI_59", "LI_60", "LI_61"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61};                //digitaler pin
-const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
-int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
-long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
+// 41 roolo on
+// 42 bad
+// 43 rollo bad do
+// 44 sz
+// 45 anselm
+// 46 rollo do
+// 47 melli
+// 48 steckdose?
+// 49 rollo bad on
+// 60 vd zu
+// 58 vd auf
+// 59 df zu
+// 61 df auf
+const int num_l_states      = 17;
+const String l_address[]    = {"RO_OG_SZ_ON", "LI_OG_BA", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "LI_OG_SZ_L1", "LI_48", "RO_OG_BA_ON", "LI_54", "LI_55", "LI_56", "LI_57", "VD_OG_SZ_UP", "DF_OG_SZ_DO", "VD_OG_SZ_DO", "DF_OG_SZ_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61};                //digitaler pin
+const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
 
 
 
@@ -167,11 +136,11 @@ void user_logic()
     int i;  
 
   //taFer verküpfungen
-  //6  sz, tür, mitte
-  //7  sz, tür, unten
-  //12  df sz
-  //13  df sz
-  i=6;
+  //3  sz, tür, mitte
+  //0  sz, tür, unten
+  //14  df sz
+  //15  df sz
+  i=3;
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -183,7 +152,7 @@ void user_logic()
      write_state("LI_OG_SZ_L2",0);
      }
   }
-  i=7;
+  i=0;
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -195,7 +164,7 @@ void user_logic()
      write_state("LI_OG_SZ_L2",0);
      }
   }
-  i=12;
+  i=14;
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -208,7 +177,7 @@ void user_logic()
        write_state("VD_OG",1);
      }
   }
-  i=13;
+  i=15;
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -224,10 +193,9 @@ void user_logic()
   
   
   
-  //10  rollo sz
-  //0  rollo sz
-    i=10;
- 
+  //6  rollo sz
+  //2  rollo sz
+  i=6;
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_SZ",0);
@@ -246,7 +214,7 @@ void user_logic()
         write_state("RO_OG_SZ_DO",0);
      }
   }
-  i=0;
+  i=2;
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_SZ",0);
@@ -264,9 +232,9 @@ void user_logic()
         write_state("RO_OG_SZ_DO",0);
      }
   }
-  //11  bett, west
-  //8  bett ost
-  i=11;
+  //5  bett, west
+  //1  bett ost
+  i=5;
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -278,7 +246,7 @@ void user_logic()
      write_state("LI_OG_SZ_L2",0);
      }
   }
-  i=8;
+  i=1;
   if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
@@ -290,8 +258,8 @@ void user_logic()
        write_state("LI_OG_SZ_L2",0);
      }
   }
-  //9  flur, sz
-  i=9;
+  //7  flur, sz
+  i=7;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
        write_state("LI_OG_GA", 3);
@@ -301,8 +269,8 @@ void user_logic()
      }
   }
   
-  // 3  flur, bad
-  i=3;
+  //9  flur, bad
+  i=9;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
        write_state("LI_OG_GA", 3);
@@ -311,15 +279,14 @@ void user_logic()
        write_state("LI_OG_GA_L1", 3);
      }
   }
-  // 2  bad, einzel
-  //1  rollo bad tür
-  //5  rollo bad tür
-  i=2;
+  //10  bad, einzel
+  //11  rollo bad tür
+  //8  rollo bad tür
+  i=10;
   if (value_c[i]==1){
      toggle_state("LI_OG_BA");
   }
-   i=1;
- 
+   i=11;
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_BA",0);
@@ -338,7 +305,7 @@ void user_logic()
         write_state("RO_OG_BA_DO",0);
      }
   }
-  i=5;
+  i=8;
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_BA",0);
@@ -356,10 +323,9 @@ void user_logic()
         write_state("RO_OG_BA_DO",0);
      }
   }
-  //14   rollo bad balkon
- //15   rollo bad balkon
-   i=14;
-  
+  //13   rollo bad balkon
+ //12   rollo bad balkon
+   i=13;
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_BA",0);
@@ -378,7 +344,7 @@ void user_logic()
        write_state("RO_OG_BA_DO",0);
      }
   }
-  i=15;
+  i=12;
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_BA",0);
