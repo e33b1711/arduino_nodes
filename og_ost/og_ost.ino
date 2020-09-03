@@ -16,7 +16,12 @@ const int ethernet_sc_pin       = 53;
 const int ethernet_reset_pin    = 12;
 
 
-
+//constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
+int counter_a=0;
+const int num_b_states  = 16;
+const int b_pin[]       = {4,  5,  6,  7,  8,  9,  10, 11, 25, 24, 23, 22, 17, 16, 3,  2, 33, 32, 31, 30, 29, 28, 27, 26};                           
+int value_b[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
+int prev_value_b[]      = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};  
 
 
 //0 sz rollo runter
@@ -34,34 +39,26 @@ const int ethernet_reset_pin    = 12;
 //12 sz df
 //13  sz df
 //14 bad rollo ho
-//15 bad rollo ru
-
-
-//constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
-int counter_a=0;
-const int num_b_states  = 16;
-const int b_pin[]       = {4,  5,  6,  7,  8,  9,  10, 11, 25, 24, 23, 22, 17, 16, 3,  2, 33, 32, 31, 30, 29, 28, 27, 26};                           
-int value_b[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
-int prev_value_b[]      = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
+//15 bad rollo ru  
 
 
 //constants and variables for c states (flanke eines b states)
-//0 
-//1 
-//2 
-//3 
-//4 
-//5 
-//6 
-//7 
-//8 
-//9 
-//10 
-//11
-//12 
-//13
-//14
-//15 
+//0 sz unten
+//1 ans
+//2 sz rollo runter
+//3 sz oben 
+//4 bad runter tür
+//5 mell
+//6 sz rollohoch
+//7 gang sz
+//8 bewegung
+//9 gang bad
+//10 bad 
+//11 bad hoch tür
+//12 bad fenster runter
+//13 bad fenster hoch
+//14 df sz hoch
+//15 df sz runter
 const int num_c_states  = 16;
 const int which_b[]     = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};       //a state auf der selben unit                         
 int value_c[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};           //positive flanke
@@ -72,29 +69,43 @@ long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 
 
 
-// "TI_OG_SZ", "TI_OG_BA",
+// "", "",
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
-const int num_t_states      = 8;
+const int num_t_states      = 2;
 const long period_t         = 1800000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_33", "TI_32", "TI_31", "TI_30", "TI_29", "TI_28", "TI_27", "TI_26"};                                     
-const int t_pin[]           = {33, 32, 31, 30, 29, 28, 27, 26};
-int value_t[]               = {0,  0,  0,  0,  0,  0,  0,  0};                                            //temperatur
-int aux_value_t[]           = {0,  0,  0,  0,  0,  0,  0,  0};                                           //feuchtigkeit
+const String t_address[]    = {"TI_OG_BA", "TI_OG_SZ"};                                     
+const int t_pin[]           = {27, 26};
+int value_t[]               = {0,  0};                                            //temperatur
+int aux_value_t[]           = {0,  0};                                           //feuchtigkeit
 long time_t                 = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                              //cycle_counter
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states      = 0;
-const String h_address[]    = {"HI_33", "HI_32", "HI_31", "HI_30", "HI_29", "HI_28", "HI_27", "HI_26"};          //addresse
-int value_h[]               = {0,  0,  0,  0,  0,  0,  0,  0};    
+const int num_h_states      = 2;
+const String h_address[]    = {"HI_OG_BA", "HI_OG_SZ"};       //addresse
+int value_h[]               = {0,  0};    
 
 
 
 //"VD_OG_SZ_UP", "LI_OG_BA", "VD_OG_SZ_DO", "L25", "DF_OG_SZ_UP", "L27", "DF_OG_SZ_DO", "L29", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "RO_OG_SZ_ON", "L33", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L1", "RO_OG_BA_ON", "L44", "L45", "L46", "L47"};       //addresse, zum gleichschalten selbe addresse vergeben
 
+41 roolo on
+42 bad
+43 rollo bad do
+44 sz
+45 anselm
+46 rollo do
+47 melli
+48 steckdose?
+49 rollo bad on
+
+60 vd zu
+58 vd auf
+59 df zu
+61 df auf
 
 
 
@@ -133,19 +144,17 @@ int value_s[]               = {-1, 0};          // -1 zu und verriegelt, 0 entri
 long stop_time_s[]          = {0, 0};          // zeit zu stoppen
 
 
-//"U_OG_KN",       "U_OG_KS",         "U_OG_GA",        "U_OG_SZ",     "U_OG_BA"
-
 //constants and variables for u states (temperatur steller)
-//0 
-//1 
-//2 
-//3 
-//4 
+//0 blau U_OG_GA
+//1 weiß U_OG_KS
+//2 grün U_OG_KN
+//3 rosa U_OG_BA
+//4 grau U_OG_SZ
 //5 
 //6 
 //7 
 const int num_u_states          = 5;
-const String u_address[]        = {"U_34", "U_35", "U_36", "U_37", "U_38"};        //addresse
+const String u_address[]        = {"U_OG_GA", "U_OG_KS", "U_OG_KN", "U_OG_BA", "U_OG_SZ"};        //addresse
 const int u_pin[]               = {34, 35, 36, 37, 38};               //pwm-pin  
 const unsigned long u_interval  = 240000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis    = 0;
