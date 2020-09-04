@@ -71,7 +71,8 @@ extern unsigned long epoch;                      //epoch updated every cycle
 extern unsigned long seconds_today;              //recent uninx seconds of this day
 extern unsigned long unix_day;                    // this unix day 
 
-
+//temp
+extern float tempHigh, tempLow;
 
 void setup() {
 
@@ -83,6 +84,7 @@ void setup() {
   setup_heating();
   setup_log();
   setup_extern_log();
+  setup_temp();
   
 }
 
@@ -101,5 +103,6 @@ void loop() {
   handle_modbus();
   handle_log();
   handle_extern_log();
+  handle_temp();
 
 }

@@ -41,7 +41,7 @@ EthernetClient client;
 
 //mqtt
 #define AIO_SERVER      "192.168.178.222"
-#define AIO_SERVERPORT  1883
+#define AIO_SERVERPORT  1884
 #define AIO_USERNAME    "power_control"
 #define AIO_KEY         ""
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
@@ -57,6 +57,9 @@ Adafruit_MQTT_Publish energyImportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USER
 Adafruit_MQTT_Publish energyExportPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyExport");
 Adafruit_MQTT_Publish energyPVPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyPV");
 Adafruit_MQTT_Publish energyHeatPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/energyHeat");
+
+Adafruit_MQTT_Publish tempLowPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/tempLow");
+Adafruit_MQTT_Publish tempHighPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/tempHigh");
 
 Adafruit_MQTT_Publish versionPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/version");
 Adafruit_MQTT_Publish statusPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/status");
@@ -136,6 +139,11 @@ void handle_server(){
         energyExportPub.publish(energyExport, 4);
         energyPVPub.publish(energyPV(), 4);
         energyHeatPub.publish(energyHeat(), 4);
+        //
+        //tempLowPub.publish(tempLow, 4);
+        //tempHighPub.publish(tempHigh, 4);
+        tempLowPub.publish(7.7, 4);
+        tempHighPub.publish(66.66, 4);
       }else{
         Serial.println("ERROR: MQTT Broker not rechable. ");
       }
