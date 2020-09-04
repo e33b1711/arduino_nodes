@@ -2,11 +2,9 @@
 #include <DallasTemperature.h>
 
 
-#define ONE_WIRE_BUS_1 58
-#define ONE_WIRE_BUS_2 59
 
-OneWire oneWire_in(ONE_WIRE_BUS_1);
-OneWire oneWire_out(ONE_WIRE_BUS_2);
+OneWire oneWire_in(A7);
+OneWire oneWire_out(A8);
 
 DallasTemperature sensor_inhouse(&oneWire_in);
 DallasTemperature sensor_outhouse(&oneWire_out);
@@ -29,8 +27,8 @@ void setup_temp(){
 
 void handle_temp(){
 
-    //if(lastUpdateDS+updatePeriodDS<millis()){
-    //  lastUpdateDS = millis();
+    if((lastUpdateDS+updatePeriodDS)<millis()){
+      lastUpdateDS = millis();
  
 
    Serial.print("Requesting temperatures...");
@@ -47,7 +45,7 @@ void handle_temp(){
     Serial.println(tempLow);
       
 
-   // }
+    }
   
   
     

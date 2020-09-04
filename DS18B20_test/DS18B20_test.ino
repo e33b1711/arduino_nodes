@@ -32,8 +32,8 @@
 #define REPORT_INTERVAL 60 // in sec
 
 
-#define ONE_WIRE_BUS 2  // DS18B20 pin
-OneWire oneWire(ONE_WIRE_BUS);
+#define ONE_WIRE_BUS 65  // DS18B20 pin
+OneWire oneWire(A7);
 DallasTemperature DS18B20(&oneWire);
 
 
@@ -43,8 +43,8 @@ float oldTemp;
 
 
 void setup() {
-  Serial.begin(115200);
-  
+  Serial.begin(9600);
+   Serial.println(A15);
   //wifiConnect();
     
   //char uname[USER_PWD_LEN];
