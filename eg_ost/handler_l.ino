@@ -17,10 +17,10 @@ void update_l()
   for (i=0; i<num_l_states; i++){
   switch(value_l[i]){
   case 1:
-    digitalWrite(l_pin[i],l_inv[i]);
+    if(l_inv[i]>=0) digitalWrite(l_pin[i],l_inv[i]);
     break;
   default:
-    digitalWrite(l_pin[i],!l_inv[i]);
+    if(l_inv[i]>=0) digitalWrite(l_pin[i],!l_inv[i]);
     value_l[i]=0;
     break;
     }
