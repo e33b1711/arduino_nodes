@@ -41,7 +41,7 @@ EthernetClient client;
 
 //mqtt
 #define AIO_SERVER      "192.168.178.222"
-#define AIO_SERVERPORT  1884
+#define AIO_SERVERPORT  1883
 #define AIO_USERNAME    "power_control"
 #define AIO_KEY         ""
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
@@ -142,8 +142,8 @@ void handle_server(){
         //
         //tempLowPub.publish(tempLow, 4);
         //tempHighPub.publish(tempHigh, 4);
-        tempLowPub.publish(7.7, 4);
-        tempHighPub.publish(66.66, 4);
+        tempLowPub.publish(tempLow, 4);
+        tempHighPub.publish(tempHigh, 4);
       }else{
         Serial.println("ERROR: MQTT Broker not rechable. ");
       }
