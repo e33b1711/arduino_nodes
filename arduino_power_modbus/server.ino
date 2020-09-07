@@ -23,13 +23,9 @@ unsigned long unix_day;                   // this unix day
 //for udp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <SPI.h>
-#include "Adafruit_MQTT.h"
-#include "Adafruit_MQTT_Client.h"
-
 #include <Ethernet.h>
 #include <EthernetClient.h>
-#include <Dns.h>
-#include <Dhcp.h>
+#include <PubSubClient.h>
 
 
 //ethernet
@@ -44,11 +40,23 @@ EthernetClient client;
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME    "power_control"
 #define AIO_KEY         ""
-Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
-#define halt(s) { Serial.println(F( s )); while(1);  }
+
+
+// Function prototypes
+void subscribeReceive(char* topic, byte* payload, unsigned int length);
+ 
+// Set your MAC address and IP address here
+ 
+// Make sure to leave out the http and slashes!
+const char* server = "test.mosquitto.org";
+ 
+// Ethernet and MQTT related objects
+EthernetClient ethClient;
+PubSubClient mqttClient(client);
 
 
 //mqtt feeds
+/*
 Adafruit_MQTT_Publish powerPVPub        = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerPV");
 Adafruit_MQTT_Publish powerHeatPub   = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerHeat");
 Adafruit_MQTT_Publish powerBalPub       = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/powerBal");
@@ -63,6 +71,7 @@ Adafruit_MQTT_Publish tempHighPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNA
 
 Adafruit_MQTT_Publish versionPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/version");
 Adafruit_MQTT_Publish statusPub     = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/status");
+*/
 
 //server throttle timer
 unsigned long lastServerUpd;
@@ -89,15 +98,23 @@ void setup_server(){
   Serial.println(F("Init the mqtt client..."));
   Ethernet.init(ethernet_sc_pin);
   Ethernet.begin(mac, ip);
-  delay(1000); //give the ethernet a second to initialize
+  delay(2000); //give the ethernet a second to initialize
 
-  if(MQTT_connect()){
-    versionPub.publish(vers,20);
-    statusPub.publish("Started.",8);
-  }else{
-    Serial.println("ERROR: MQTT Broker not rechable. ");
+  // Set the MQTT server to the server stated above ^
+  mqttClient.setServer(AIO_SERVER, AIO_SERVERPORT);   
+ 
+  // Attempt to connect to the server with the ID "myClientID"
+  if (mqttClient.connect("myClientID")) 
+  {
+    Serial.println("Connection has been established, well done");
+ 
+    // Establish the subscribe event
+    mqttClient.setCallback(subscribeReceive);
+  } 
+  else 
+  {
+    Serial.println("Looks like the server connection failed...");
   }
-  Serial.println("===============================");
 
   //time & OTA
   Serial.println("===============================");
@@ -130,23 +147,41 @@ void handle_server(){
       Serial.println("=====================================");
       Serial.println("Publishing via mqtt...");
       
-      if(MQTT_connect()){
-        powerPVPub.publish(powerPV, 4);
-        powerHeatPub.publish(powerHeat, 4);
-        powerBalPub.publish(bal_power, 4);
-        //
-        energyImportPub.publish(energyImport(), 4);
-        energyExportPub.publish(energyExport, 4);
-        energyPVPub.publish(energyPV(), 4);
-        energyHeatPub.publish(energyHeat(), 4);
-        //
-        //tempLowPub.publish(tempLow, 4);
-        //tempHighPub.publish(tempHigh, 4);
-        tempLowPub.publish(tempLow, 4);
-        tempHighPub.publish(tempHigh, 4);
-      }else{
-        Serial.println("ERROR: MQTT Broker not rechable. ");
+      // This is needed at the top of the loop!
+      mqttClient.loop();
+ 
+      // Ensure that we are subscribed to the topic "MakerIOTopic"
+      mqttClient.subscribe("MakerIOTopic");
+ 
+      // Attempt to publish a value to the topic "MakerIOTopic"
+      if(mqttClient.publish("MakerIOTopic", "Hello World"))
+      {
+        Serial.println("Publish message success");
       }
+      else
+      {
+        Serial.println("Could not send message :(");
+      }
+      
+      
+      //union F{float f_val; uint8_t c_val[4];};
+      //F converter;
+      //converter.f_val = powerPV;
+      char payload[41];
+      dtostrf(powerPV, 0, 0, payload);
+      
+      mqttClient.publish(AIO_USERNAME "/powerPV", payload);
+      //mqttClient.publish(AIO_USERNAME "/powerHeat", powerHeat);
+      //mqttClient.publish(AIO_USERNAME "/powerBal, powerBal");
+      //mqttClient.publish(AIO_USERNAME "/energyImport", energyImport);
+      //mqttClient.publish(AIO_USERNAME "/energyExport", energyExport);
+      /*mqttClient.publish(AIO_USERNAME "/energyPV");
+      mqttClient.publish(AIO_USERNAME "/energyHeat");
+      mqttClient.publish(AIO_USERNAME "/tempLow");
+      mqttClient.publish(AIO_USERNAME "/tempHigh");
+      mqttClient.publish(AIO_USERNAME "/version");
+      mqttClient.publish(AIO_USERNAME "/status");*/
+      
  
       Serial.println("=====================================");
     }
@@ -154,25 +189,21 @@ void handle_server(){
  
 
 
-bool MQTT_connect() {
-  int8_t ret;
-
-  // Stop if already connected.
-  if (mqtt.connected()) {
-    return;
+void subscribeReceive(char* topic, byte* payload, unsigned int length)
+{
+  // Print the topic
+  Serial.print("Topic: ");
+  Serial.println(topic);
+ 
+  // Print the message
+  Serial.print("Message: ");
+  for(int i = 0; i < length; i ++)
+  {
+    Serial.print(char(payload[i]));
   }
-
-  Serial.print("Connecting to MQTT... ");
-
-  if ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
-       Serial.println(mqtt.connectErrorString(ret));
-       Serial.println("Retrying MQTT connection in 5 seconds...");
-       mqtt.disconnect();
-       return false;
-  }else{
-    Serial.println("MQTT Connected!");
-    return true;
-  }
+ 
+  // Print a newline
+  Serial.println("");
 }
 
 void print_server_info(){

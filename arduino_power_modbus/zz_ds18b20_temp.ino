@@ -28,15 +28,15 @@ void handle_temp(){
     if((lastUpdateDS+updatePeriodDS)<millis()){
       lastUpdateDS = millis();
 
-    //ds.selectNext();
+    ds.selectNext();
     Serial.print("tempHigh: ");
-    //tempHigh = ds.getTempC();
+    tempHigh = ds.getTempC();
     Serial.print(tempHigh);
     Serial.println(" °C");
 
-    //ds.selectNext();
+    ds.selectNext();
     Serial.print("tempLow: ");
-    //tempLow = ds.getTempC();
+    tempLow = ds.getTempC();
     Serial.print(tempLow);
     Serial.println(" °C");
   
