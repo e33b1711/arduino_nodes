@@ -50,13 +50,14 @@ long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
        
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
+#define DHTTYPE DHT22
 const int num_t_states      = 0;
 const long period_t         = 1800000;                                                                                  //update periode in ms
 const String t_address[]    = {"TI_33", "TI_32", "TI_31", "TI_30", "TI_29", "TI_28", "TI_27", "TI_26"};                                     
 const int t_pin[]           = {33, 32, 31, 30, 29, 28, 27, 26};
 int value_t[]               = {0,  0,  0,  0,  0,  0,  0,  0};                                            //temperatur
 int aux_value_t[]           = {0,  0,  0,  0,  0,  0,  0,  0};                                           //feuchtigkeit
-long time_t                 = 0;                                                                                          //update timer
+long s_time_t                 = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                              //cycle_counter
                                                                                          //cycle_counter
 
@@ -254,7 +255,7 @@ void user_logic()
   }
   //timer: running
   if ((address_to_value("ZE_EG_VH")==1) & (timer_on==true)){
-    if ((set_time_l[8]+180000)<millis()){
+    if ((set_time_l[16]+180000)<millis()){
       write_state("LI_EG_VH",0);
       write_state("ZE_EG_VH",0);
       timer_on=false;
