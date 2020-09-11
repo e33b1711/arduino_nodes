@@ -1,9 +1,15 @@
+//watchdog
+extern void setup_watchdog(void);
+extern void watchdog_off(void);
+extern void handle_watchdog();
+
 void setup(){
 
    //init debug interface
   init_debug();
 
   // init states
+  setup_watchdog();
   setup_a_b_c();
   setup_t();
   setup_h();
@@ -20,6 +26,9 @@ void setup(){
 
 void loop()
 {
+
+  //watchdog
+  handle_watchdog();
 
   //react to messages
   handle_comm();

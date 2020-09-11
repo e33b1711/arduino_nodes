@@ -9,4 +9,5 @@ handler_r.ino
 handler_s.ino
 handler_t.ino
 handler_u.ino
+handle_watchdog.ino
 main_loop.ino
