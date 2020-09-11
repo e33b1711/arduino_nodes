@@ -51,13 +51,14 @@ long time_c_pos[]={0, 0, 0, 0, 0, 0, 0, 0};        //zeit der letzen steigenden 
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
+#define DHTTYPE DHT22
 const int num_t_states=2;
 const long period_t=1800000;                                                                                  //update periode in ms
 const String t_address[]={"TI_GR", "TI_GR_A"};                                                                                                           //addresse
 const int t_pin[]={ 22, 24};
 int value_t[]={ 0,   0};                                            //temperatur
 int aux_value_t[]={  0,   0};                                            //feuchtigkeit
-long time_t=0;                                                                                          //update timer
+long s_time_t=0;                                                                                          //update timer
 int i_t=0;                                                                                              //cycle_counter
   
 
