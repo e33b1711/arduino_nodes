@@ -17,22 +17,22 @@ const int port                  = 8888;
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a           = 0;
-const int num_b_states  = 3;
-const int b_pin[]       = {19, 18, 5};       //a state auf der selben unit                         
-int value_b[]           = {0,  0,  0};       //an/aus
-int prev_value_b[]      = {0,  0,  0};       //an/aus (alter Wert zur Flankenerkennung)
+const int num_b_states  = 4;
+const int b_pin[]       = {14, 27, 26, 25};       //a state auf der selben unit                         
+int value_b[]           = {0,  0,  0,  0};       //an/aus
+int prev_value_b[]      = {0,  0,  0,  0};       //an/aus (alter Wert zur Flankenerkennung)
 
 
 //constants and variables for c states (flanke eines b states)
 //0     taster innen
 //1     garagentor down
 //2     garagentor up
-const int num_c_states  = 3;
-const int which_b[]     = {0,  1,  2};        //a state auf der selben unit                         
-int value_c[]           = {0,  0,  0};        //positive flanke
-int aux_value_c[]       = {0,  0,  0};        //negative flanke
-long time_c_neg[]       = {0,  0,  0};        //zeit der letzen fallenden flanke
-long time_c_pos[]       = {0,  0,  0};        //zeit der letzen steigenden flanke
+const int num_c_states  = 4;
+const int which_b[]     = {0,  1,  2,  0};        //a state auf der selben unit                         
+int value_c[]           = {0,  0,  0,  0};        //positive flanke
+int aux_value_c[]       = {0,  0,  0,  0};        //negative flanke
+long time_c_neg[]       = {0,  0,  0,  0};        //zeit der letzen fallenden flanke
+long time_c_pos[]       = {0,  0,  0,  0};        //zeit der letzen steigenden flanke
 
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -61,11 +61,11 @@ int value_h[]={0, 0};
  * ...
  */
 const int num_l_states      = 7;
-const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_TR"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {14, 12, 27, -1, -1, -1, 26};                //digitaler pin
-const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0};                //digitaler pin
-int value_l[]               = {0,  0,  0,  0,  0,  0,  0};
-long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0};
+const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {19, 18, 5,  -1, -1, -1, 17, 21};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0};
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0};
 
 
 
@@ -73,8 +73,8 @@ long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0};
 // über an/aus und richtungsrelais gesteuert
 const int num_r_states            = 1;
 const String r_address[]          = {"DO_GR"};       //addresse
-const String r_trigger_up[]       = {"DO_GR_TR"};         //l state
-const String r_trigger_do[]       = {"DO_GR_TR"};         //l state
+const String r_trigger_up[]       = {"DO_GR_UP"};         //l state
+const String r_trigger_do[]       = {"DO_GR_DO"};         //l state
 const int r_down[]                = {1};         // c state up sensor
 const int r_up[]                  = {2};       // c state down sensor
 int value_r[]                     = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
