@@ -48,6 +48,7 @@ extern int pwm_setpoint;
 extern unsigned long watchdog_counter;
 extern float target_power;
 extern int control_mode;
+extern void heat_off();
 
 
 //modbus
@@ -110,13 +111,16 @@ void watchdogOff(void){
 }
 
 ISR(WDT_vect){
+  heat_off();
   Serial.println(">>>>>>>>>>>>>>>>>>>>>HW Watchdog Interrupt<<<<<<<<<<<<<<<<<<<");
 }
 
 
 void loop() {
   handle_time();
+  asm("WDR");
   handle_server();
+  asm("WDR");
   update_heating();
   update_s0();
   handle_debug();

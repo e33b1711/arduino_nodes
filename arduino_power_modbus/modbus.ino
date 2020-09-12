@@ -96,12 +96,14 @@ void handle_modbus(){
 //called from debug
 void print_modbus_info(){
     Serial.println("=============MODBUS INFO==========");
-    Serial.print("Modbus data vaild:");   Serial.println(sdm_data_valid);
-    Serial.print("Balanced power: ");     Serial.println(bal_power,3);
-    Serial.print("bal_power_valid: ");    Serial.println(bal_power_valid);
-    Serial.print("energyExport: ");       Serial.println(energyExport,3);
+    Serial.print("Modbus data vaild: ");  Serial.println(sdm_data_valid);
+    Serial.print("Balanced power:    ");  Serial.println(bal_power,3);
+    Serial.print("bal_power_valid:   ");  Serial.println(bal_power_valid);
+    Serial.print("energyExport:      ");  Serial.println(energyExport,3);
     Serial.print("unsalEnergyExport: ");  Serial.println(unsalEnergyExport,3);
     Serial.print("unsalEnergyImport: ");  Serial.println(unsalEnergyImport,3);
+    Serial.print("EnergyExport:      ");  Serial.println(sdm_data[4],3);
+    Serial.print("EnergyImport:      ");  Serial.println(sdm_data[3],3);
     Serial.println("==================================");
 }
 

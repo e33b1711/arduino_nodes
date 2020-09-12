@@ -30,6 +30,11 @@ void setup_heating(){
     Serial.println("===============================");
 }
 
+void heat_off(){
+  pinMode(pwmPin, OUTPUT);
+  analogWrite(pwmPin, 0);
+}
+
 
 //called form main loop
 void update_heating(){
