@@ -1,6 +1,7 @@
 #include <WiFi.h>
+#include <ESPmDNS.h>
 #include <WiFiUdp.h>
-//#include <ArduinoOTA.h>
+#include <ArduinoOTA.h>
 
 WiFiClient client;
 int conn_error_count    = 0;
@@ -25,7 +26,7 @@ void init_comm()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-    /*
+    
    //OTA
    ArduinoOTA.setHostname(unit_name);
    ArduinoOTA.setPassword(password);
@@ -62,7 +63,7 @@ void init_comm()
       }
     });
     ArduinoOTA.begin();
-    */
+    
 
 
 }
@@ -78,7 +79,7 @@ void send_message(String out_messageType, String out_address, int out_value){
 
 void handle_comm(){
   //OTA
-  //ArduinoOTA.handle();
+  ArduinoOTA.handle();
   
   static long last_try=0;               // a string to hold incoming data
   static boolean messageComplete = false;        // whether the string is complete
