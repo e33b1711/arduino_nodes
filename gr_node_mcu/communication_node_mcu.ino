@@ -1,7 +1,6 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
+#include <WiFi.h>
 #include <WiFiUdp.h>
-#include <ArduinoOTA.h>
+//#include <ArduinoOTA.h>
 
 WiFiClient client;
 int conn_error_count    = 0;
@@ -13,7 +12,7 @@ void init_comm()
     // We start by connecting to a WiFi network
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.mode(WIFI_STA);
+  //WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -26,6 +25,7 @@ void init_comm()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
+    /*
    //OTA
    ArduinoOTA.setHostname(unit_name);
    ArduinoOTA.setPassword(password);
@@ -62,6 +62,7 @@ void init_comm()
       }
     });
     ArduinoOTA.begin();
+    */
 
 
 }
@@ -77,7 +78,7 @@ void send_message(String out_messageType, String out_address, int out_value){
 
 void handle_comm(){
   //OTA
-  ArduinoOTA.handle();
+  //ArduinoOTA.handle();
   
   static long last_try=0;               // a string to hold incoming data
   static boolean messageComplete = false;        // whether the string is complete

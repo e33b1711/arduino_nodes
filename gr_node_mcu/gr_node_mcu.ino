@@ -6,7 +6,7 @@ extern const char *pass;
 
 //for tcp communication (node mcu)
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 
 const IPAddress                 server(192,168,178,222);
 const int port                  = 8888;
@@ -18,7 +18,7 @@ const int port                  = 8888;
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a           = 0;
 const int num_b_states  = 3;
-const int b_pin[]       = {2, 14, 12};       //a state auf der selben unit                         
+const int b_pin[]       = {19, 18, 5};       //a state auf der selben unit                         
 int value_b[]           = {0,  0,  0};       //an/aus
 int prev_value_b[]      = {0,  0,  0};       //an/aus (alter Wert zur Flankenerkennung)
 
@@ -37,12 +37,13 @@ long time_c_pos[]       = {0,  0,  0};        //zeit der letzen steigenden flank
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 #define DHTTYPE DHT22
-const int num_t_states      = 1;
+#define DHTPIN1 22
+#define DHTPIN2 23
+const int num_t_states      = 2;
 const long period_t         = 1800000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_GR"};                                                                                                           //addresse
-const int t_pin[]           = {13};
-int value_t[]               = {0};                                            //temperatur
-int aux_value_t[]           = {0};                                            //feuchtigkeit
+const String t_address[]    = {"TI_GR", "TI_GR_A"};                                                                                                           //addresse
+int value_t[]               = {0,  0};                                            //temperatur
+int aux_value_t[]           = {0,  0};                                            //feuchtigkeit
 long s_time_t               = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                              //cycle_counter
   
@@ -61,7 +62,7 @@ int value_h[]={0, 0};
  */
 const int num_l_states      = 7;
 const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_TR"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {16, 5,  4,  -1, -1, -1, 0};                //digitaler pin
+const int l_pin[]           = {14, 12, 27, -1, -1, -1, 26};                //digitaler pin
 const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0};
 long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0};
