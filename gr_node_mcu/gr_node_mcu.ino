@@ -60,12 +60,12 @@ int value_h[]={0, 0};
  * 1 aussen
  * ...
  */
-const int num_l_states      = 7;
-const String l_address[]    = {"LI_GR", "LI_GR_L1", "LI_GR", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2", "DO_GR_DO", "DO_GR_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {19, 18, 5,  -1, -1, -1, 17, 21};                //digitaler pin
-const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
-int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0};
-long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0};
+const int num_l_states      = 11;
+const String l_address[]    = {"LI_GR", "LI_GR", "LI_GR_L1", "LI_GR_L2", "LI_GR_L3", "LI_GR_L4", "DO_GR_UP", "DO_GR_DO", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {0, 21,  4,  16, 17, 5,  18, 19, -1, -1, -1};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
 
 
