@@ -62,7 +62,7 @@ int value_h[]={0, 0};
  */
 const int num_l_states      = 11;
 const String l_address[]    = {"LI_GR", "LI_GR", "LI_GR_L1", "LI_GR_L2", "LI_GR_L3", "LI_GR_L4", "DO_GR_UP", "DO_GR_DO", "ZE_GR_0", "ZE_GR_1", "ZE_GR_2"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {0, 21,  4,  16, 17, 5,  18, 19, -1, -1, -1};                //digitaler pin
+const int l_pin[]           = {0,  4, 21,  16, 17, 5,  18, 19, -1, -1, -1};                //digitaler pin
 const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
@@ -126,7 +126,7 @@ void user_logic(){
   prev_value = address_to_value("DO_GR");
 
   //timer innenbeleuchtung lang (taster)
-  i=3;
+  i=8;
   static boolean timer_0_on=false;
   //start
   if ((address_to_value("ZE_GR_0")==1) & (timer_0_on==false)){
@@ -152,7 +152,7 @@ void user_logic(){
 
 
   //timer innenbeleuchtung kurz (einfahrt)
-   i=4;
+   i=9;
   static boolean timer_1_on=false;
   //start
   if ((address_to_value("ZE_GR_1")==1) & (timer_1_on==false)){
@@ -178,7 +178,7 @@ void user_logic(){
 
 
   //timer außen, mit vordach timer auslösen
-  i=5;
+  i=10;
   static boolean timer_2_on=false;
   //start
   if ((address_to_value("ZE_GR_2")==1) & (timer_2_on==false)){
