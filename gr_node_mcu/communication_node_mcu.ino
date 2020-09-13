@@ -161,6 +161,10 @@ void handle_comm(){
     if (in_messageType=="post_all" && addressString==unit_name){
       post_all(); 
     }
+    if (in_messageType=="restart" && addressString==unit_name){
+      send_message("info", String(unit_name) + " restarting", 0);
+      ESP.restart();
+    }
     if (in_messageType=="r") {
       if (is_my_state(addressString)){
         send_message("i", addressString, address_to_value(addressString));
