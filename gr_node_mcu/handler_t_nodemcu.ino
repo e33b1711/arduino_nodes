@@ -48,7 +48,7 @@ void handle_one_t(int i){
     value_t[i] = t*10;
     value_h[i] = h*10;
     send_message("w", t_address[i], value_t[i]);
-    send_message("w", h_address[i], value_h[i]);
+    send_message("w", h_address[i], value_h[i]*0.1);
     send_message("w", "E"+t_address[i], 0);
     Serial.print("handle_one_t: value_t: "); Serial.print(value_t[i]); 
     Serial.print(" value_h: "); Serial.print(value_h[i]);
