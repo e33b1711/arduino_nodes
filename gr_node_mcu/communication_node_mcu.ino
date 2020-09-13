@@ -16,9 +16,15 @@ void init_comm()
   //WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
 
+  int retries=0;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    retries++;
+    if (retries==10){
+        Serial.println("Getting no WIFI, rebooting...");
+        ESP.restart();
+    }
   }
   Serial.println("");
 
