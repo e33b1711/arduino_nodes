@@ -94,7 +94,24 @@ void handle_comm(){
 
 
   //reconnect Wifi eventually
-  //with throttle to avoid blocking the unit!
+  static int wifi_retry = 0;
+  if(WiFi.status() != WL_CONNECTED) {
+      wifi_retry++;
+      Serial.println("WiFi not connected. Try to reconnect");
+      WiFi.disconnect();
+      WiFi.mode(WIFI_OFF);
+      WiFi.mode(WIFI_STA);
+      WiFi.begin(ssid, pass);
+      delay(100);
+  }
+  if(WiFi.status() != WL_CONNECTED && wifi_retry >= 5) {
+      Serial.println("\nReboot");
+      ESP.restart();
+  }
+  if(WiFi.status() == WL_CONNECTED){
+      wifi_retry = 0;
+  }
+ 
 
   //check if still connected, eventually reconnect
   if ((!client.connected())) {
