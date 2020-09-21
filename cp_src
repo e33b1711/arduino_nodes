@@ -15,7 +15,15 @@ rm ./og_ost/eg_ost.ino
 cp ./eg_ost/* ./ug
 rm ./ug/eg_ost.ino
 
-cp ./eg_ost/* ./gr
-rm ./gr/eg_ost.ino
-rm ./gr/handler_r.ino
+cp ./eg_ost/* ./gr_node_mcu
+rm ./gr_node_mcu/eg_ost.ino
+rm ./gr_node_mcu/handler_r.ino
+rm ./gr_node_mcu/handler_watchdog.ino
+
+cp ./eg_ost/* ./ch_node_mcu
+cp ./gr_node_mcu/communication_node_mcu.ino     ./ch_node_mcu
+cp ./gr_node_mcu/wifi_credentials.ino           ./ch_node_mcu
+cp ./gr_node_mcu/handler_watchdog_mcu.ino       ./ch_node_mcu
+rm ./gr_node_mcu/eg_ost.ino
+rm ./gr_node_mcu/handler_watchdog.ino
 

@@ -1,4 +1,5 @@
 communication.ino
+communication_node_mcu.ino
 handler_a_b_c.ino
 handler_all_states.ino
 handler_debug.ino
@@ -9,5 +10,7 @@ handler_r.ino
 handler_s.ino
 handler_t.ino
 handler_u.ino
-handler_watchdog.ino
 main_loop.ino
+handler_watchdog.ino
+ssid.ino
+wifi_credentials.ino
