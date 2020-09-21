@@ -17,12 +17,19 @@ rm ./ug/eg_ost.ino
 
 cp ./eg_ost/* ./gr_node_mcu
 rm ./gr_node_mcu/eg_ost.ino
+rm ./gr_node_mcu/handler_t.ino
+rm ./gr_node_mcu/communication.ino
+rm ./ch_node_mcu/handler_watchdog.ino
 rm ./gr_node_mcu/handler_r.ino
-rm ./gr_node_mcu/handler_watchdog.ino
+
 
 cp ./eg_ost/* ./ch_node_mcu
+rm ./ch_node_mcu/eg_ost.ino
+rm ./ch_node_mcu/handler_t.ino
+rm ./ch_node_mcu/communication.ino
+rm ./ch_node_mcu/handler_watchdog.ino
 cp ./gr_node_mcu/communication_node_mcu.ino     ./ch_node_mcu
 cp ./gr_node_mcu/handler_watchdog_mcu.ino       ./ch_node_mcu
-rm ./ch_node_mcu/eg_ost.ino
-rm ./ch_node_mcu/handler_watchdog.ino
+cp ./ch_node_mcu/handler_t_nodemcu.ino          ./ch_node_mcu
+
 
