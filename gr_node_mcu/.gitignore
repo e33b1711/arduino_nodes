@@ -12,6 +12,5 @@ handler_t_nodemcu.ino
 handler_u.ino
 main_loop.ino
 handler_watchdog.ino
-handler_watchdog_mcu.ino
 ssid.ino
 wifi_credentials.ino
