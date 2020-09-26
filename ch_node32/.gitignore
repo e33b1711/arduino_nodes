@@ -1,5 +1,5 @@
 communication.ino
-communication_nodemcu.ino
+communication_esp32.ino
 handler_a_b_c.ino
 handler_all_states.ino
 handler_debug.ino
@@ -9,9 +9,10 @@ handler_l.ino
 handler_r.ino
 handler_s.ino
 handler_t.ino
-handler_t_nodemcu.ino
+handler_t_node32.ino
 handler_u.ino
 main_loop.ino
 handler_watchdog.ino
+handler_watchdog_esp32.ino
 ssid.ino
 wifi_credentials.ino

@@ -1,12 +1,11 @@
 //this nodes name
-const char* unit_name   = "ch";
+const char* unit_name   = "ch_node32";
 const char* password    = "pass";
 extern const char* ssid;
 extern const char* pass;
 
 //for tcp communication (node mcu)
-//watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 
 const IPAddress                 server(192,168,178,222);
 const int port                  = 8888;
@@ -17,7 +16,7 @@ const int port                  = 8888;
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a           = 0;
-const int num_b_states  = 0;
+const int num_b_states  = 4;
 const int b_pin[]       = {14, 27, 26, 25};       //a state auf der selben unit                         
 int value_b[]           = {0,  0,  0,  0};       //an/aus
 int prev_value_b[]      = {0,  0,  0,  0};       //an/aus (alter Wert zur Flankenerkennung)
@@ -27,7 +26,7 @@ int prev_value_b[]      = {0,  0,  0,  0};       //an/aus (alter Wert zur Flanke
 //0     taster innen
 //1     garagentor down
 //2     garagentor up
-const int num_c_states  = 0;
+const int num_c_states  = 4;
 const int which_b[]     = {0,  1,  2,  0};        //a state auf der selben unit                         
 int value_c[]           = {0,  0,  0,  0};        //positive flanke
 int aux_value_c[]       = {0,  0,  0,  0};        //negative flanke
@@ -50,8 +49,8 @@ int i_t                     = 0;                                                
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
 const int num_h_states=2;
-const String h_address[]={"HI_GR", "HI_GR_A"};       //addresse
-int value_h[]={0, 0};
+const String h_address[]    ={"HI_GR", "HI_GR_A"};       //addresse
+int value_h[]               ={0, 0};
 
   
 //constants and variables for l states (einfaches licht / verbraucher)
@@ -61,7 +60,7 @@ int value_h[]={0, 0};
  * ...
  */
 const int num_l_states      = 4;
-const String l_address[]    = {"DO_CH_UP", "DO_CH_DO", "CH_PUMP", "CH_LI"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"DO_CH_UP", "DO_CH_DO", "CH_PUMP", "LI_CH"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {0,  4, 21,  16};                //digitaler pin
 const bool l_inv[]          = {0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0};

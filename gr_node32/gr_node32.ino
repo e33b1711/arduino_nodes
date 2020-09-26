@@ -1,11 +1,10 @@
 //this nodes name
-const char* unit_name   = "gr_nm";
+const char* unit_name   = "gr_node32";
 const char* password    = "pass";
 extern const char *ssid;
 extern const char *pass;
 
 //for tcp communication (node mcu)
-//watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <WiFi.h>
 
 const IPAddress                 server(192,168,178,222);
