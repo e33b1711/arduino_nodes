@@ -1,5 +1,5 @@
 //this nodes name
-const char* unit_name   = "ch_node32";
+const char* unit_name   = "ch";
 const char* password    = "pass";
 extern const char* ssid;
 extern const char* pass;
