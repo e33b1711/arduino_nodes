@@ -3,7 +3,7 @@ void setup_s()
   Serial.println("setup_s");
   int i;
   for (i=0; i<num_s_states; i++){
-    send_message("w", s_address[i], value_r[i]);
+    send_message("w", s_address[i], value_s[i]);
     stop_time_s[i]=millis()+down_time_s[i];;
   }
 }
