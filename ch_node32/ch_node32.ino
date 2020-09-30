@@ -38,9 +38,9 @@ long time_c_pos[]       = {0,  0,  0,  0};        //zeit der letzen steigenden f
 #define DHTTYPE DHT22
 #define DHTPIN1 22
 #define DHTPIN2 23
-const int num_t_states      = 2;
+const int num_t_states      = 1;
 const long period_t         = 1800000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_CH", "TI_CHA"};                                                                                                           //addresse
+const String t_address[]    = {"TI_CH", "TI_CH_A"};                                                                                                           //addresse
 int value_t[]               = {0,  0};                                            //temperatur
 int aux_value_t[]           = {0,  0};                                            //feuchtigkeit
 long s_time_t               = 0;                                                                                          //update timer
@@ -48,8 +48,8 @@ int i_t                     = 0;                                                
   
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
-const int num_h_states=2;
-const String h_address[]    ={"HI_GR", "HI_GR_A"};       //addresse
+const int num_h_states=1;
+const String h_address[]    ={"HI_CH", "HI_CH_A"};       //addresse
 int value_h[]               ={0, 0};
 
   
@@ -60,8 +60,8 @@ int value_h[]               ={0, 0};
  * ...
  */
 const int num_l_states      = 4;
-const String l_address[]    = {"DO_CH_UP", "DO_CH_DO", "CH_PUMP", "LI_CH"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {0,  4, 21,  16};                //digitaler pin
+const String l_address[]    = {"DO_CH_UP", "DO_CH_DO", "PUMP", "LI_CH"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {17, 19, 18, 5};                //digitaler pin
 const bool l_inv[]          = {0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0};
 long set_time_l[]           = {0,  0,  0,  0};
