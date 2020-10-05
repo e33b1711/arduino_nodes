@@ -16,11 +16,11 @@ cp ./eg_ost/* ./ug
 rm ./ug/eg_ost.ino
 
 cp ./eg_ost/* ./gr_node32
-rm ./gr_node_mcu/eg_ost.ino
-rm ./gr_node_mcu/handler_t.ino
-rm ./gr_node_mcu/communication.ino
-rm ./gr_node_mcu/handler_watchdog.ino
-rm ./gr_node_mcu/handler_r.ino
+rm ./gr_node32/eg_ost.ino
+rm ./gr_node32/handler_t.ino
+rm ./gr_node32/communication.ino
+rm ./gr_node32/handler_watchdog.ino
+rm ./gr_node32/handler_r.ino
 
 
 cp ./eg_ost/* ./ch_node32
@@ -29,6 +29,7 @@ rm ./ch_node32/handler_t.ino
 rm ./ch_node32/communication.ino
 rm ./ch_node32/handler_watchdog.ino
 cp ./gr_node32/handler_watchdog_esp32.ino     ./ch_node32
-cp ./gr_node32/handler_t_esp32.ino          ./ch_node32
+cp ./gr_node32/handler_t_esp32.ino            ./ch_node32
+cp ./gr_node32/communication_esp32.ino        ./ch_node32
 
 
