@@ -86,9 +86,9 @@ const int num_s_states      = 1;
 const String s_address[]    = {"DO_CH"};       //addresse
 const String s_up[]         = {"DO_CH_UP"};         //l state
 const String s_down[]       = {"DO_CH_DO"};          //l state
-const int up_time_s[]       = {5000};       // zeit zum öffnen in ms
-const int down_time_s[]     = {5000};       // zeit zum schließen in ms
-int value_s[]               = {-1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+const int up_time_s[]       = {8000};       // zeit zum öffnen in ms
+const int down_time_s[]     = {8000};       // zeit zum schließen in ms
+int value_s[]               = {0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]          = {0};          // zeit zu stoppen
 
   
