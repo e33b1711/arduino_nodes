@@ -4,12 +4,12 @@ void setup_u()
   int i;
   for (i=0; i<num_u_states; i++){
     send_message("w", u_address[i], value_u[i]);
-    digitalWrite(u_pin[i],HIGH);
+    digitalWrite(u_pin[i],LOW);
     pinMode(u_pin[i],OUTPUT);
   }
   for (i=0; i<num_u_states; i++){
     delay(400);
-    digitalWrite(u_pin[i],LOW);
+    digitalWrite(u_pin[i],HIGH);
   }
   previousMillis=millis();
 }
@@ -26,9 +26,9 @@ void update_u()
     for (i=0; i<num_u_states; i++){
       //Serial.println(value_u[i]>=((u_phase + 2*i) % 16));
       if (value_u[i]>((u_phase + 2*i) % 15)){
-        digitalWrite(u_pin[i],LOW);
-      }else{
         digitalWrite(u_pin[i],HIGH);
+      }else{
+        digitalWrite(u_pin[i],LOW);
       }
     }
   } 
