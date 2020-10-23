@@ -69,12 +69,12 @@ int value_h[]               = {0,  0,  0,  0,  0,  0,  0,  0};
 
 
 //constants and variables for l states (einfaches licht / verbraucher)
-const int num_l_states      = 24;
-const String l_address[]    = {"LI_34", "LI_35", "LI_36", "LI_37", "LI_38", "LI_39", "LI_40", "LI_41", "LI_EG_WZ", "LI_EG_WZ_L1", "LI_EG_WC", "LI_GA_L1", "LI_EG_GR", "LI_EG_GA", "LI_EG_WZ_L2", "LI_EG_VH", "ZE_EG_VH", "LI_55", "LI_56", "LI_57", "LI_58", "LI_59", "LI_60", "LI_61"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61};                //digitaler pin
-const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
-int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
-long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
+const int num_l_states      = 16;
+const String l_address[]    = {"LI_EG_WZ", "LI_EG_WZ_L1", "LI_EG_WC", "LI_GA_L1", "LI_EG_GR", "LI_EG_GA", "LI_EG_WZ_L2", "LI_EG_VH", "ZE_EG_VH", "LI_55", "LI_56", "LI_57", "LI_58", "LI_59", "LI_60", "LI_61"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61};                //digitaler pin
+const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
 
 
 
@@ -114,10 +114,10 @@ long stop_time_s[]          = {0,  0};          // zeit zu stoppen
 const int num_u_states          = 7;
 const String u_address[]        = {"U_EG_WZ", "U_EG_GR", "U_EG_E1", "U_EG_E2", "U_EG_WC", "U_EG_GA", "U_EG_KU", "U_41"};        //addresse
 const int u_pin[]               = {34, 35, 36, 37, 38, 39, 40, 41};               //pwm-pin  
-const unsigned long u_interval  = 240000;          //pwm periode /16 in milisekunden
+const unsigned long u_interval  = 1000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis    = 0;
 int u_phase                     = 0;
-int value_u[]                   = {3, 3, 3, 3, 3, 3, 3, 3};               //stell wert 0-15 (0=aus bis 15=voll)
+int value_u[]                   = {15, 15, 15, 15, 0, 0, 0, 0};               //stell wert 0-15 (0=aus bis 15=voll)
 
 
 void user_logic()
