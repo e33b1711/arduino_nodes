@@ -102,10 +102,11 @@ long stop_time_s[]          = {0,  0};          // zeit zu stoppen
 
 
 //constants and variables for u states (temperatur steller)
-//                              0                1                  2                 3              4                5
-//                              hobby1           hobby2             hobby3            gang          lager             waschküche
+// grün gelb  blau  rot   grau  weiß
+// 34   35    36    37    38    39  
+// H    Lager WK    H     Flur  H
 const int num_u_states          = 6;
-const String u_address[]        = {"U_UG_WK", "U_UG_LA", "U_UG_GA", "U_UG_H1", "U_UG_H2", "U_UG_H3"};        //addresse
+const String u_address[]        = {"U_UG_H1", "U_UG_LA", "U_UG_WK", "U_UG_H2", "U_UG_GA", "U_UG_H3"};        //addresse
 const int u_pin[]               = {34, 35, 36, 37, 38, 39, 40, 41};               //pwm-pin  
 const unsigned long u_interval  = 240000;          //pwm periode /16 in milisekunden
 unsigned long previousMillis    = 0;
