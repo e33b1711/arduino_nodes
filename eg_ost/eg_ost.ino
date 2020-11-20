@@ -255,7 +255,7 @@ void user_logic()
   }
   //timer: running
   if ((address_to_value("ZE_EG_VH")==1) & (timer_on==true)){
-    if ((set_time_l[16]+180000)<millis()){
+    if ((set_time_l[8]+180000)<millis()){
       write_state("LI_EG_VH",0);
       write_state("ZE_EG_VH",0);
       timer_on=false;
