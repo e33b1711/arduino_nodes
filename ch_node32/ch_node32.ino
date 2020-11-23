@@ -16,7 +16,7 @@ const int port                  = 8888;
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
 int counter_a           = 0;
-const int num_b_states  = 4;
+const int num_b_states  = 0;
 const int b_pin[]       = {14, 27, 26, 25};       //a state auf der selben unit                         
 int value_b[]           = {0,  0,  0,  0};       //an/aus
 int prev_value_b[]      = {0,  0,  0,  0};       //an/aus (alter Wert zur Flankenerkennung)
@@ -26,7 +26,7 @@ int prev_value_b[]      = {0,  0,  0,  0};       //an/aus (alter Wert zur Flanke
 //0     taster innen
 //1     garagentor down
 //2     garagentor up
-const int num_c_states  = 4;
+const int num_c_states  = 0;
 const int which_b[]     = {0,  1,  2,  0};        //a state auf der selben unit                         
 int value_c[]           = {0,  0,  0,  0};        //positive flanke
 int aux_value_c[]       = {0,  0,  0,  0};        //negative flanke
@@ -59,12 +59,12 @@ int value_h[]               ={0, 0};
  * 1 aussen
  * ...
  */
-const int num_l_states      = 4;
-const String l_address[]    = {"DO_CH_UP", "DO_CH_DO", "PUMP", "LI_CH"};       //addresse, zum gleichschalten selbe addresse vergeben
-const int l_pin[]           = {17, 19, 18, 5};                //digitaler pin
-const bool l_inv[]          = {0,  0,  0,  0};                //digitaler pin
-int value_l[]               = {0,  0,  0,  0};
-long set_time_l[]           = {0,  0,  0,  0};
+const int num_l_states      = 7;
+const String l_address[]    = {"DO_CH_UP", "DO_CH_DO", "PUMP", "LI_CH", "LI_CH_L2", "LI_CH_L3", "LI_CH_L4"};       //addresse, zum gleichschalten selbe addresse vergeben
+const int l_pin[]           = {17, 19, 18, 5, 25, 26, 27};                //digitaler pin
+const bool l_inv[]          = {0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+int value_l[]               = {0,  0,  0,  0,  0,  0,  0};
+long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0};
 
 
 
