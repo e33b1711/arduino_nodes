@@ -10,6 +10,18 @@ void setup_debug(){
   last_update_debug = millis();
 }
 
+void handle_debug(){
+  //print sensor values & setpoint periodically
+    if (last_update_debug+debug_update_interval < millis()){
+        last_update_debug = millis();
+        print_s0_info();
+        print_modbus_info();
+        print_temp_info();
+        print_time_info();
+    } 
+}
+
+/*
 //called form main loop
 void handle_debug(){
   //print sensor values & setpoint periodically
@@ -62,3 +74,4 @@ void handle_debug(){
         }   
     }
 }
+*/

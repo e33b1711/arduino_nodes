@@ -37,7 +37,7 @@ void setup_s0(){
     Serial.println("===============================");
 }
 
-void update_s0(){
+void handle_s0(){
     /*
     Serial.print("powerUtility: ");
     Serial.println(powerUtility);
@@ -124,6 +124,7 @@ void onPulse2(){
     powerPV = (powerConstant2 / (pulseTime2 - lastTime2));
     //Serial.println("...");
 }
+
 
 float energyImport(){
     return energyConstant0 * pulseCount0;

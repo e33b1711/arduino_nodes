@@ -1,11 +1,12 @@
-float tempHigh, tempLow;
-
 #include <DS18B20.h>
 
 DS18B20 ds(A7);
 
 long lastUpdateDS;
 const long updatePeriodDS = 10000;
+
+float tempHigh, tempLow;
+bool temp_valid;
 
 
 
@@ -52,7 +53,8 @@ void handle_temp(){
 
     if((lastUpdateDS+updatePeriodDS)<millis()){
         lastUpdateDS = millis();
-
+        
+        temp_valid = true;
         while (ds.selectNext()) {
             uint8_t address[8];
             ds.getAddress(address);
@@ -60,18 +62,28 @@ void handle_temp(){
             case 51:
                 Serial.print("tempHigh: ");
                 tempHigh = ds.getTempC();
-                Serial.print(tempHigh);
-                Serial.println(" °C");
+                //Serial.print(tempHigh);
+                //Serial.println(" °C");
                 break;
             case 189:
                 Serial.print("tempLow: ");
                 tempLow = ds.getTempC();
-                Serial.print(tempLow);
-                Serial.println(" °C");
+                //Serial.print(tempLow);
+                //Serial.println(" °C");
                 break;
             default:
                 Serial.println("ERROR: DS Address unknown."); 
+                temp_valid = false;
             }
         }   
     }
+}
+
+
+void print_temp_info(){
+    Serial.println("=============DS18B20 INFO==========");
+    Serial.print("temp_valid: ");  Serial.println(temp_valid);
+    Serial.print("tempHigh:   ");  Serial.println(tempHigh, 3);
+    Serial.print("tempLow:    ");  Serial.println(tempLow, 3);
+    Serial.println("==================================");
 }
