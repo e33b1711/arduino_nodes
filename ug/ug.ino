@@ -69,7 +69,7 @@ int value_h[]               = {0, 0, 0, 0, 0, 0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states=8;
-const String l_address[]    = {"LI_UG_HO", "LI_UG_HK", "LI_UG_GA", "BELL", "PUMP", "LI_UG_GA", "LI_UG_WK", "LI_UG_HN"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"LI_UG_HO", "LI_UG_HK", "LI_UG_TR", "BELL", "PUMP", "LI_UG_GA", "LI_UG_WK", "LI_UG_HN"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {42, 43, 44, 45, 46, 47, 48, 49};                //digitaler pin
 const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0};
@@ -136,13 +136,12 @@ void user_logic()
   i=3;
   if (value_c[i]==1){
      toggle_state("LI_UG_GA");
-    
   }
   i=4;
   if (value_c[i]==1){
      toggle_state("LI_UG_GA");
-    
   }
+  
   //7 Hobby Süd
   i=7;
   if (value_c[i]==-1){
