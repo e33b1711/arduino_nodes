@@ -11,8 +11,9 @@ bool bal_power_valid                  = false;
 
 unsigned long last_time;
 
-float energyImport                      = 0;
-float energyExport                      = 0;
+float energyImport                      = 0;  //Wh
+float energyExport                      = 0;  //Wh
+const float h_per_milli                 = 1.0 / (60.0*60.0*1000.0);
 
 
 
@@ -44,14 +45,21 @@ bool modbus_get_bal_power(){
     valid           &= getRTUMore(sdm_adresses[1],1,1);
     valid           &= getRTUMore(sdm_adresses[2],1,2);
     bal_power       = sdm_data[0] + sdm_data[1] + sdm_data[2];
-    long this_time  = millis();
+    unsigned long this_time  = millis();
 
     //increment energy counters
     if (bal_power_valid and valid){
+      /*
+      Serial.println("****************");
+      Serial.println(h_per_s*(this_time-last_time),10);
+      Serial.println(bal_power, 10);
+      Serial.println(bal_power*h_per_s*(this_time-last_time), 10);
+      Serial.println("****************");
+      */
         if (bal_power>0){
-            energyImport += bal_power*(this_time-last_time)*0.001;
+            energyImport += bal_power*h_per_milli*(this_time-last_time);
         }else{
-            energyExport -= bal_power*(this_time-last_time)*0.001;
+            energyExport -= bal_power*h_per_milli*(this_time-last_time);
         }
     }
 
@@ -101,8 +109,8 @@ void handle_modbus(){
 //called from debug
 void print_modbus_info(){
     Serial.println("=============MODBUS INFO==========");
-    Serial.print("energyImport: ");         Serial.println(energyImport);
-    Serial.print("energyExport: ");         Serial.println(energyExport);
+    Serial.print("energyImport: ");         Serial.println(energyImport, 10);
+    Serial.print("energyExport: ");         Serial.println(energyExport, 10);
     Serial.print("Balanced power:    ");    Serial.println(bal_power,3);
     Serial.print("bal_power_valid:   ");    Serial.println(bal_power_valid);
     Serial.println("==================================");

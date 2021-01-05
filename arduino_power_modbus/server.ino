@@ -118,8 +118,8 @@ void handle_server(){
             publish_mqtt((char *) AIO_USERNAME "/powerPV",       0,  powerPV);
             publish_mqtt((char *) AIO_USERNAME "/powerHeat",     0,  powerHeat);
             publish_mqtt((char *) AIO_USERNAME "/powerBal",      0,  bal_power);
-            publish_mqtt((char *) AIO_USERNAME "/energyImport",  3,  energyImport);
-            publish_mqtt((char *) AIO_USERNAME "/energyExport",  3,  energyExport);
+            publish_mqtt((char *) AIO_USERNAME "/energyImport",  3,  energyImport*0.001);
+            publish_mqtt((char *) AIO_USERNAME "/energyExport",  3,  energyExport*0.001);
             publish_mqtt((char *) AIO_USERNAME "/energyPV",      3,  energyPV());
             publish_mqtt((char *) AIO_USERNAME "/energyHeat",    3,  energyHeat());
             publish_mqtt((char *) AIO_USERNAME "/tempLow",       1,  tempLow);

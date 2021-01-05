@@ -15,7 +15,7 @@ const float energyConstant2 = 0.0005;                  // "
 //Used to measure power.
 unsigned long pulseTime1,lastTime1, timeout1;
 unsigned long pulseTime2,lastTime2, timeout2;
-float powerUtility, powerHeat, powerPV = 0;
+float powerHeat, powerPV = 0;
 
 
 void setup_s0(){
