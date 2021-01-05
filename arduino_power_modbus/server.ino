@@ -128,6 +128,7 @@ void handle_server(){
             publish_mqtt((char *) AIO_USERNAME "/energyHeat",    3,  energyHeat());
             publish_mqtt((char *) AIO_USERNAME "/tempLow",       1,  tempLow);
             publish_mqtt((char *) AIO_USERNAME "/tempHigh",      1,  tempHigh);
+            publish_mqtt((char *) AIO_USERNAME "/waterWarning",  1,  waterWarning);
             publish_mqtt((char *) AIO_USERNAME "/version",           vers);
             publish_mqtt((char *) AIO_USERNAME "/status",            "started");
             Serial.println("SUCCESS.");

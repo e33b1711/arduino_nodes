@@ -37,6 +37,9 @@ float energyPV();
 //temp
 extern float tempHigh, tempLow;
 
+//water warning
+extern bool waterWarning;
+
 
 void setup() {
   setup_debug();
@@ -45,6 +48,7 @@ void setup() {
   setup_s0();
   setup_heating();
   setup_temp();
+  setup_ww();
   watchdogSetup();
 }
 
@@ -79,4 +83,5 @@ void loop() {
   handle_debug();
   handle_modbus();
   handle_temp();
+  handle_ww();
 }
