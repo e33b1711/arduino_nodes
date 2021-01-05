@@ -28,16 +28,9 @@ extern bool sdm_data_valid;
 
 
 //S0
-extern float powerUtility, powerHeat, powerPV;
-float energyImport();
+extern float powerHeat, powerPV;
 float energyHeat();
 float energyPV();
-extern long pulseCount0;
-extern long pulseCount1;
-extern long pulseCount2;
-extern float energyExport,lastEnergyExport;
-extern float unsalEnergyImportZero;
-extern float unsalEnergyExportZero;
 
 
 

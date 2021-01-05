@@ -1,22 +1,8 @@
 //for ntp time & OTA
 #include <EthernetUdp.h>
 #include <ArduinoOTA.h>
-EthernetUDP Udp;
-unsigned int localPort = 8888;                // local port to listen for UDP packets
-const int NTP_PACKET_SIZE = 48;               // NTP time stamp is in the first 48 bytes of the message
-byte packetBuffer[NTP_PACKET_SIZE];           //buffer to hold incoming and outgoing packets
-const char timeServer[] = "time.nist.gov";    // time.nist.gov NTP server
 
-const unsigned long seconds_per_day = 86400;  //exactly what it says 
 
-unsigned long  epoch_at_millis0;          //timebase referneced to millis=0
-unsigned long  epoch_at_timebase;         //time we got the timebase
-unsigned long startup_unix_day;           //unix day at statrtup
-unsigned long startup_seconds_today;      //unix secondes at statrtup
-bool timebase_valid = false;              //do we have a timebase?
-unsigned long epoch;                      //epoch updated every cycle
-unsigned long seconds_today;              //recent uninx seconds of this day
-unsigned long unix_day;                   // this unix day 
 
 
 
@@ -107,7 +93,6 @@ void setup_server(){
     //time & OTA
     Serial.println("===============================");
     Serial.println("Setting up OTA....");
-    Udp.begin(localPort);
     ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
     Serial.println("done.");
     Serial.println("===============================");
@@ -137,8 +122,8 @@ void handle_server(){
             publish_mqtt((char *) AIO_USERNAME "/powerPV",       0,  powerPV);
             publish_mqtt((char *) AIO_USERNAME "/powerHeat",     0,  powerHeat);
             publish_mqtt((char *) AIO_USERNAME "/powerBal",      0,  bal_power);
-            publish_mqtt((char *) AIO_USERNAME "/energyImport",  3,  energyImport());
-            publish_mqtt((char *) AIO_USERNAME "/energyExport",  3,  energyExport);
+            //publish_mqtt((char *) AIO_USERNAME "/energyImport",  3,  0);
+            //publish_mqtt((char *) AIO_USERNAME "/energyExport",  3,  0);
             publish_mqtt((char *) AIO_USERNAME "/energyPV",      3,  energyPV());
             publish_mqtt((char *) AIO_USERNAME "/energyHeat",    3,  energyHeat());
             publish_mqtt((char *) AIO_USERNAME "/tempLow",       1,  tempLow);
