@@ -1,24 +1,17 @@
-//for ntp time & OTA
-#include <EthernetUdp.h>
-#include <ArduinoOTA.h>
-
-
-
-
-
-//for udp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <SPI.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
 #include <PubSubClient.h>
-
+#include <ArduinoOTA.h>
 
 //ethernet
 const int ethernet_sc_pin     = 53;
 const int ethernet_reset_pin  = 50;
 const byte mac[] = {0x4E, 0xAB, 0x7E, 0xEF, 0xFE, 0x04 };
-IPAddress ip(192,168,178,213);
+const IPAddress ip(192,168,178,213);
+const IPAddress                 gateway(192,168,178,1);
+const IPAddress                 subnet(255,255,255,0);
 EthernetClient client;
 
 //mqtt
@@ -75,7 +68,7 @@ void setup_server(){
     //setup mttq
     Serial.println(F("Init the mqtt client..."));
     Ethernet.init(ethernet_sc_pin);
-    Ethernet.begin(mac, ip);
+    Ethernet.begin(mac, ip, gateway, subnet);
     delay(2000); //give the ethernet a second to initialize
 
     // Set the MQTT server to the server stated above ^
@@ -100,6 +93,9 @@ void setup_server(){
 
 //called form main loop
 void handle_server(){
+    
+    //OTA
+    ArduinoOTA.poll();
    
     if((lastServerUpd+serverUpdPeriod)<millis()){
         lastServerUpd = millis();
