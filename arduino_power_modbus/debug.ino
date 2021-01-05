@@ -25,7 +25,6 @@ void handle_debug(){
         print_heating_info();
         print_modbus_info();
         print_s0_info();
-        print_time_info();
     } 
 
 
@@ -47,16 +46,6 @@ void handle_debug(){
                 control_mode = val;
                 Serial.print("Set control_mode:");
                 Serial.println(control_mode);
-            }
-            if (inString.substring(0,12)=="clear_eeprom"){
-                clear_eeprom();
-            }
-            if (inString.substring(0,12)=="readback_at:"){
-                int val = inString.substring(12).toInt();
-                readback_log(val);
-            }
-            if (inString.substring(0,12)=="readback_log"){
-                readback_log();
             }
             inString = "";
         }   

@@ -106,20 +106,8 @@ void setup_server(){
 
     //time & OTA
     Serial.println("===============================");
-    Serial.println("Setting up time and OTA....");
+    Serial.println("Setting up OTA....");
     Udp.begin(localPort);
-    update_time();
-    if(!timebase_valid){
-        //stop
-        Serial.println("FATAL ERROR: no timebase, restart!");
-        while(true){};
-    }
-    epoch           = epoch_at_millis0 + millis()/1000;
-    seconds_today   = epoch % seconds_per_day;
-    unix_day        = epoch / seconds_per_day;
-    startup_unix_day              = unix_day;
-    startup_seconds_today         = seconds_today;
-
     ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
     Serial.println("done.");
     Serial.println("===============================");

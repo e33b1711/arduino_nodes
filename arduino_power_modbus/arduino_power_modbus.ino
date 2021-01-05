@@ -84,12 +84,9 @@ extern float tempHigh, tempLow;
 void setup() {
   setup_debug();
   setup_server();
-  //setup_time() --at server
   setup_modbus();
   setup_s0();
   setup_heating();
-  setup_log();
-  setup_extern_log();
   setup_temp();
   watchdogSetup();
 }
@@ -117,7 +114,6 @@ ISR(WDT_vect){
 
 
 void loop() {
-  handle_time();
   asm("WDR");
   handle_server();
   asm("WDR");
@@ -125,7 +121,5 @@ void loop() {
   update_s0();
   handle_debug();
   handle_modbus();
-  handle_log();
-  handle_extern_log();
   handle_temp();
 }
