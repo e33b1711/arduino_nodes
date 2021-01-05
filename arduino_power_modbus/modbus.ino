@@ -3,14 +3,17 @@
 ModbusMaster node; //MODBUS NODE NUMBER OF SDM630 .. must be the same as configured in SDM630
 const int SDM_SIZE                    = 3; 
 float sdm_data[SDM_SIZE];
-bool sdm_data_valid                   = false;
 static int MAX_ITERATION              = 1; //maximum read MODBUS Value if checksum fails
 //                                      Power L1-3             
 const uint16_t sdm_adresses[SDM_SIZE] = {0x000C, 0x000E, 0x0010};
-unsigned long lastModbusUpdate;
-unsigned long modbusPeriod = 30000;
 float bal_power                       = 0;
 bool bal_power_valid                  = false;
+
+unsigned long last_time;
+
+float energyImport                      = 0;
+float energyExport                      = 0;
+
 
 
 
@@ -28,18 +31,33 @@ void setup_modbus(){
         Serial.println("FATAL ERROR: no modbus, restart!");
         while(true){};
     }
-    lastModbusUpdate=millis();
     Serial.println("===============================");
 }
 
 
 //called form heat control
 bool modbus_get_bal_power(){
-    bool valid = true;
-    valid &= getRTUMore(sdm_adresses[0],1,0);
-    valid &= getRTUMore(sdm_adresses[1],1,1);
-    valid &= getRTUMore(sdm_adresses[2],1,2);
-    bal_power             = sdm_data[0] + sdm_data[1] + sdm_data[2];
+
+    //get modbus data
+    bool valid      = true;
+    valid           &= getRTUMore(sdm_adresses[0],1,0);
+    valid           &= getRTUMore(sdm_adresses[1],1,1);
+    valid           &= getRTUMore(sdm_adresses[2],1,2);
+    bal_power       = sdm_data[0] + sdm_data[1] + sdm_data[2];
+    long this_time  = millis();
+
+    //increment energy counters
+    if (bal_power_valid and valid){
+        if (bal_power>0){
+            energyImport += bal_power*(this_time-last_time)*0.001;
+        }else{
+            energyExport -= bal_power*(this_time-last_time)*0.001;
+        }
+    }
+
+    //store time / valid
+    bal_power_valid     = valid;
+    last_time           = this_time;
     return valid;
 }
 
@@ -76,21 +94,16 @@ boolean getRTUMore(uint16_t m_startAddress,uint8_t m_length,int arrayPosition){
 
 //called form server
 void handle_modbus(){
-    if (lastModbusUpdate+modbusPeriod<millis()) {
-        lastModbusUpdate = millis();
-        for (int i=0; i<SDM_SIZE; i++){
-            sdm_data_valid    = true;
-            sdm_data_valid    &= getRTUMore(sdm_adresses[i],1,i);
-        }
-    }
+
 }
 
 
 //called from debug
 void print_modbus_info(){
     Serial.println("=============MODBUS INFO==========");
-    Serial.print("Modbus data vaild: ");  Serial.println(sdm_data_valid);
-    Serial.print("Balanced power:    ");  Serial.println(bal_power,3);
-    Serial.print("bal_power_valid:   ");  Serial.println(bal_power_valid);
+    Serial.print("energyImport: ");         Serial.println(energyImport);
+    Serial.print("energyExport: ");         Serial.println(energyExport);
+    Serial.print("Balanced power:    ");    Serial.println(bal_power,3);
+    Serial.print("bal_power_valid:   ");    Serial.println(bal_power_valid);
     Serial.println("==================================");
 }
