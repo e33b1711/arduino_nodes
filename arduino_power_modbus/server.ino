@@ -103,18 +103,31 @@ void handle_server(){
         Serial.println("=====================================");
         Serial.println("Publishing via mqtt...");
 
+        //reconnect
+        /*
+        if(!mqttClient.connected()){
+            // Attempt to connect to the server with the ID "myClientID"
+            if (mqttClient.connect(AIO_USERNAME)){
+                Serial.println("Connection has been established, well done");
+                // Establish the subscribe event
+                mqttClient.setCallback(subscribeReceive);
+            }else{
+                Serial.println("Looks like the server connection failed...");
+            }
+        }
+        */
+
         // This is needed at the top of the loop!
         mqttClient.loop();
 
         // Ensure that we are subscribed to the topic "MakerIOTopic"
-        //mqttClient.subscribe(AIO_USERNAME "/controlMode");
+        mqttClient.subscribe((char *) AIO_USERNAME "/testTopic0");
+        mqttClient.subscribe((char *) AIO_USERNAME "/testTopic1");
+        mqttClient.subscribe("power_control/#");
 
-        if(!mqttClient.connected()){
-            Serial.print("Trying to reconnected to MQTT broker...");
-            mqttClient.connect(AIO_USERNAME);
-        }
+        
 
-        if(mqttClient.connected()){
+        //if(mqttClient.connected()){
             publish_mqtt((char *) AIO_USERNAME "/powerPV",       0,  powerPV);
             publish_mqtt((char *) AIO_USERNAME "/powerHeat",     0,  powerHeat);
             publish_mqtt((char *) AIO_USERNAME "/powerBal",      0,  bal_power);
@@ -123,14 +136,16 @@ void handle_server(){
             publish_mqtt((char *) AIO_USERNAME "/energyPV",      3,  energyPV());
             publish_mqtt((char *) AIO_USERNAME "/energyHeat",    3,  energyHeat());
             publish_mqtt((char *) AIO_USERNAME "/tempLow",       1,  tempLow);
+            publish_mqtt((char *) AIO_USERNAME "/controlMode",   1,  control_mode);
+            publish_mqtt((char *) AIO_USERNAME "/targetPower",   1,  target_power);
             publish_mqtt((char *) AIO_USERNAME "/tempHigh",      1,  tempHigh);
             publish_mqtt((char *) AIO_USERNAME "/waterWarning",  1,  waterWarning);
             publish_mqtt((char *) AIO_USERNAME "/version",           vers);
             publish_mqtt((char *) AIO_USERNAME "/status",            "started");
-            Serial.println("SUCCESS.");
-        }else{
-            Serial.println("FAIL.");
-        }
+        //    Serial.println("SUCCESS.");
+        //}else{
+        //    Serial.println("FAIL.");
+        //}
 
 
         Serial.println("=====================================");
@@ -143,6 +158,7 @@ void handle_server(){
 
 void subscribeReceive(char* topic, byte* payload, unsigned int length)
 {
+  Serial.println("===========mqtt in==============");
   // Print the topic
   Serial.print("Topic: ");
   Serial.println(topic);
@@ -156,6 +172,7 @@ void subscribeReceive(char* topic, byte* payload, unsigned int length)
  
   // Print a newline
   Serial.println("");
+  Serial.println("===========mqtt in==============");
 }
 
 void print_server_info(){
