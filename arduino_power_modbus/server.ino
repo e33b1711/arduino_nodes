@@ -121,9 +121,13 @@ void handle_server(){
         mqttClient.loop();
 
         // Ensure that we are subscribed to the topic "MakerIOTopic"
-        mqttClient.subscribe((char *) AIO_USERNAME "/testTopic0");
-        mqttClient.subscribe((char *) AIO_USERNAME "/testTopic1");
-        mqttClient.subscribe("power_control/#");
+        if (mqttClient.subscribe("power_control/#")){
+            Serial.println("subcribe SUCCESS.");
+        }else{
+           Serial.println("subcribe FAIL.");
+        }
+        //mqttClient.subscribe((char *) AIO_USERNAME "/testTopic1");
+        //mqttClient.subscribe("power_control/#");
 
         
 
