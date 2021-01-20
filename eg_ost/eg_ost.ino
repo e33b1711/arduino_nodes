@@ -223,11 +223,11 @@ void user_logic()
   i=15;
   if (value_c[i]==-1){
     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_GA",3);
+      write_state("LI_OG_GA_L1",3);
     }
     else{
 
-      write_state("LI_OG_GA_L1",3);
+      write_state("LI_OG_GA",3);
     }
   }
   i=11;

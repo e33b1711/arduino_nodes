@@ -263,10 +263,10 @@ void user_logic()
   i=7;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-       write_state("LI_OG_GA", 3);
+       write_state("LI_OG_GA_L1", 3);
      }
      else{
-       write_state("LI_OG_GA_L1", 3);
+       write_state("LI_OG_GA", 3);
      }
   }
   
@@ -274,10 +274,10 @@ void user_logic()
   i=9;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-       write_state("LI_OG_GA", 3);
+       write_state("LI_OG_GA_L1", 3);
      }
      else{
-       write_state("LI_OG_GA_L1", 3);
+       write_state("LI_OG_GA", 3);
      }
   }
   //10  bad, einzel

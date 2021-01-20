@@ -122,11 +122,11 @@ void user_logic()
   i=15;
    if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-      toggle_state("LI_OG_GA");
+      toggle_state("LI_OG_GA_L1");
      }
      else{
      
-      toggle_state("LI_OG_GA_L1");
+      toggle_state("LI_OG_GA");
      }
   }
   i=13;
@@ -141,11 +141,11 @@ void user_logic()
   i=1;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-      toggle_state("LI_OG_GA");
+      toggle_state("LI_OG_GA_L1");
      }
      else{
      
-      toggle_state("LI_OG_GA_L1");
+      toggle_state("LI_OG_GA");
      }
   }
   //14  KZ nord unten
