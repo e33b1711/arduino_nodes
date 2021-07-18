@@ -5,9 +5,6 @@
 
 EthernetClient client;
 
-
-
-
 void init_comm()
 {
   // initialize
@@ -16,15 +13,11 @@ void init_comm()
   // give the Ethernet shield a second to initialize:
   delay(500);
   Serial.println("init_comm: connecting...");
- 
-
   //OTA
   ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
 }
 
 void handle_comm(){
-
   //OTA
   ArduinoOTA.poll();
-
 }

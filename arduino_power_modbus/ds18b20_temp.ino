@@ -58,20 +58,25 @@ void handle_temp(){
             ds.getAddress(address);
             switch (address[7]){
             case 51:
-                Serial.print("tempHigh: ");
+                //Serial.print("tempHigh: ");
                 tempHigh = ds.getTempC();
-                Serial.print(tempHigh);
-                Serial.println(" °C");
+                //Serial.println(tempHigh);
                 break;
             case 189:
-                Serial.print("tempLow: ");
+                //Serial.print("tempLow: ");
                 tempLow = ds.getTempC();
-                Serial.print(tempLow);
-                Serial.println(" °C");
+                //Serial.println(tempLow);
                 break;
             default:
                 Serial.println("ERROR: DS Address unknown."); 
             }
         }   
     }
+}
+
+void print_temp_info(){
+    Serial.print("tempHigh: ");
+    Serial.println(tempHigh);
+    Serial.print("tempLow: ");
+    Serial.println(tempLow);
 }

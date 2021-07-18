@@ -1,26 +1,3 @@
-/*TODO
-Status:
-modbus Error (no response)
-Heating Error (no powerHeat when pwm)
-s0 Error (balPower>0 and powerImport=0, balPower<0 and powerPV=0)
-no ntp time 
-=> non-persistent status
-=> persistent status (later resetable)
-=> check all dependencies of status <> functions
-
-Control:
-=> set target power / control mode over serial (done)
-=> set target power / control mode over mqtt
-=> reset status over mqtt
-=> reset status over debug
-=> direct mode (control off) (done)
-
-write long time statistics, WIP, new day!!
-
-lower cutoff power heating / how to prevent toggling?
-
-*/
-
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
@@ -38,14 +15,10 @@ const char* password   = "pass";
 const char* vers       = "v0.11";
 
 
-
-
 //heat
 extern int pwm_setpoint;
 extern unsigned long watchdog_counter;
 extern void heat_off();
-
-
 
 
 //S0

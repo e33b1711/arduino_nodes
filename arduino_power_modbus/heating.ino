@@ -1,17 +1,9 @@
 const int pwmPin                      = 5;
-unsigned long heatingLastUpdate;
-const float c_down                    = 1.0/10;
-const float c_up                      = 1.0/15;
-const float c_hist                    = 25;   //hystereses
-const float c_pwm_max                 = 240;
 const float max_temp                  = 85;
-const unsigned long time_out          = 10000; 
-const unsigned long h_update_period   = 1000;
-float target_power                    = -25;
-int control_mode                      =  1; //0=off, 1=control balanced power, 2=control heat power
+const unsigned long time_out          = 10000;
+unsigned long heatingLastUpdate; 
 int pwm_setpoint                      = 0;
-unsigned long watchdog_counter        = 0;
-bool h_control_off                    = false;
+
 
 void setup_heating(){
     Serial.println("===============================");
@@ -35,18 +27,24 @@ void heat_off(){
   analogWrite(pwmPin, 0);
 }
 
+void set_pwm(int val){
+    heatingLastUpdate = millis();
+    pwm_setpoint = val;  
+}
+
 
 //called form main loop
 void update_heating(){
 
-  
-
-  //watchdog
-
-
     //overheat protection
-    if (tempHigh > max_temp){
+    if ((pwm_setpoint > 0) and (tempHigh > max_temp)){
         Serial.println("ERROR: Overtemperature. Setting heating to 0!");
+        pwm_setpoint = 0;
+    }
+
+    //watchdog
+    if ((pwm_setpoint > 0) and (heatingLastUpdate+time_out<millis()) ){
+        Serial.println("ERROR: pwm update too old!");
         pwm_setpoint = 0;
     }
   
@@ -56,10 +54,6 @@ void update_heating(){
 
 
 void print_heating_info(){
-    Serial.println("=============HEATING INFO==========");
-    Serial.print("PWM setpoint:  ");
+    Serial.print("pwm_setpoint: ");
     Serial.println(pwm_setpoint);
-    Serial.print("Watch dog counter: ");
-    Serial.println(watchdog_counter);
-    Serial.println("===================================");
 }
