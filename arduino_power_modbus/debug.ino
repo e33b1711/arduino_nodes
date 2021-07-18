@@ -23,9 +23,7 @@ void handle_debug(){
         Serial.println("===============================");
         print_server_info();
         print_heating_info();
-        print_modbus_info();
         print_s0_info();
-        print_time_info();
     } 
 
 
@@ -35,30 +33,13 @@ void handle_debug(){
         inString += (char)inChar;
     
         // if you get a newline, print the string, then the string's value:
-        if (inChar == '\n') {
-            if (inString.substring(0,13)=="target_power:"){
+        if (inChar == '\n') {            
+            if (inString.substring(0,13)=="pwm_setpoint:"){
                 int val = inString.substring(13).toInt();
-                target_power = val;
-                Serial.print("Set target_power: ");
-                Serial.println(target_power);
+                pwm_setpoint = val;
+                Serial.print("Set pwm_setpoint: ");
+                Serial.println(pwm_setpoint);
             }
-            if (inString.substring(0,13)=="control_mode:"){
-                int val = inString.substring(13).toInt();
-                control_mode = val;
-                Serial.print("Set control_mode:");
-                Serial.println(control_mode);
-            }
-            if (inString.substring(0,12)=="clear_eeprom"){
-                clear_eeprom();
-            }
-            if (inString.substring(0,12)=="readback_at:"){
-                int val = inString.substring(12).toInt();
-                readback_log(val);
-            }
-            if (inString.substring(0,12)=="readback_log"){
-                readback_log();
-            }
-            inString = "";
         }   
     }
 }
