@@ -21,7 +21,6 @@ void handle_debug(){
         Serial.print("Version:");
         Serial.println(vers);
         Serial.println("===============================");
-        print_server_info();
         print_heating_info();
         print_s0_info();
     } 
