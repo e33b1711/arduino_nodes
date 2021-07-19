@@ -54,6 +54,6 @@ void update_heating(){
 
 
 void print_heating_info(){
-    Serial.print("pwm_setpoint: ");
+    Serial.print("setpoint_pwm: ");
     Serial.println(pwm_setpoint);
 }

@@ -93,9 +93,9 @@ void onPulse2(){
 
 
 void print_s0_info(){
-    Serial.print("powerPV: ");
+    Serial.print("power_pv: ");
     Serial.println(powerPV,3);
-    Serial.print("powerHeat: ");
+    Serial.print("power_heat: ");
     Serial.println(powerHeat,3);
 }
 

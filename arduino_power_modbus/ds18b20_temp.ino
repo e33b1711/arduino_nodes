@@ -75,8 +75,8 @@ void handle_temp(){
 }
 
 void print_temp_info(){
-    Serial.print("tempHigh: ");
+    Serial.print("temp_high: ");
     Serial.println(tempHigh);
-    Serial.print("tempLow: ");
+    Serial.print("temp_low: ");
     Serial.println(tempLow);
 }
