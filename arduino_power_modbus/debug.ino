@@ -1,5 +1,5 @@
 unsigned long last_update_debug;
-const unsigned long debug_update_interval       = 10000;
+const unsigned long debug_update_interval       = 1000;
 String inString                                 = "";
 
 void setup_debug(){
@@ -29,12 +29,13 @@ void handle_debug(){
         // if you get a newline, print the string, then the string's value:
         if (inChar == '\n') {            
             //Serial.print("inString: " + inString);
-            if (inString.substring(0,13)=="pwm_setpoint:"){
+            if (inString.substring(0,13)=="setpoint_pwm:"){
                 int val = inString.substring(13).toInt();
                 set_pwm(val);
                 //Serial.print("Set pwm_setpoint: ");
                 //Serial.println(pwm_setpoint);
             }
+            inString = "";
         }   
     }
 }
