@@ -43,10 +43,10 @@ void update_heating(){
     }
 
     //watchdog
-    if ((pwm_setpoint > 0) and (heatingLastUpdate+time_out<millis()) ){
-        Serial.println("ERROR: pwm update too old!");
-        pwm_setpoint = 0;
-    }
+    //if ((pwm_setpoint > 0) and (heatingLastUpdate+time_out<millis()) ){
+    //    Serial.println("ERROR: pwm update too old!");
+    //    pwm_setpoint = 0;
+    //}
   
     //write pwm
     analogWrite(pwmPin, pwm_setpoint);

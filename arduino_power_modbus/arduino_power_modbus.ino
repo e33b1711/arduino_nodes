@@ -20,20 +20,6 @@ extern int pwm_setpoint;
 extern unsigned long watchdog_counter;
 extern void heat_off();
 
-
-//S0
-extern float powerUtility, powerHeat, powerPV;
-float energyImport();
-float energyHeat();
-float energyPV();
-extern long pulseCount0;
-extern long pulseCount1;
-extern long pulseCount2;
-extern float energyExport,lastEnergyExport;
-extern float unsalEnergyImportZero;
-extern float unsalEnergyExportZero;
-
-
 //temp
 extern float tempHigh, tempLow;
 
@@ -41,7 +27,6 @@ extern float tempHigh, tempLow;
 void setup() {
   setup_debug();
   init_comm();
-  setup_s0();
   setup_heating();
   setup_temp();
   watchdogSetup();
@@ -74,7 +59,6 @@ void loop() {
   handle_comm();
   asm("WDR");
   update_heating();
-  update_s0();
   handle_debug();
   handle_temp();
 }
