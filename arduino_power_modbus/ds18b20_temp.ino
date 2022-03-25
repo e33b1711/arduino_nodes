@@ -4,15 +4,12 @@ float tempHigh, tempLow;
 
 DS18B20 ds(A7);
 
-long lastUpdateDS;
-const long updatePeriodDS = 10000;
 
 
 
-void setup_temp(){
-    lastUpdateDS  = millis(); 
-    tempHigh      = 8.8;
-    tempLow       = 9.9;
+
+void setup_t(){
+    lastUpdateDS_t  = millis(); 
     Serial.println("=========================");
     Serial.println("DS Temp Sensors...");
     Serial.print("Devices: ");
@@ -48,10 +45,10 @@ void setup_temp(){
 }
 
 
-void handle_temp(){
+void update_t(){
 
-    if((lastUpdateDS+updatePeriodDS)<millis()){
-        lastUpdateDS = millis();
+    if((lastUpdateDS_t+updatePeriodDS_t)<millis()){
+        lastUpdateDS_t = millis();
 
         while (ds.selectNext()) {
             uint8_t address[8];
@@ -59,13 +56,13 @@ void handle_temp(){
             switch (address[7]){
             case 51:
                 Serial.print("tempHigh: ");
-                tempHigh = ds.getTempC();
+                value_t[0] = ds.getTempC();
                 Serial.print(tempHigh);
                 Serial.println(" °C");
                 break;
             case 189:
                 Serial.print("tempLow: ");
-                tempLow = ds.getTempC();
+                value_t[1] = ds.getTempC();
                 Serial.print(tempLow);
                 Serial.println(" °C");
                 break;
@@ -73,5 +70,19 @@ void handle_temp(){
                 Serial.println("ERROR: DS Address unknown."); 
             }
         }   
+        for (int i=0; i<num_t_states; i++){
+            send_message("w", t_address[0], value_t[i]);
+        }
     }
+}
+
+
+
+void write_t(String address, int value){
+  int i;
+  for (i=0; i<num_t_states; i++){
+    if (t_address[i]==address){
+      value_t[i]=value;
+    }
+  }
 }
