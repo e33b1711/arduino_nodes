@@ -82,7 +82,7 @@ int value_h[]               = {0,  0};
 // 59 df zu
 // 61 df auf
 const int num_l_states      = 17;
-const String l_address[]    = {"RO_OG_SZ_ON", "LI_OG_BA", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "LI_OG_SZ_L1", "LI_48", "RO_OG_BA_ON", "LI_54", "LI_55", "LI_56", "LI_57", "VD_OG_SZ_UP", "DF_OG_SZ_DO", "VD_OG_SZ_DO", "DF_OG_SZ_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"RO_OG_SZ_ON", "LI_OG_BA", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "LI_OG_SZ_L1", "LI_48", "RO_OG_BA_ON", "LI_54", "LI_55", "LI_56", "LI_57", "VD_OG_SZ_DO", "DF_OG_SZ_DO", "VD_OG_SZ_UP", "DF_OG_SZ_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61};                //digitaler pin
 const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
