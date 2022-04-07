@@ -82,7 +82,7 @@ int value_h[]               = {0,  0};
 // 59 df zu
 // 61 df auf
 const int num_l_states      = 17;
-const String l_address[]    = {"RO_OG_SZ_ON", "LI_OG_BA", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "LI_OG_SZ_L1", "LI_48", "RO_OG_BA_ON", "LI_54", "LI_55", "LI_56", "LI_57", "VD_OG_SZ_DO", "DF_OG_SZ_DO", "VD_OG_SZ_UP", "DF_OG_SZ_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"RO_OG_SZ_ON", "LI_OG_BA", "RO_OG_BA_DO", "LI_OG_SZ", "LI_OG_SZ_L2", "RO_OG_SZ_DO", "LI_OG_SZ_L1", "LI_48", "RO_OG_BA_ON", "LI_54", "LI_55", "LI_56", "LI_57", "VD_OG_SZ_UP", "DF_OG_SZ_DO", "VD_OG_SZ_DO", "DF_OG_SZ_UP"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61};                //digitaler pin
 const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
@@ -108,8 +108,8 @@ const int num_s_states      = 2;
 const String s_address[]    = {"DF_OG_SZ", "VD_OG_SZ"};       //addresse
 const String s_up[]         = {"DF_OG_SZ_UP", "VD_OG_SZ_UP"};         //l state
 const String s_down[]       = {"DF_OG_SZ_DO", "VD_OG_SZ_DO"};         //l state
-const int up_time_s[]       = {500, 10000};       // zeit zum öffnen in ms
-const int down_time_s[]     = {500, 10000};       // zeit zum schließen in ms
+const int up_time_s[]       = {500, 500};       // zeit zum öffnen in ms
+const int down_time_s[]     = {500, 500};       // zeit zum schließen in ms
 int value_s[]               = {-1, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]          = {0, 0};          // zeit zu stoppen
 
