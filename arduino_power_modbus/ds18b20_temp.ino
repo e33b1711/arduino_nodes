@@ -56,13 +56,13 @@ void update_t(){
             switch (address[7]){
             case 51:
                 Serial.print("tempHigh: ");
-                value_t[0] = ds.getTempC();
+                value_t[0] = ds.getTempC()*10;
                 Serial.print(tempHigh);
                 Serial.println(" °C");
                 break;
             case 189:
                 Serial.print("tempLow: ");
-                value_t[1] = ds.getTempC();
+                value_t[1] = ds.getTempC()*10;
                 Serial.print(tempLow);
                 Serial.println(" °C");
                 break;
@@ -71,7 +71,7 @@ void update_t(){
             }
         }   
         for (int i=0; i<num_t_states; i++){
-            send_message("w", t_address[0], value_t[i]);
+            send_message("w", t_address[i], value_t[i]);
         }
     }
 }
