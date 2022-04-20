@@ -23,7 +23,7 @@ const long period_t         = 100000;                                           
 const String t_address[]    = {"TI_PU_O", "TI_PU_U"};                                    
 int value_t[]               = {0,  0};                                            //temperatur
 long lastUpdateDS_t;
-const long updatePeriodDS_t = 10000;
+const long updatePeriodDS_t = 100000;
 
 
 //constants and variables for p states (pwm output)
