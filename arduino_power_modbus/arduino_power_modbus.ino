@@ -41,7 +41,7 @@ void user_logic()
 
     //timeout for elo heating
     const long heat_timeout_c = 30000;
-    if ( (set_time_p[0]+heat_timeout_c) < millis() and (address_to_value("P_EL")!=0)){
+    if ( (set_time_p[0]+heat_timeout_c) < millis() and (address_to_value("U_EL")!=0)){
         write_p("U_EL", 0);
         send_message("info", String(unit_name) + " heat timeout", 0);
     }
