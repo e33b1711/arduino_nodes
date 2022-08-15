@@ -24,22 +24,16 @@ void init_comm()
   // give the Ethernet shield a second to initialize:
   delay(500);
   Serial.println("init_comm: connecting...");
-  if (client.connect(server, port)) {
-    Serial.println("init_comm: connected");
-    client.println("Arduino Node " + String(unit_name) + " started.$");
-  }
-  else {
-    // if you didn't get a connection to the server:
-    Serial.println("init_comm: connection failed");
-  }
+
+
 
   //OTA
-  ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
+  //ArduinoOTA.begin(Ethernet.localIP(), unit_name, password, InternalStorage);
 
   //mqtt
   mqtt_client.connect(server, broker_port);
-  mqtt_client.onMessage(message_received);
-  mqtt_client.subscribe(command_prefix+"#");
+  mqtt_client.onMessage(message_rx);
+  mqtt_client.subscribe(command_prefix + "#");
 }
 
 
@@ -49,19 +43,29 @@ void post_state(String out_address, int out_value) {
   mqtt_client.endMessage();
 }
 
-void message_received(String &topic, String &payload) {
-  Serial.println("message_received");
-  Serial.println("incoming: " + topic.substring(0, 20) + " - " + payload.substring(0, 4020));
-  //int index = topic.indexOf('/');
-  //String prefix     = topic.substring(0, index);
-  //String address    = topic.substring(index + 1);
-  //Serial.println("prefix:  " + prefix);
-  //Serial.println("address: " + address);
+void message_rx(int message_size) {
+  String topic = mqtt_client.messageTopic();
+  int index = topic.indexOf("/");
+  String prefix = topic.substring(0, index);
+  String address = topic.substring(index + 1);
+  //Serial.println(prefix);
+  //Serial.println(address);
 
-  //message handler
-  //TODO: post all / restart
-  //write_state(address, payload.toInt());
+  // we received a message, print out the topic and contents
+  //Serial.println("Received a message with topic '");
+  //Serial.println(mqtt_client.messageTopic());
+  //Serial.println("', length ");
+  //Serial.println(message_size);
+  //Serial.println(" bytes:");
 
+  // use the Stream interface to print the contents
+  String payload;
+  while (mqtt_client.available()) {
+    payload += (char)mqtt_client.read();
+  }
+  //Serial.println(payload);
+  //Serial.println(payload.toInt());
+  write_state(address, payload.toInt());
 }
 
 
