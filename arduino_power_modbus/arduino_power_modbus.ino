@@ -1,23 +1,22 @@
 
 //unit's stuff
-const char* unit_name  = "power2";
+const char* unit_name  = "power";
 const char* password   = "pass";
 
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const byte mac[]                = {0x4E, 0xAC, 0x6E, 0xEF, 0xFE, 0x14 };
-const IPAddress                 ip(192,168,178,132);
+const byte mac[]                = {0x4E, 0xAB, 0x7E, 0xEF, 0xFE, 0x04 };
+const IPAddress                 ip(192,168,178,213);
 const IPAddress                 server(192,168,178,222);
 const IPAddress                 gateway(192,168,178,1);
 const IPAddress                 subnet(255,255,255,0);
 const int port                  = 8888;
+const int broker_port           = 1883;
 const int ethernet_sc_pin       = 53;
 const int ethernet_reset_pin    = 12;
-const int broker_port           = 1883;
 const String command_prefix     = "ard_command/";
 const String state_prefix       = "ard_state/";
-
 
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 #define DHTTYPE DHT22

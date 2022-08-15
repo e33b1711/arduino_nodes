@@ -48,8 +48,8 @@ void message_rx(int message_size) {
   int index = topic.indexOf("/");
   String prefix = topic.substring(0, index);
   String address = topic.substring(index + 1);
-  //Serial.println(prefix);
-  //Serial.println(address);
+  Serial.println(prefix);
+  Serial.println(address);
 
   // we received a message, print out the topic and contents
   //Serial.println("Received a message with topic '");
@@ -64,7 +64,7 @@ void message_rx(int message_size) {
     payload += (char)mqtt_client.read();
   }
   //Serial.println(payload);
-  //Serial.println(payload.toInt());
+  Serial.println(payload.toInt());
   write_state(address, payload.toInt());
 }
 
