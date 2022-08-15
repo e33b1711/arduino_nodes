@@ -1,5 +1,6 @@
 //this nodes name
 const char* unit_name 	= "og_west";
+//const char* unit_name   = "test";
 const char* password   	= "pass";
 
 
@@ -8,12 +9,17 @@ const char* password   	= "pass";
 #include <Ethernet.h>
 const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x16 };
 const IPAddress                 ip(192,168,178,217);
+//const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x15 };
+//const IPAddress                 ip(192,168,178,77);
 const IPAddress                 server(192,168,178,222);
 const IPAddress                 gateway(192,168,178,1);
 const IPAddress                 subnet(255,255,255,0);
 const int port                  = 8888;
+const int broker_port           = 1883;
 const int ethernet_sc_pin       = 53;
 const int ethernet_reset_pin    = 12;
+const String command_prefix     = "ard_command/";
+const String state_prefix       = "ard_state/";
 
 
 //constants and variables for b states (einer der 2 R-codierte Schalter an einem analogen Eingang)
