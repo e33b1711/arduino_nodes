@@ -24,30 +24,16 @@ void update_t()
 }
 
 
-void write_t(String address, int value){
-  int i;
-  for (i=0; i<num_t_states; i++){
-    if (t_address[i]==address){
-      value_t[i]=value;
-      post_state(t_address[i], value_t[i]);
-    }
-  }
-}
 
 void handle_one_t(int i){
   if (!(i<num_t_states)) return;
  int8_t notice  = dht.broadcast(DHT22, t_pin[i]);
    if (notice == SDHT_OK){
-      value_t[i]=dht.celsius*10;
-      value_h[i]=dht.humidity;
-      post_state(t_address[i], value_t[i]);
-      post_state(h_address[i], value_h[i]);
-      post_state("E"+t_address[i], 0);
-      Serial.print("handle_one_t: value_t: "); Serial.print(value_t[i]); 
-      Serial.print(" value_h: "); Serial.print(value_h[i]);
-      Serial.print("  i: "); Serial.println(i);
+      post_state(t_address[i], String(dht.celsius));
+      post_state(h_address[i], String(dht.humidity));
+      post_state("E"+t_address[i], String(0));
    }else{
-      post_state("E"+t_address[i], 1);
+      post_state("E"+t_address[i], String(1));
       Serial.print("handle_one_t: error reading from dth22. "); Serial.print("  i: "); Serial.println(i);
   }
 }

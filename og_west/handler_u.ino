@@ -3,7 +3,7 @@ void setup_u()
   Serial.println("setup_u");
   int i;
   for (i = 0; i < num_u_states; i++) {
-    post_state(u_address[i], value_u[i]);
+    post_state(u_address[i], String(value_u[i]));
     digitalWrite(u_pin[i], LOW);
     pinMode(u_pin[i], OUTPUT);
   }
@@ -37,8 +37,9 @@ void update_u()
 }
 
 
-void write_u(String address, int value) {
+void write_u(String address, String value_str) {
   int i;
+  int value = value_str.toInt();
   for (i = 0; i < num_u_states; i++) {
     if (u_address[i] == address) {
          Serial.println("write_u: " + address);
@@ -51,7 +52,7 @@ void write_u(String address, int value) {
       else {
         value_u[i] = value;
       }
-      post_state(u_address[i], value_u[i]);
+      post_state(u_address[i], String(value_u[i]));
     }
   }
 }
