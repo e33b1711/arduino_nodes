@@ -40,6 +40,7 @@ void update_r(){
 void write_r(String address, String value) {
   for (int i = 0; i < num_r_states; i++) {
     if (r_address[i] == address) {
+      value_r[i] = 50;
       if (value == "100") {
         value_r[i] = 100;
       }

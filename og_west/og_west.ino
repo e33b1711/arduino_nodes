@@ -1,15 +1,16 @@
 //this nodes name
-const char* unit_name 	= "og_west_test";
+//const char* unit_name 	= "og_west_test";
+const char* unit_name     = "og_west";
 const char* password   	= "pass";
 
 
 //for tcp communication
 //watch out for the pins needed for the ethernet schield (always 10, 11 12 13 on uno, 50 51 52 53 on mega!)
 #include <Ethernet.h>
-const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x17 };
-const IPAddress                 ip(192, 168, 178, 77);
-//const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x15 };
-//const IPAddress                 ip(192,168,178,222);
+//const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x17 };
+//const IPAddress                 ip(192, 168, 178, 77);
+const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x15 };
+const IPAddress                 ip(192,168,178,222);
 const IPAddress                 server(192, 168, 178, 109);
 const IPAddress                 gateway(192, 168, 178, 1);
 const IPAddress                 subnet(255, 255, 255, 0);
@@ -59,9 +60,9 @@ long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 #define DHTTYPE DHT22
 const int num_t_states      = 3;
-const long period_t         = 1800000;                                                                                  //update periode in ms
+const long period_t         = 180000;                                                                                  //update periode in ms
 const String t_address[]    = {"TI_OG_KN", "TI_OG_KS", "TI_OG_GA"};
-const String h_address[]    = {"HI_OG_KS", "HI_OG_KN", "HI_OG_GA"};          //addresse
+const String h_address[]    = {"HI_OG_KN", "HI_OG_KS", "HI_OG_GA"};          //addresse
 const int t_pin[]           = {28, 27, 26};
 long s_time_t               = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                            //cycle_counter
@@ -98,7 +99,7 @@ const String s_up[]			= {"DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "VD_OG_KS_
 const String s_down[]		= {"DF_OG_KN_DO", "DF_OG_KS_DO", "DF_OG_GA_DO", "VD_OG_KS_DO", "VD_OG_KN_DO"};         //l state
 const int up_time_s[]		= {500,     500,    500,    500,    500};       // zeit zum öffnen in ms
 const int down_time_s[] 	= {500,     500,    500,    500,    500};       // zeit zum schließen in ms
-int value_s[] 				= { 100,    100,    100,    0,      0};         // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int value_s[] 				= { 50,     50,     50,     50,     50};         // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 int aux_value_s[]           = { 50,     50,     50,     50,     50};         // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[] 			= {0,       0,      0,      0,      0};          // zeit zu stoppen
 boolean stop_pending_s[]    = {false,   false,  false,  false,  false};
@@ -124,11 +125,10 @@ void user_logic()
   // 13  "
   i = 15;
   if (value_c[i] == -1) {
-    if (time_c_pos[i] + 700 > time_c_neg[i]) {
+    if (time_c_pos[i] + 700 < time_c_neg[i]) {
       toggle_state("LI_OG_GA_L1");
     }
     else {
-
       toggle_state("LI_OG_GA");
     }
   }
@@ -143,7 +143,7 @@ void user_logic()
   //1  Gang, KZ süd
   i = 1;
   if (value_c[i] == -1) {
-    if (time_c_pos[i] + 700 > time_c_neg[i]) {
+    if (time_c_pos[i] + 700 < time_c_neg[i]) {
       toggle_state("LI_OG_GA_L1");
     }
     else {
@@ -187,24 +187,19 @@ void user_logic()
   //6
   i = 4;
   if (value_c[i] == 1) {
-    //entriegeln
     write_state("RO_OG_KN", "0");
   }
-  //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i] == -1) {
-    //verriegeln auf auf
-    if (time_c_pos[i] + 1000 > time_c_neg[i]) {
+    if (time_c_pos[i] + 1000 < time_c_neg[i]) {
       write_state("RO_OG_KN", "STOP");
     }
   }
   i = 6;
   if (value_c[i] == 1) {
-    //entriegeln
     write_state("RO_OG_KN", "100");
   }
   if (value_c[i] == -1) {
-    //verriegeln
-    if (time_c_pos[i] + 1000 > time_c_neg[i]) {
+    if (time_c_pos[i] + 1000 < time_c_neg[i]) {
       write_state("RO_OG_KN", "STOP");
     }
   }
@@ -228,19 +223,19 @@ void user_logic()
   i = 2;
   if (value_c[i] == -1) {
     if (time_c_pos[i] + 700 > time_c_neg[i]) {
-      write_state("DF_OG_KS", "100");
+      write_state("DF_OG_KS", "0");
     }
     else {
-      write_state("VD_OG_KS", "100");
+      write_state("VD_OG_KS", "0");
     }
   }
   i = 3;
   if (value_c[i] == -1) {
     if (time_c_pos[i] + 700 > time_c_neg[i]) {
-      write_state("DF_OG_KS", "0");
+      write_state("DF_OG_KS", "100");
     }
     else {
-      write_state("VD_OG_KS", "0");
+      write_state("VD_OG_KS", "100");
     }
   }
 
@@ -253,23 +248,20 @@ void user_logic()
   i = 7;
   if (value_c[i] == 1) {
     //entriegeln
-    write_state("RO_OG_KS", "100");;
+    write_state("RO_OG_KS", "0");;
   }
-  //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i] == -1) {
     //verriegeln auf auf
-    if (time_c_pos[i] + 1000 > time_c_neg[i]) {
+    if (time_c_pos[i] + 1000 < time_c_neg[i]) {
       write_state("RO_OG_KS", "STOP");
     }
   }
   i = 5;
   if (value_c[i] == 1) {
-    //entriegeln
-    write_state("RO_OG_KS", "0");
+    write_state("RO_OG_KS", "100");
   }
   if (value_c[i] == -1) {
-    //verriegeln
-    if (time_c_pos[i] + 1000 > time_c_neg[i]) {
+    if (time_c_pos[i] + 1000 < time_c_neg[i]) {
       write_state("RO_OG_KS", "STOP");
     }
   }

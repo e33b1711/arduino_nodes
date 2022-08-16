@@ -6,7 +6,11 @@ void setup_l()
     digitalWrite(l_pin[i], !l_inv[i]);
     pinMode(l_pin[i], OUTPUT);
     value_l[i] = 0;
-    post_state(l_address[i], String(value_l[i]));
+    if (value_l[i] == 1) {
+      post_state(l_address[i], "ON");
+    } else {
+      post_state(l_address[i], "OFF");
+    }
   }
 }
 
@@ -51,9 +55,9 @@ void write_l(String address, String value) {
       if (value == "ON") {
         value_l[i] = 1;
       }
-      if (value_l[i]==1){
+      if (value_l[i] == 1) {
         post_state(l_address[i], "ON");
-      }else{
+      } else {
         post_state(l_address[i], "OFF");
       }
     }
@@ -64,7 +68,7 @@ void write_l(String address, String value) {
 // Achtung: funktioniert nur bei eigenen States (auf der selben unit)
 void toggle_state(String address) {
   int value = 0;
-   for (int i = 0; i < num_l_states; i++) {
+  for (int i = 0; i < num_l_states; i++) {
     if (l_address[i] == address) {
       value = value_l[i];
     }
