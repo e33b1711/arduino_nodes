@@ -43,7 +43,7 @@ void user_logic()
     const long heat_timeout_c = 30000;
     if ( (set_time_p[0]+heat_timeout_c) < millis() and (address_to_value("U_EL")!=0)){
         write_p("U_EL", 0);
-        send_message("info", String(unit_name) + " heat timeout", 0);
+        send_state(String(unit_name) + " heat timeout", 0);
     }
     
 
@@ -52,7 +52,7 @@ void user_logic()
     const int max_temp_c = 850;
     if ( (address_to_value("TI_PU_U") > max_temp_c) and (address_to_value("P_EL")!=0) ){
         write_p("U_EL", 0);
-        send_message("info", String(unit_name) + " overtemp", 0);
+        send_state(String(unit_name) + " overtemp", 0);
     }
 
 }

@@ -1,6 +1,5 @@
 // state schreiben, egal ob auf dieser unit oder anderer
 void write_state(String address, int value){
-  send_message("w", address, value);
   write_state_silent(address, value);
 }
 
@@ -10,7 +9,6 @@ void write_state_silent(String address, int value){
 //    Serial.println("in function write silent");
 //    Serial.println(address);
 //    //debbuging
-  write_t(address, value);
   write_p(address, value);
 }
 

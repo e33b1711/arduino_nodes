@@ -6,7 +6,7 @@ void setup_p()
     pinMode(p_pin[i],OUTPUT);
     analogWrite(p_pin[i], 0);
     value_p[i]=0;
-    send_message("w", p_address[i], value_p[i]);
+    send_state(p_address[i], value_p[i]);
     set_time_p[i]=millis();
   }
 }
@@ -30,7 +30,7 @@ void write_p(String address, int value){
       set_time_p[i]=millis();
       value_p[i] = value;
       if (value_p[i] > max_p[i]) value_p[i] = max_p[i];
-      send_message("w", p_address[i], value_p[i]); 
+      send_state(p_address[i], value_p[i]); 
     }
   }
 }

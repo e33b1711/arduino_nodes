@@ -39,8 +39,15 @@ void init_comm()
 }
 
 
-void send_message(String out_messageType, String out_address, int out_value){
-  String message='!' + out_messageType + '!' + out_address + '!' + String(out_value, DEC) + "$\n";
+void send_command(String out_address, int out_value){
+  String message="!c!" + out_address + '!' + String(out_value, DEC) + "$\n";
+  //client.println(message);
+  //client.flush();
+  message_buffer += message;
+}
+
+void send_state(String out_address, int out_value){
+  String message="!s!" + out_address + '!' + String(out_value, DEC) + "$\n";
   //client.println(message);
   //client.flush();
   message_buffer += message;
@@ -161,11 +168,11 @@ void handle_comm(){
     }
     if (in_messageType=="r") {
       if (is_my_state(addressString)){
-        send_message("i", addressString, address_to_value(addressString));
+        send_state(addressString, address_to_value(addressString));
       }
     }
-    if (in_messageType=="w") {   
-      write_state_silent(addressString, in_value);
+    if (in_messageType=="c") {   
+      write_state(addressString, in_value);
     }
   }
 
@@ -181,14 +188,13 @@ void handle_comm(){
 
 
 void post_all(){
-  send_message("info", String(unit_name) + " posting all: start", 0);
+  send_state(String(unit_name) + " posting all: start", 0);
   int i;
-  for (i=0; i<num_p_states; i++){
-    send_message("w", p_address[i], value_p[i]);
-  }
   for (i=0; i<num_t_states; i++){
-    send_message("w", t_address[i], value_t[i]);
+    send_state(t_address[i], value_t[i]);
   }
- 
-  send_message("info", String(unit_name) + " posting all: end", 0);
+  for (i=0; i<num_p_states; i++){
+    send_state(p_address[i], value_p[i]);
+  }
+  send_state(String(unit_name) + " posting all: end", 0);
 }

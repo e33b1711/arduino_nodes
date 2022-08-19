@@ -71,18 +71,7 @@ void update_t(){
             }
         }   
         for (int i=0; i<num_t_states; i++){
-            send_message("w", t_address[i], value_t[i]);
+            send_state(t_address[i], value_t[i]);
         }
     }
-}
-
-
-
-void write_t(String address, int value){
-  int i;
-  for (i=0; i<num_t_states; i++){
-    if (t_address[i]==address){
-      value_t[i]=value;
-    }
-  }
 }
