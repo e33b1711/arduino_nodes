@@ -84,10 +84,12 @@ const int num_r_states=2;
 const String r_address[]	= {"RO_OG_KN", "RO_OG_KS"};       //addresse
 const String r_on_off[]		= {"RO_OG_KN_ON", "RO_OG_KS_ON"};         //l state
 const String r_up_down[] 	= {"RO_OG_KN_DO", "RO_OG_KS_DO"};         //l state
-const int up_time_r[] 		= {31, 31};       // zeit zum öffnen in s
-const int down_time_r[] 	= {31, 31};       // zeit zum schließen in s
-int value_r[] 				= {0,  0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-long stop_time_r[] 			= {0,  0};          // zeit zu stoppen
+const int up_time_r[] 		= {31000, 31000};       // zeit zum öffnen in s
+const int down_time_r[] 	= {31000, 31000};       // zeit zum schließen in s
+int value_r[] 				= {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_r[]           = {50, 50};                                   // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+long stop_time_r[]          = {0, 0};                                   // zeit zu stoppen
+boolean stop_pending_r[]    = {false, false};
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
@@ -97,8 +99,10 @@ const String s_up[]			= {"DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "VD_OG_KS_
 const String s_down[]		= {"DF_OG_KN_DO", "DF_OG_KS_DO", "DF_OG_GA_DO", "VD_OG_KS_DO", "VD_OG_KN_DO"};         //l state
 const int up_time_s[]		= {500, 500, 500, 500, 500};       // zeit zum öffnen in ms
 const int down_time_s[] 	= {500, 500, 500, 500, 500};       // zeit zum schließen in ms
-int value_s[] 				= {-1,  -1,  -1,  0,   0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-long stop_time_s[] 			= {0,   0,   0,   0,   0};          // zeit zu stoppen
+int value_s[] 				= {50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+long stop_time_s[]          = {0, 0, 0, 0, 0};          // zeit zu stoppen
+boolean stop_pending_s[]    = {false, false, false, false, false};
 
 
 //constants and variables for u states (temperatur steller)
@@ -131,11 +135,11 @@ void user_logic()
   }
   i=13;
   if (value_c[i]==1){
-     write_state("DF_OG_GA",1);
+     write_state("DF_OG_GA",0);
   }
   i=10;
   if (value_c[i]==1){
-     write_state("DF_OG_GA",-1);
+     write_state("DF_OG_GA",100);
   }
   //1  Gang, KZ süd
   i=1;
@@ -160,24 +164,23 @@ void user_logic()
   if (value_c[i]==1){
      toggle_state("LI_OG_KN_L1");
   }
+  i=11;
+   if (value_c[i]==-1){
+     if (time_c_pos[i]+700>time_c_neg[i]){
+      write_state("DF_OG_KN",100);
+     }
+     else{
+       write_state("VD_OG_KN",100);
+     }
+  }
   i=8;
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("DF_OG_KN",1);
+      write_state("DF_OG_KN",0);
      }
      else{
-       write_state("VD_OG_KN",1);
-     }
-  }
-  i=11;
-   if (value_c[i]==-1){
-    //verriegeln auf auf
-     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("DF_OG_KN",-1);
-     }
-     else{
-       write_state("VD_OG_KN",-1);
+       write_state("VD_OG_KN",0);
      }
   }
   
@@ -187,39 +190,21 @@ void user_logic()
   //6 
   i=4;
   if (value_c[i]==1){
-    //entriegeln
      write_state("RO_OG_KN",0);
-     //aktivieren
-     write_state("RO_OG_KN_ON",1);
-     write_state("RO_OG_KN_DO",0);
   }
   //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i]==-1){
-    //verriegeln auf auf
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_KN",1);
-     }
-     else{
-       write_state("RO_OG_KN_ON",0);
-       write_state("RO_OG_KN_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_KN",50);
      }
   }
   i=6;
   if (value_c[i]==1){
-    //entriegeln
-     write_state("RO_OG_KN",0);
-     //aktivieren
-     write_state("RO_OG_KN_ON",1);
-     write_state("RO_OG_KN_DO",1);
+     write_state("RO_OG_KN",100);
   }
   if (value_c[i]==-1){
-    //verriegeln
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_KN",-1);
-     }
-     else{
-       write_state("RO_OG_KN_ON",0);
-       write_state("RO_OG_KN_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_KN",50);
      }
   }  
   
@@ -243,20 +228,20 @@ void user_logic()
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("DF_OG_KS",1);
+      write_state("DF_OG_KS",0);
      }
      else{
-       write_state("VD_OG_KS",1);
+       write_state("VD_OG_KS",0);
      }
   }
   i=3;
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("DF_OG_KS",-1);
+      write_state("DF_OG_KS",100);
      }
      else{
-       write_state("VD_OG_KS",-1);
+       write_state("VD_OG_KS",100);
      }
   }
   
@@ -270,37 +255,23 @@ void user_logic()
   if (value_c[i]==1){
     //entriegeln
      write_state("RO_OG_KS",0);
-     //aktivieren
-     write_state("RO_OG_KS_ON",1);
-     write_state("RO_OG_KS_DO",0);
   }
   //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i]==-1){
     //verriegeln auf auf
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_KS",1);
-     }
-     else{
-       write_state("RO_OG_KS_ON",0);
-       write_state("RO_OG_KS_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_KS",50);
      }
   }
   i=5;
   if (value_c[i]==1){
     //entriegeln
-     write_state("RO_OG_KS",0);
-     //aktivieren
-     write_state("RO_OG_KS_ON",1);
-     write_state("RO_OG_KS_DO",1);
+     write_state("RO_OG_KS",100);
   }
   if (value_c[i]==-1){
     //verriegeln
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_KS",-1);
-     }
-     else{
-       write_state("RO_OG_KS_ON",0);
-       write_state("RO_OG_KS_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_KS",50);
      }
   }  
   

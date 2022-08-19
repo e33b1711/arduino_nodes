@@ -85,11 +85,13 @@ const int num_r_states=2;
 const String r_address[]	= {"RO_EG_SU", "RO_EG_WE"};       //addresse
 const String r_on_off[]		= {"RO_EG_SU_ON", "RO_EG_WE_ON"};         //l state
 const String r_up_down[] 	= {"RO_EG_SU_DO", "RO_EG_WE_DO"};         //l state
-const int up_time_r[] 	 	= {31, 31};       // zeit zum öffnen in s
-const int down_time_r[]		= {31, 31};       // zeit zum schließen in s
-int value_r[]				= {0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-long stop_time_r[]			= {0, 0};          // zeit zu stoppen
-  
+const long up_time_r[] 	 	= {31000, 31000};       // zeit zum öffnen in ms
+const long down_time_r[]	= {31000, 31000};       // zeit zum schließen in ms
+int value_r[]				= {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_r[]           = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+long stop_time_r[]          = {0, 0};          // zeit zu stoppen
+boolean stop_pending_r[]    = {false,   false};
+
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
@@ -100,7 +102,9 @@ const String s_down[]       = {"LI_A1", "LI_A3"};          //l state
 const int up_time_s[]       = {10, 10};       // zeit zum öffnen in ms
 const int down_time_s[]     = {200, 200};       // zeit zum schließen in ms
 int value_s[]               = {-1, -1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {-1, -1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]          = {0,  0};          // zeit zu stoppen
+boolean stop_pending_s[]    = {false,   false};
 
   
   
@@ -129,8 +133,7 @@ void user_logic(){
   //10  gang, ez
   i=10;
   if (value_c[i]==1){
-     toggle_state("LI_EG_GA");
-     //write_state("LI_GA_L1",3);
+     toggle_state_ext("LI_EG_GA");
   }
   //9, ez, gang, unten
   //11  ", mitte
@@ -152,13 +155,13 @@ void user_logic(){
   }
   i=4;
   if (value_c[i]==1){
-    write_state("RO_EG_SU",1);
-    write_state("RO_EG_WE",1);
+    write_state("RO_EG_SU",0);
+    write_state("RO_EG_WE",0);
   }
   i=8;
   if (value_c[i]==1){
-    write_state("RO_EG_SU",-1);
-    write_state("RO_EG_WE",-1);
+    write_state("RO_EG_SU",100);
+    write_state("RO_EG_WE",100);
   }
 
 
@@ -173,44 +176,27 @@ void user_logic(){
       toggle_state("LI_EG_AS");
     }
     else{
-      write_state("PUMP",3);
+      toggle_state_ext("PUMP");
     }
   }
   i=0;
   if (value_c[i]==1){
-    //entriegeln
     write_state("RO_EG_SU",0);
-    //aktivieren
-    write_state("RO_EG_SU_ON",1);
-    write_state("RO_EG_SU_DO",0);
   }
   //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i]==-1){
-    //verriegeln auf auf
-    if (time_c_pos[i]+1000>time_c_neg[i]){
-      write_state("RO_EG_SU",1);
-    }
-    else{
-      write_state("RO_EG_SU_ON",0);
-      write_state("RO_EG_SU_DO",0);
+    if (time_c_pos[i]+1000<time_c_neg[i]){
+      write_state("RO_EG_SU",50);
     }
   }
   i=2;
   if (value_c[i]==1){
-    //entriegeln
-    write_state("RO_EG_SU",0);
-    //aktivieren
-    write_state("RO_EG_SU_ON",1);
-    write_state("RO_EG_SU_DO",1);
+    write_state("RO_EG_SU",100);
   }
   if (value_c[i]==-1){
     //verriegeln
-    if (time_c_pos[i]+1000>time_c_neg[i]){
-      write_state("RO_EG_SU",-1);
-    }
-    else{
-      write_state("RO_EG_SU_ON",0);
-      write_state("RO_EG_SU_DO",0);
+    if (time_c_pos[i]+1000<time_c_neg[i]){
+      write_state("RO_EG_SU",50);
     }
   }
   //14  ez, west, unten
@@ -222,38 +208,22 @@ void user_logic(){
   }
   i=1;
   if (value_c[i]==1){
-    //entriegeln
     write_state("RO_EG_WE",0);
-    //aktivieren
-    write_state("RO_EG_WE_ON",1);
-    write_state("RO_EG_WE_DO",0);
   }
   if (value_c[i]==-1){
-    //verriegeln auf auf
-    if (time_c_pos[i]+1000>time_c_neg[i]){
-      write_state("RO_EG_WE",1);
-    }
-    else{
-      write_state("RO_EG_WE_ON",0);
-      write_state("RO_EG_WE_DO",0);
+    if (time_c_pos[i]+1000<time_c_neg[i]){
+      write_state("RO_EG_WE",50);
     }
   }
   i=15;
   if (value_c[i]==1){
     //entriegeln
-    write_state("RO_EG_WE",0);
-    //aktivieren
-    write_state("RO_EG_WE_DO",1);
-    write_state("RO_EG_WE_ON",1);
+    write_state("RO_EG_WE",100);
   }
   if (value_c[i]==-1){
     //verriegeln
-    if (time_c_pos[i]+1000>time_c_neg[i]){
-      write_state("RO_EG_WE",-1);
-    }
-    else{
-      write_state("RO_EG_WE_ON",0);
-      write_state("RO_EG_WE_DO",0);
+    if (time_c_pos[i]+1000<time_c_neg[i]){
+      write_state("RO_EG_WE",50);
     }
   }
    
@@ -261,20 +231,17 @@ void user_logic(){
   i=13;
   if (value_c[i]==1){
     toggle_state("LI_EG_KU_L1");
-    write_state("LI_EG_SP", address_to_value("LI_EG_KU_L1"));
   }
       
   //5 kellertreppe unten
   //6 kellertreppe oben
   i=6;
   if (value_c[i]==1){
-    write_state("LI_UG_GA",3);
-    //write_state("LI_GA_L1",3);
+    send_command("LI_UG_GA",3);
   }
   i=5;
   if (value_c[i]==1){
-    toggle_state("LI_EG_GA");
-    //write_state("LI_GA_L1",3);
+    toggle_state_ext("LI_EG_GA");
   }
 }
   

@@ -6,7 +6,7 @@ void setup_l()
   digitalWrite(l_pin[i],!l_inv[i]);
   pinMode(l_pin[i],OUTPUT);
   value_l[i]=0;
-  send_message("w", l_address[i], value_l[i]);
+  send_state(l_address[i], value_l[i]);
   }
 }
 
@@ -46,9 +46,9 @@ void write_l(String address, int value){
         }else{
           value_l[i]=1;
         }
-        send_message("w", l_address[i], value_l[i]);
         break; 
       }  
+      send_state(l_address[i], value_l[i]);
     }
   }
 }

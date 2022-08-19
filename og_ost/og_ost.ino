@@ -96,10 +96,12 @@ const int num_r_states          = 2;
 const String r_address[]        = {"RO_OG_SZ", "RO_OG_BA"};                 //addresse
 const String r_on_off[]         = {"RO_OG_SZ_ON", "RO_OG_BA_ON"};           //l state
 const String r_up_down[]        = {"RO_OG_SZ_DO", "RO_OG_BA_DO"};           //l state
-const int up_time_r[]           = {31, 31};                                 // zeit zum öffnen in s
-const int down_time_r[]         = {31, 31};                                 // zeit zum schließen in s
-int value_r[]                   = {0, 0};                                   // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+const long up_time_r[]           = {31000, 31000};                                 // zeit zum öffnen in s
+const long down_time_r[]         = {31000, 31000};                                 // zeit zum schließen in s
+int value_r[]                   = {50, 50};                                   // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_r[]               = {50, 50};                                   // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_r[]              = {0, 0};                                   // zeit zu stoppen
+boolean stop_pending_r[]    = {false, false};
 
 
 ////constants and variables for s states (dachfenster)
@@ -110,9 +112,10 @@ const String s_up[]         = {"DF_OG_SZ_UP", "VD_OG_SZ_UP"};         //l state
 const String s_down[]       = {"DF_OG_SZ_DO", "VD_OG_SZ_DO"};         //l state
 const int up_time_s[]       = {500, 500};       // zeit zum öffnen in ms
 const int down_time_s[]     = {500, 500};       // zeit zum schließen in ms
-int value_s[]               = {-1, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int value_s[]               = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]          = {0, 0};          // zeit zu stoppen
-
+boolean stop_pending_s[]    = {false, false};
 
 //constants and variables for u states (temperatur steller)
 //0 blau U_OG_GA
@@ -169,26 +172,26 @@ void user_logic()
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("DF_OG_SZ",1);
+      write_state("DF_OG_SZ",0);
      }
      else if (time_c_pos[i]+2000>time_c_neg[i]){
-       write_state("VD_OG_SZ",1);
+       write_state("VD_OG_SZ",0);
      }
        else {
-       write_state("VD_OG",1);
+       write_state("VD_OG",0);
      }
   }
   i=15;
    if (value_c[i]==-1){
     //verriegeln auf auf
      if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("DF_OG_SZ",-1);
+      write_state("DF_OG_SZ",100);
      }
      else if (time_c_pos[i]+2000>time_c_neg[i]){
-       write_state("VD_OG_SZ",-1);
+       write_state("VD_OG_SZ",100);
      }
        else {
-       write_state("VD_OG",-1);
+       write_state("VD_OG",100);
      }
   }
   
@@ -198,39 +201,23 @@ void user_logic()
   //2  rollo sz
   i=6;
   if (value_c[i]==1){
-    //entriegeln
      write_state("RO_OG_SZ",0);
-     //aktivieren
-     write_state("RO_OG_SZ_ON",1);
-     write_state("RO_OG_SZ_DO",0);
   }
   //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i]==-1){
     //verriegeln auf auf
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_SZ",1);
-     }
-     else{
-        write_state("RO_OG_SZ_ON",0);
-        write_state("RO_OG_SZ_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_SZ",50);
      }
   }
   i=2;
   if (value_c[i]==1){
-    //entriegeln
-     write_state("RO_OG_SZ",0);
-     //aktivieren
-     write_state("RO_OG_SZ_ON",1);
-     write_state("RO_OG_SZ_DO",1);
+     write_state("RO_OG_SZ",100);
   }
   if (value_c[i]==-1){
     //verriegeln
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_SZ",-1);
-     }
-     else{
-        write_state("RO_OG_SZ_ON",0);
-        write_state("RO_OG_SZ_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_SZ",50);
      }
   }
   //5  bett, west
@@ -263,10 +250,10 @@ void user_logic()
   i=7;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-       write_state("LI_OG_GA_L1", 3);
+       send_command("LI_OG_GA_L1", 3);
      }
      else{
-       write_state("LI_OG_GA", 3);
+       send_command("LI_OG_GA", 3);
      }
   }
   
@@ -274,10 +261,10 @@ void user_logic()
   i=9;
   if (value_c[i]==-1){
      if (time_c_pos[i]+700>time_c_neg[i]){
-       write_state("LI_OG_GA_L1", 3);
+       send_command("LI_OG_GA_L1", 3);
      }
      else{
-       write_state("LI_OG_GA", 3);
+       send_command("LI_OG_GA", 3);
      }
   }
   //10  bad, einzel
@@ -289,78 +276,48 @@ void user_logic()
   }
    i=11;
   if (value_c[i]==1){
-    //entriegeln
      write_state("RO_OG_BA",0);
-     //aktivieren
-     write_state("RO_OG_BA_ON",1);
-     write_state("RO_OG_BA_DO",0);
   }
   //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i]==-1){
     //verriegeln auf auf
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_BA",1);
-     }
-     else{
-        write_state("RO_OG_BA_ON",0);
-        write_state("RO_OG_BA_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_BA",50);
      }
   }
   i=8;
   if (value_c[i]==1){
     //entriegeln
-     write_state("RO_OG_BA",0);
-     //aktivieren
-     write_state("RO_OG_BA_ON",1);
-     write_state("RO_OG_BA_DO",1);
+     write_state("RO_OG_BA",100);
   }
   if (value_c[i]==-1){
     //verriegeln
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_BA",-1);
-     }
-     else{
-        write_state("RO_OG_BA_ON",0);
-        write_state("RO_OG_BA_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_BA",50);
      }
   }
   //13   rollo bad balkon
  //12   rollo bad balkon
-   i=13;
+    i=13;
   if (value_c[i]==1){
-    //entriegeln
      write_state("RO_OG_BA",0);
-     //aktivieren
-     write_state("RO_OG_BA_ON",1);
-     write_state("RO_OG_BA_DO",0);
   }
   //negative flanke, wenn weniger als 1 sekunde nach positiver dann wird verriegelt
   if (value_c[i]==-1){
     //verriegeln auf auf
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_BA",1);
-     }
-     else{
-       write_state("RO_OG_BA_ON",0);
-       write_state("RO_OG_BA_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_BA",50);
      }
   }
   i=12;
   if (value_c[i]==1){
     //entriegeln
-     write_state("RO_OG_BA",0);
-     //aktivieren
-     write_state("RO_OG_BA_ON",1);
-     write_state("RO_OG_BA_DO",1);
+     write_state("RO_OG_BA",100);
   }
   if (value_c[i]==-1){
     //verriegeln
-     if (time_c_pos[i]+1000>time_c_neg[i]){
-       write_state("RO_OG_BA",-1);
-     }
-     else{
-       write_state("RO_OG_BA_ON",0);
-       write_state("RO_OG_BA_DO",0);
+     if (time_c_pos[i]+1000<time_c_neg[i]){
+       write_state("RO_OG_BA",50);
      }
   }
 
@@ -368,7 +325,7 @@ void user_logic()
 i=4;
  if (value_c[i]==1){
     //entriegeln
-     write_state("ZE_EG_VH",1);
-     write_state("ZE_GR_2",1);
+     send_command("ZE_EG_VH",1);
+     send_command("ZE_GR_2",1);
   }
 }

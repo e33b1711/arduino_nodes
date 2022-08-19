@@ -12,7 +12,6 @@ void setup(){
   setup_watchdog();
   setup_a_b_c();
   setup_t();
-  setup_h();
   setup_u();
   setup_r();
   setup_s();
@@ -37,7 +36,6 @@ void loop()
   //user logic is called from update_a_b_c
   update_a_b_c();
   update_t();
-  update_h();
   update_u();
   //update_a_b_c();
 

@@ -57,7 +57,7 @@ messageComplete = true;
 
     //handler
     if (in_messageType=="w") {   
-          write_state_silent(addressString, in_value);
+          write_state(addressString, in_value);
     }
     else{
       post_all_debug();

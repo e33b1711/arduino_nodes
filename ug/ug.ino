@@ -78,27 +78,29 @@ long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0};
 
 ////constants and variables for r states (rollo)
 // über an/aus und richtungsrelais gesteuert
-const int num_r_states      = 0;
-const String r_address[]    = {"RO_EG_SU", "RO_EG_WE"};       //addresse
-const String r_on_off[]     = {"RO_EG_SU_ON", "RO_EG_WE_ON"};         //l state
-const String r_up_down[]    = {"RO_EG_SU_DO", "RO_EG_WE_DO"};         //l state
-const int up_time_r[]       = {25, 25};       // zeit zum öffnen in s
-const int down_time_r[]     = {22, 22};       // zeit zum schließen in s
-int value_r[]               = {0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-long stop_time_r[]          = {0, 0};          // zeit zu stoppen
-
+const int num_r_states=0;
+const String r_address[]    = {"RO_OG_KN", "RO_OG_KS"};       //addresse
+const String r_on_off[]     = {"RO_OG_KN_ON", "RO_OG_KS_ON"};         //l state
+const String r_up_down[]    = {"RO_OG_KN_DO", "RO_OG_KS_DO"};         //l state
+const int up_time_r[]       = {31000, 31000};       // zeit zum öffnen in s
+const int down_time_r[]     = {31000, 31000};       // zeit zum schließen in s
+int value_r[]               = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_r[]           = {50, 50};                                   // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+long stop_time_r[]          = {0, 0};                                   // zeit zu stoppen
+boolean stop_pending_r[]    = {false, false};
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
 const int num_s_states      = 0;
-const String s_address[]    = {"DF_00", "DF_01"};       //addresse
-const String s_up[]         = {"LI_A0", "LI_A2"};         //l state
-const String s_down[]       = {"LI_A1", "LI_A3"};          //l state
-const int up_time_s[]       = {10, 10};       // zeit zum öffnen in ms
-const int down_time_s[]     = {200, 200};       // zeit zum schließen in ms
-int value_s[]               = {-1, -1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-long stop_time_s[]          = {0,  0};          // zeit zu stoppen
-
+const String s_address[]    = {"DF_OG_KN", "DF_OG_KS", "DF_OG_GA", "VD_OG_KS", "VD_OG_KN"};       //addresse
+const String s_up[]         = {"DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "VD_OG_KS_UP", "VD_OG_KN_UP"};         //l state
+const String s_down[]       = {"DF_OG_KN_DO", "DF_OG_KS_DO", "DF_OG_GA_DO", "VD_OG_KS_DO", "VD_OG_KN_DO"};         //l state
+const int up_time_s[]       = {500, 500, 500, 500, 500};       // zeit zum öffnen in ms
+const int down_time_s[]     = {500, 500, 500, 500, 500};       // zeit zum schließen in ms
+int value_s[]               = {50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+long stop_time_s[]          = {0, 0, 0, 0, 0};          // zeit zu stoppen
+boolean stop_pending_s[]    = {false, false, false, false, false};
 
 
 //constants and variables for u states (temperatur steller)
@@ -152,7 +154,6 @@ void user_logic()
      else{
        write_state("LI_UG_HN",0);
        write_state("LI_UG_HO",0);
-       Serial.println("hello4");
      }
   }
   //5 Hobby Nord
@@ -165,7 +166,6 @@ void user_logic()
      else{
        write_state("LI_UG_HN",0);
        write_state("LI_UG_HO",0);
-       Serial.println("hello5");
      }
   }
   //6 Waschküche
@@ -177,8 +177,7 @@ void user_logic()
   //turn off BELL trigger after one second
   i=3;
   if ((value_l[i]==1) && set_time_l[i]+5000<millis()){
-    write_l("BELL",0); 
-    send_message("w", l_address[i], value_l[i]);
+    write_state("BELL",0); 
   }
   
   

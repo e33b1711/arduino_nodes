@@ -86,21 +86,24 @@ const String r_on_off[]     = {"RO_EG_SU_ON", "RO_EG_WE_ON"};         //l state
 const String r_up_down[]    = {"RO_EG_SU_DO", "RO_EG_WE_DO"};         //l state
 const int up_time_r[]       = {25, 25};       // zeit zum öffnen in s
 const int down_time_r[]     = {22, 22};       // zeit zum schließen in s
-int value_r[]               = {0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int value_r[]               = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_r[]           = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_r[]          = {0, 0};          // zeit zu stoppen
+boolean stop_pending_r[]    = {false,   false};
 
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
-const int num_s_states      = 2;
+const int num_s_states      = 0;
 const String s_address[]    = {"DF_00", "DF_01"};       //addresse
 const String s_up[]         = {"LI_A0", "LI_A2"};         //l state
 const String s_down[]       = {"LI_A1", "LI_A3"};          //l state
 const int up_time_s[]       = {10, 10};       // zeit zum öffnen in ms
 const int down_time_s[]     = {200, 200};       // zeit zum schließen in ms
-int value_s[]               = {-1, -1};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int value_s[]               = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_s[]          = {0,  0};          // zeit zu stoppen
-
+boolean stop_pending_s[]    = {false,   false};
 
 //constants and variables for u states (temperatur steller)
 //34 rot    Wohnzimmer
@@ -127,12 +130,11 @@ void user_logic()
   // 6  gararobe
   i=6;
   if (value_c[i]==-1){
-    //verriegeln auf auf
     if (time_c_pos[i]+700>time_c_neg[i]){
       toggle_state("LI_EG_GR");
     }
     else{
-      write_state("LI_EG_AO",3);
+      send_command("LI_EG_AO",3);
     }
   }
 
@@ -140,8 +142,7 @@ void user_logic()
   //1  " oben
   i=0;
   if (value_c[i]==1){
-    toggle_state("LI_EG_GA");
-    //write_state("LI_GA_L1",3);
+    toggle_state_ext("LI_EG_GA");
   }
   i=1;
   if (value_c[i]==1){
@@ -152,8 +153,7 @@ void user_logic()
   //4  gang bei wz
   i=4;
   if (value_c[i]==1){
-    toggle_state("LI_EG_GA");
-    //write_state("LI_GA_L1",3);
+    toggle_state_ext("LI_EG_GA");
   }
 
   //5  wz bei gang
@@ -204,10 +204,10 @@ void user_logic()
   if (value_c[i]==-1){
     //verriegeln auf auf
     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_EG_EZ_KU",3);
+      send_command("LI_EG_EZ_KU",3);
     }
     else{
-      write_state("LI_EG_EZ_L3",3);
+      send_command("LI_EG_EZ_L3",3);
     }
   }
 
@@ -223,26 +223,26 @@ void user_logic()
   i=15;
   if (value_c[i]==-1){
     if (time_c_pos[i]+700>time_c_neg[i]){
-      write_state("LI_OG_GA_L1",3);
+      send_command("LI_OG_GA_L1",3);
     }
     else{
 
-      write_state("LI_OG_GA",3);
+      send_command("LI_OG_GA",3);
     }
   }
   i=11;
   if (value_c[i]==1){
-    write_state("DF_OG_GA",-1);
+    send_command("DF_OG_GA",100);
   }
   i=8;
   if (value_c[i]==1){
-    write_state("DF_OG_GA",1);
+    send_command("DF_OG_GA",0);
   }
 
   //13 klingel
   i=13;
   if (value_c[i]==1){
-    write_state("BELL",1);
+    send_command("BELL",1);
   }
 
   //timer: Vordach Beleuchtung
