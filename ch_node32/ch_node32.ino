@@ -77,8 +77,9 @@ const String r_up_down[]    = {"RO_EG_SU_DO", "RO_EG_WE_DO"};         //l state
 const int up_time_r[]       = {25, 25};       // zeit zum öffnen in s
 const int down_time_r[]     = {22, 22};       // zeit zum schließen in s
 int value_r[]               = {0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_r[]               = {0, 0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
 long stop_time_r[]          = {0, 0};          // zeit zu stoppen 
-  
+boolean stop_pending_r[]     ={} ;
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
@@ -88,7 +89,9 @@ const String s_up[]         = {"DO_CH_UP"};         //l state
 const String s_down[]       = {"DO_CH_DO"};          //l state
 const int up_time_s[]       = {8000};       // zeit zum öffnen in ms
 const int down_time_s[]     = {8000};       // zeit zum schließen in ms
-int value_s[]               = {0};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int value_s[]               = {50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {50};
+boolean stop_pending_s[]    = {false} ;
 long stop_time_s[]          = {0};          // zeit zu stoppen
 
   

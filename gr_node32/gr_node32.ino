@@ -78,7 +78,8 @@ const int r_down[]                = {1};         // c state up sensor
 const int r_up[]                  = {2};       // c state down sensor
 int value_r[]                     = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
 int aux_value_r[]                 = {0};          // -1 z, 0 unsicher, 1 auf, 2 fehler
-long lock_time_r[]                = {0};          
+long lock_time_r[]                = {0};   
+boolean locked_r[]                = {false};       
 const long lock_delay_r           = 20000;      
   
 
@@ -91,6 +92,8 @@ const String s_down[]           = {};         //l state
 const int up_time_s[]           = {};       // zeit zum öffnen in ms
 const int down_time_s[]         = {};       // zeit zum schließen in ms
 int value_s[]                   = {};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]               = {};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+bool stop_pending_s[]           = {};
 long stop_time_s[]              = {};          // zeit zu stoppen
 
   
