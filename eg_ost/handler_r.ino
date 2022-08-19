@@ -29,8 +29,8 @@ void update_r(){
     }
     if (stop_pending_r[i] and stop_time_r[i] < millis()){
         stop_pending_r[i]   = false;
-        write_l(r_on_off[i],    "OFF");
-        write_l(r_up_down[i],   "OFF");
+        write_l(r_on_off[i],    0);
+        write_l(r_up_down[i],   0);
     }
   }
 }
