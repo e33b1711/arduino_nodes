@@ -10,11 +10,12 @@ void setup(){
 
   // init states
   setup_watchdog();
+  init_comm();
   setup_t();
   setup_p();  
 
   //init comm
-  init_comm();
+  
 
 }
 

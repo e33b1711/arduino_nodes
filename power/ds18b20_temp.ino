@@ -42,6 +42,29 @@ void setup_t(){
     }
     
     Serial.println("=========================");
+     while (ds.selectNext()) {
+            uint8_t address[8];
+            ds.getAddress(address);
+            switch (address[7]){
+            case 51:
+                Serial.print("tempHigh: ");
+                value_t[0] = ds.getTempC()*10;
+                Serial.print(tempHigh);
+                Serial.println(" °C");
+                break;
+            case 189:
+                Serial.print("tempLow: ");
+                value_t[1] = ds.getTempC()*10;
+                Serial.print(tempLow);
+                Serial.println(" °C");
+                break;
+            default:
+                Serial.println("ERROR: DS Address unknown."); 
+            }
+        }   
+        for (int i=0; i<num_t_states; i++){
+            send_state(t_address[i], value_t[i]);
+        }
 }
 
 
