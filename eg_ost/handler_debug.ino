@@ -84,10 +84,6 @@ void post_all_debug(){
   for (i=0; i<num_s_states; i++){
     Serial.println(s_address[i] + " " +  value_s[i]);
   }
-  for (i=0; i<num_t_states; i++){
-    Serial.println(t_address[i] + " " +  value_t[i]);
-    Serial.println(h_address[i] + " " +  value_h[i]);
-  }
   for (i=0; i<num_u_states; i++){
     Serial.println(u_address[i] + " " +  value_u[i]);
   }

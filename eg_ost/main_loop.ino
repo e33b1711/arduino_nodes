@@ -11,15 +11,13 @@ void setup(){
   // init states
   setup_watchdog();
   setup_a_b_c();
+  init_comm();
   setup_t();
   setup_u();
   setup_r();
   setup_s();
   //states mit ausgängen zum Schluss
   setup_l();  
-
-  //init comm
-  init_comm();
 
 }
 

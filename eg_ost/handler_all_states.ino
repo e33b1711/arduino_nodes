@@ -28,11 +28,6 @@ void toggle_state_ext(String address){
 int address_to_value(String address){
   int i;
   int value;
-  for (i=0; i<num_t_states; i++){
-    if (t_address[i]==address){
-      return value_t[i];
-    }
-  }
   for (i=0; i<num_h_states; i++){
     if (h_address[i]==address){
       return value_h[i];
@@ -58,7 +53,7 @@ int address_to_value(String address){
       return value_s[i];
     }
   }
-  
+  return 999;
 }
 
 //checket ob es diesen state auf dieser unit gibt

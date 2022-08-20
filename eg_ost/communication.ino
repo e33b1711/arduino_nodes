@@ -53,6 +53,13 @@ void send_state(String out_address, int out_value){
   message_buffer += message;
 }
 
+void send_state(String out_address, String out_value){
+  String message="!s!" + out_address + '!' + out_value + "$\n";
+  //client.println(message);
+  //client.flush();
+  message_buffer += message;
+}
+
 
 void handle_comm(){
 
@@ -150,6 +157,11 @@ void handle_comm(){
     valueString=inputString.substring(index3+1,index4);
     //Serial.println("  " + valueString);
     in_value=valueString.toInt();
+    if (valueString=="STOP")   {in_value=50;};
+    if (valueString=="UP")     {in_value=0;};
+    if (valueString=="DOWN")   {in_value=100;};
+    if (valueString=="ON")     {in_value=1;};
+    if (valueString=="OFF")    {in_value=0;};
     //Serial.print("  ");
     //Serial.println(in_value);
 
@@ -198,10 +210,6 @@ void post_all(){
   }
   for (i=0; i<num_s_states; i++){
     send_state(s_address[i], value_s[i]);
-  }
-  for (i=0; i<num_t_states; i++){
-    send_state(t_address[i], value_t[i]);
-    send_state(h_address[i], value_h[i]);
   }
   for (i=0; i<num_u_states; i++){
     send_state(u_address[i], value_u[i]);
