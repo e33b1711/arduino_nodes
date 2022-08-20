@@ -28,30 +28,16 @@ void update_t()
 }
 
 
-void write_t(String address, int value){
-  int i;
-  for (i=0; i<num_t_states; i++){
-    if (t_address[i]==address){
-      value_t[i]=value;
-    }
-  }
-}
-
 void handle_one_t(int i){
   if (!(i<num_t_states)) return;
   float h = dht[i].readHumidity()*0.1;
   float t = dht[i].readTemperature();
   if (isnan(h) || isnan(t)) {
-    send_state("E"+t_address[i], 1);
+    send_state(t_address[i], "999.9");
+    send_state(h_address[i], "999.9");
     Serial.print("handle_one_t: error reading from dth22. "); Serial.print("  i: "); Serial.println(i);
   }else{
-    value_t[i] = t*10;
-    value_h[i] = h*10;
-    send_state(t_address[i], value_t[i]);
-    send_state(h_address[i], value_h[i]);
-    send_state("E"+t_address[i], 0);
-    Serial.print("handle_one_t: value_t: "); Serial.print(value_t[i]); 
-    Serial.print(" value_h: "); Serial.print(value_h[i]);
-    Serial.print("  i: "); Serial.println(i);
+    send_state(t_address[i], String(t));
+    send_state(h_address[i], String(h*10.0));
   }
 }

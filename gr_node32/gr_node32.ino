@@ -41,8 +41,6 @@ long time_c_pos[]       = {0,  0,  0,  0};        //zeit der letzen steigenden f
 const int num_t_states      = 2;
 const long period_t         = 1800000;                                                                                  //update periode in ms
 const String t_address[]    = {"TI_GR", "TI_GR_A"};                                                                                                           //addresse
-int value_t[]               = {0,  0};                                            //temperatur
-int aux_value_t[]           = {0,  0};                                            //feuchtigkeit
 long s_time_t               = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                              //cycle_counter
   
