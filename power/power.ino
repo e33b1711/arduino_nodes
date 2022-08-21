@@ -20,7 +20,7 @@ const int ethernet_reset_pin    = 12;
 #define DHTTYPE DHT22
 const int num_t_states      = 2;
 const long period_t         = 100000;                                            //update periode in ms
-const String t_address[]    = {"TI_PU_O", "TI_PU_U"};                                    
+const String t_address[]    = {"TI_PU_U", "TI_PU_O"};                                    
 int value_t[]               = {0,  0};                                            //temperatur
 long lastUpdateDS_t;
 const long updatePeriodDS_t = 100000;
