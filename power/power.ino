@@ -20,7 +20,7 @@ const int ethernet_reset_pin    = 12;
 #define DHTTYPE DHT22
 const int num_t_states      = 2;
 const long period_t         = 100000;                                            //update periode in ms
-const String t_address[]    = {"TI_PU_U", "TI_PU_O"};                                    
+const String t_address[]    = {"TI_PU_O", "TI_PU_U"};                                    
 int value_t[]               = {0,  0};                                            //temperatur
 long lastUpdateDS_t;
 const long updatePeriodDS_t = 100000;
@@ -50,7 +50,7 @@ void user_logic()
 
     //overtemp for elo heating, 85°
     const int max_temp_c = 850;
-    if ( (address_to_value("TI_PU_U") > max_temp_c) and (address_to_value("P_EL")!=0) ){
+    if ( (address_to_value("TI_PU_U") > max_temp_c) and (address_to_value("U_EL")!=0) ){
         write_p("U_EL", 0);
         send_state(String(unit_name) + " overtemp", 0);
     }
