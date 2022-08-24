@@ -20,10 +20,9 @@ void update_t()
 {
   if (s_time_t+(period_t)<millis()){
     s_time_t=millis();
-    i_t++;
-    if (i_t==num_t_states){i_t=0;}
-    handle_one_t(i_t);
-    
+    for (int i=0; i<num_t_states; i++){
+        handle_one_t(i);
+    }
   }
 }
 

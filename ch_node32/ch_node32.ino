@@ -39,7 +39,7 @@ long time_c_pos[]       = {0,  0,  0,  0};        //zeit der letzen steigenden f
 #define DHTPIN1 22
 #define DHTPIN2 23
 const int num_t_states      = 1;
-const long period_t         = 1800000;                                                                                  //update periode in ms
+const long period_t         = 600000;                                                                                  //update periode in ms
 const String t_address[]    = {"TI_CH", "TI_CH_A"};                                                                                                           //addresse
 int value_t[]               = {0,  0};                                            //temperatur
 int aux_value_t[]           = {0,  0};                                            //feuchtigkeit

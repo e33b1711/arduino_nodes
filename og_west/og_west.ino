@@ -54,7 +54,7 @@ long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
 #define DHTTYPE DHT22
 const int num_t_states      = 3;
-const long period_t         = 1800000;                                                                                  //update periode in ms
+const long period_t         = 600000;                                                                                  //update periode in ms
 const String t_address[]    = {"TI_OG_KN", "TI_OG_KS", "TI_OG_GA"};                                    
 const int t_pin[]           = {28, 27, 26};
 int value_t[]               = {0,  0,  0};                                            //temperatur
