@@ -38,9 +38,9 @@ long time_c_pos[]       = {0,  0,  0,  0};        //zeit der letzen steigenden f
 #define DHTTYPE DHT22
 #define DHTPIN1 22
 #define DHTPIN2 23
-const int num_t_states      = 2;
+const int num_t_states      = 1;
 const long period_t         = 600000;                                                                                  //update periode in ms
-const String t_address[]    = {"TI_GR", "TI_GR_A"};                                                                                                           //addresse
+const String t_address[]    = {"TI_GR"};                                                                                                           //addresse
 long s_time_t               = 0;                                                                                          //update timer
 int i_t                     = 0;                                                                                              //cycle_counter
   
