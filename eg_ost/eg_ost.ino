@@ -56,8 +56,7 @@ const long period_t         = 600000;                                           
 const String t_address[]    = {"TI_33", "TI_32", "TI_31", "TI_30", "TI_29", "TI_28", "TI_27", "TI_26"};                                     
 const int t_pin[]           = {33, 32, 31, 30, 29, 28, 27, 26};
 long s_time_t                 = 0;                                                                                          //update timer
-int i_t                     = 0;                                                                                              //cycle_counter
-                                                                                         //cycle_counter
+
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)

@@ -58,7 +58,6 @@ const int t_pin[]           = {27, 26};
 int value_t[]               = {0,  0};                                            //temperatur
 int aux_value_t[]           = {0,  0};                                           //feuchtigkeit
 long s_time_t               = 0;                                                                                          //update timer
-int i_t                     = 0;                                                                                              //cycle_counter
 
 
 //constants and variables for h states (feuchtigkeit über zustand t über dht22 an digitalem pin)
