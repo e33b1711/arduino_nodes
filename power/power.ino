@@ -26,6 +26,15 @@ long lastUpdateDS_t;
 const long updatePeriodDS_t = 100000;
 
 
+//constants and variables for f states (digitaler eingang)
+const int num_f_states      = 2;                          
+const int f_pin[]           = {57, 2};
+const bool f_inv[]           = {true, true};
+const String f_address[]    = {"F_HE", "F_WW"};                                    
+int f_value[]               = {-1,  -1};                  //alter wert
+
+
+
 //constants and variables for p states (pwm output)
 const int num_p_states      = 1;
 const String p_address[]    = {"U_EL"};

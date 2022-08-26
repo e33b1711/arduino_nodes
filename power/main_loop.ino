@@ -13,6 +13,7 @@ void setup(){
   init_comm();
   setup_t();
   setup_p();  
+  setup_f();
 
   //init comm
   
@@ -37,5 +38,6 @@ void loop()
   user_logic();
 
   update_p();
+  update_f();
 
 }

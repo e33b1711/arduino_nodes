@@ -37,6 +37,11 @@ int address_to_value(String address){
       return value_p[i];
     }
   }
+  for (i=0; i<num_f_states; i++){
+    if (f_address[i]==address){
+      return f_value[i];
+    }
+  }
   
 }
 
@@ -53,6 +58,10 @@ boolean is_my_state(String address){
       return true;
     }
   }
-  
+  for (i=0; i<num_f_states; i++){
+    if (f_address[i]==address){
+      return true;
+    }
+  }
   return false;
 }
