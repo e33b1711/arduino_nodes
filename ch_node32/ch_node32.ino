@@ -7,7 +7,7 @@ extern const char* pass;
 //for tcp communication (node mcu)
 #include <WiFi.h>
 
-const IPAddress                 server(192,168,178,222);
+const IPAddress                 server(192,168,178,23);
 const int port                  = 8888;
 
 

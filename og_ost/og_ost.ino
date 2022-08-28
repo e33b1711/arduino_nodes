@@ -8,7 +8,7 @@ const char* password    = "pass";
 #include <Ethernet.h>
 const byte mac[]                = {0xDE, 0xAA, 0x7E, 0xE1, 0x1E, 0x15 };
 const IPAddress                 ip(192,168,178,216);
-const IPAddress                 server(192,168,178,222);
+const IPAddress                 server(192,168,178,23);
 const IPAddress                 gateway(192,168,178,1);
 const IPAddress                 subnet(255,255,255,0);
 const int port                  = 8888;
