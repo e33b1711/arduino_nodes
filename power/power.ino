@@ -49,7 +49,7 @@ void user_logic()
 {
 
     //repeat water warning if 1
-    const long ww_interval_c = 60000;
+    const long ww_interval_c = 3600000; //1 hour
     static long ww_time =0;
     if ( (ww_time+ww_interval_c) < millis() and (address_to_value("F_WW")!=0)){
         send_state("F_WW", 1);
