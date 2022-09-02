@@ -29,7 +29,7 @@ const long updatePeriodDS_t = 100000;
 //constants and variables for f states (digitaler eingang)
 const int num_f_states      = 2;                          
 const int f_pin[]           = {57, 2};
-const bool f_inv[]           = {true, true};
+const bool f_inv[]           = {true, false};
 const String f_address[]    = {"F_HE", "F_WW"};                                    
 int f_value[]               = {-1,  -1};                  //alter wert
 
@@ -47,6 +47,14 @@ unsigned short  max_p[]     = {210};
 
 void user_logic()
 {
+
+    //repeat water warning if 1
+    const long ww_interval_c = 60000;
+    static long ww_time =0;
+    if ( (ww_time+ww_interval_c) < millis() and (address_to_value("F_WW")!=0)){
+        send_state("F_WW", 1);
+        ww_time = millis();
+    }
 
     //timeout for elo heating
     const long heat_timeout_c = 30000;

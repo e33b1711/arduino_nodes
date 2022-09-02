@@ -230,6 +230,7 @@ void user_logic(){
   i=13;
   if (value_c[i]==1){
     toggle_state("LI_EG_KU_L1");
+    toggle_state("LI_EG_SP");
   }
       
   //5 kellertreppe unten
