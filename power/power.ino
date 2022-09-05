@@ -67,7 +67,7 @@ void user_logic()
 
     //overtemp for elo heating, 85°
     const int max_temp_c = 850;
-    if ( (address_to_value("TI_PU_U") > max_temp_c) and (address_to_value("U_EL")!=0) ){
+    if ( (address_to_value("TI_PU_O") > max_temp_c) and (address_to_value("U_EL")!=0) ){
         write_p("U_EL", 0);
         send_state(String(unit_name) + " overtemp", 0);
     }
