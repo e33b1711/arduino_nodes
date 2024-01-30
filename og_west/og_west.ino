@@ -45,10 +45,10 @@ int prev_value_b[]      = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 */
 const int num_c_states  = 16;
 const int which_b[]     = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};       //a state auf der selben unit                         
-int value_c[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};           //positive flanke
-int aux_value_c[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};          //negative flanke
-long time_c_neg[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};           //zeit der letzen fallenden flanke
-long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};        //zeit der letzen steigenden flanke
+int value_c[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};       //positive flanke
+int aux_value_c[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};       //negative flanke
+long time_c_neg[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};       //zeit der letzen fallenden flanke
+long time_c_pos[]       = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};       //zeit der letzen steigenden flanke
        
 	   
 //constants and variables for t states (temperatur über dht22 an digitalem pin)
@@ -71,9 +71,9 @@ int value_h[]               = {0,  0,  0};
 
 //constants and variables for l states (einfaches licht / verbraucher)
 const int num_l_states      = 28;
-const String l_address[]    = {"LI_34", "RO_OG_KS_DO", "LI_OG_KS", "RO_OG_KS_ON", "LI_46", "LI_47", "LI_48", "LI_49", "LI_OG_KS_L1", "LI_OG_KN_L1", "LI_OG_KN", "RO_OG_KN_ON", "LI_GA_L1", "RO_OG_KN_DO", "LI_OG_GA_L1", "LI_OG_GA", "DF_OG_GA_UP", "DF_OG_GA_DO","DF_OG_KS_UP", "DF_OG_KS_DO", "LI_58", "DF_OG_KN_UP", "LI_60", "DF_OG_KN_DO", "VD_OG_KN_DO", "VD_OG_KS_UP", "VD_OG_KN_UP", "VD_OG_KS_DO"};       //addresse, zum gleichschalten selbe addresse vergeben
+const String l_address[]    = {"LI_34", "RO_OG_KS_DO", "LI_OG_KS", "RO_OG_KS_ON", "LI_46", "LI_47", "VD_OG_GA_UP", "VD_OG_GA_DO", "LI_OG_KS_L1", "LI_OG_KN_L1", "LI_OG_KN", "RO_OG_KN_ON", "LI_GA_L1", "RO_OG_KN_DO", "LI_OG_GA_L1", "LI_OG_GA", "DF_OG_GA_UP", "DF_OG_GA_DO","DF_OG_KS_UP", "DF_OG_KS_DO", "LI_58", "DF_OG_KN_UP", "LI_60", "DF_OG_KN_DO", "VD_OG_KN_DO", "VD_OG_KS_UP", "VD_OG_KN_UP", "VD_OG_KS_DO"};       //addresse, zum gleichschalten selbe addresse vergeben
 const int l_pin[]           = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 61, 30, 31, 32, 33};                //digitaler pin
-const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
+const bool l_inv[]          = {1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};                //digitaler pin
 int value_l[]               = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
 long set_time_l[]           = {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};    
 
@@ -93,16 +93,16 @@ boolean stop_pending_r[]    = {false, false};
 
 ////constants and variables for s states (dachfenster)
 // üer eingänge auf und ab gesteuert
-const int num_s_states		= 5;
-const String s_address[]	= {"DF_OG_KN", "DF_OG_KS", "DF_OG_GA", "VD_OG_KS", "VD_OG_KN"};       //addresse
-const String s_up[]			= {"DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "VD_OG_KS_UP", "VD_OG_KN_UP"};         //l state
-const String s_down[]		= {"DF_OG_KN_DO", "DF_OG_KS_DO", "DF_OG_GA_DO", "VD_OG_KS_DO", "VD_OG_KN_DO"};         //l state
-const int up_time_s[]		= {500, 500, 500, 500, 500};       // zeit zum öffnen in ms
-const int down_time_s[] 	= {500, 500, 500, 500, 500};       // zeit zum schließen in ms
-int value_s[] 				= {50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-int aux_value_s[]           = {50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
-long stop_time_s[]          = {0, 0, 0, 0, 0};          // zeit zu stoppen
-boolean stop_pending_s[]    = {false, false, false, false, false};
+const int num_s_states		= 6;
+const String s_address[]	= {"DF_OG_KN", "DF_OG_KS", "DF_OG_GA", "VD_OG_KS", "VD_OG_KN", "VD_OG_GA"};       //addresse
+const String s_up[]			= {"DF_OG_KN_UP", "DF_OG_KS_UP", "DF_OG_GA_UP", "VD_OG_KS_UP", "VD_OG_KN_UP", "VD_OG_GA_UP"};         //l state
+const String s_down[]		= {"DF_OG_KN_DO", "DF_OG_KS_DO", "DF_OG_GA_DO", "VD_OG_KS_DO", "VD_OG_KN_DO", "VD_OG_GA_DO"};         //l state
+const int up_time_s[]		= {500, 500, 500, 500, 500, 500};       // zeit zum öffnen in ms
+const int down_time_s[] 	= {500, 500, 500, 500, 500, 500};       // zeit zum schließen in ms
+int value_s[] 				= {50, 50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+int aux_value_s[]           = {50, 50, 50, 50, 50, 50};          // -1 zu und verriegelt, 0 entriegelt, 1 auf und verriegelt
+long stop_time_s[]          = {0, 0, 0, 0, 0, 0};          // zeit zu stoppen
+boolean stop_pending_s[]    = {false, false, false, false, false, false};
 
 
 //constants and variables for u states (temperatur steller)
@@ -133,13 +133,24 @@ void user_logic()
       toggle_state("LI_OG_GA");
      }
   }
-  i=13;
-  if (value_c[i]==1){
-     write_state("DF_OG_GA",0);
+   i=13;
+   if (value_c[i]==-1){
+     if (time_c_pos[i]+700>time_c_neg[i]){
+      write_state("DF_OG_GA",0);
+     }
+     else{
+       write_state("VD_OG_GA",0);
+     }
   }
   i=10;
-  if (value_c[i]==1){
-     write_state("DF_OG_GA",100);
+   if (value_c[i]==-1){
+    //verriegeln auf auf
+     if (time_c_pos[i]+700>time_c_neg[i]){
+      write_state("DF_OG_GA",100);
+     }
+     else{
+       write_state("VD_OG_GA",100);
+     }
   }
   //1  Gang, KZ süd
   i=1;
