@@ -228,12 +228,22 @@ void user_logic()
     }
   }
   i=11;
-  if (value_c[i]==1){
-    send_command("DF_OG_GA",100);
+  if (value_c[i]==-1){
+    if (time_c_pos[i]+700>time_c_neg[i]){
+      send_command("DF_OG_GA",100);
+    }
+     else{
+       send_command("VD_OG_GA",100);
+     }
   }
   i=8;
-  if (value_c[i]==1){
-    send_command("DF_OG_GA",0);
+  if (value_c[i]==-1){
+     if (time_c_pos[i]+700>time_c_neg[i]){
+      send_command("DF_OG_GA",0);
+     }
+     else{
+       send_command("VD_OG_GA",0);
+     }
   }
 
   //13 klingel
