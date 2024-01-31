@@ -26,8 +26,8 @@ void update_t()
 
 void handle_one_t(int i){
   if (!(i<num_t_states)) return;
- int8_t notice  = dht.broadcast(DHT22, t_pin[i]);
-   if (notice == SDHT_OK){
+ bool good  = dht.broadcast(DHT22, t_pin[i]);
+   if (good){
       send_state(t_address[i], String(dht.celsius));
       send_state(h_address[i], String(dht.humidity));
       Serial.print("handle_one_t: value_t: "); Serial.print(dht.celsius); 
