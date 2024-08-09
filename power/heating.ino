@@ -16,7 +16,7 @@ void update_p()
 {
   int i;
   for (i=0; i<num_p_states; i++){
-  if (value_p[i] > max_p[i]) value_p[i] = max_p[i];
+    if (value_p[i] > max_p[i]) value_p[i] = max_p[i];
     analogWrite(p_pin[i], value_p[i]);
   }
   
